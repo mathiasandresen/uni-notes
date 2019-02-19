@@ -8,6 +8,8 @@ theme:
     name: 'material'
     logo:
         icon: 'school'
+    feature:
+        tabs: true
 
 
 extra_css:

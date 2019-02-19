@@ -4,13 +4,6 @@ repo_name: 'jollycola/uni-notes'
 repo_url: 'https://gitlab.com/ollycola/uni-notes'
 
 
-nav:
-    - Home: index.md
-    - Current State: current.md
-    - Future State: future.md
-
-
-
 theme:
     name: 'material'
     logo:

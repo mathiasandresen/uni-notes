@@ -1,0 +1,2 @@
+# Welcome to ABK-NET Documentation
+The current state of ABK-NET is a mess and since the network is due for a hardware upgrade the software will get upgraded simultaneously, this time with documentation.

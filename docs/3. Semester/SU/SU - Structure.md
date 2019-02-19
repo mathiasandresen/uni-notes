@@ -22,7 +22,7 @@ The classes “Taxi” and “Private Car” might be specializations of the gen
 
 ​	Think programming!
 
-<img src="images/1537899317912.png" height="20em"></img>
+<img src="./images/1537899317912.png" height="20em"></img>
 
 
 

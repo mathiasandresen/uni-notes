@@ -7,7 +7,7 @@ repo_url: 'https://gitlab.com/ollycola/uni-notes'
 theme:
     name: 'material'
     logo:
-        icon: 'dns'
+        icon: 'school'
 
 
 extra_css:

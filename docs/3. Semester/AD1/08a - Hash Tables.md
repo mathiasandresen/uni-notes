@@ -63,7 +63,7 @@ Each entry in the table is pointer to a linked list.
 
 Elements with same hashed key are placed into a linked list.
 
-![1547035424506](images/1547035424506.png)images/
+![1547035424506](images/1547035424506.png)
 
 ### Linear Probing
 
@@ -71,7 +71,7 @@ If the current location is used, try the next table location.
 
 Lookups walk along the table until the key or an empty slot is found.
 
-![1547035609310](images/1547035609310.png)images/
+![1547035609310](images/1547035609310.png)
 
 
 

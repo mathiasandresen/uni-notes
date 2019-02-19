@@ -95,9 +95,9 @@ Put back the elements into A by merging the sorted sequences $A_1$ and $A_2$ int
 <u>Analysis in lecture-3 slide 53-55</u>
 
 
-![1547135226696](images/1547135226696.png)images/
+![1547135226696](images/1547135226696.png)
 
-![1547135690297](images/1547135690297.png)images/
+![1547135690297](images/1547135690297.png)
 
-![1547135268483](images/1547135268483.png)images/
+![1547135268483](images/1547135268483.png)
 

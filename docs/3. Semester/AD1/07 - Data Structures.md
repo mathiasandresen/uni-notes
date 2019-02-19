@@ -59,7 +59,7 @@ Elements are removed from a queue in the same order as they were inserted.
 
 **FIFO**: First in, First out.
 
-![1547033810944](images/1547033810944.png)images/
+![1547033810944](images/1547033810944.png)
 
 ### Operations
 
@@ -96,7 +96,7 @@ There are different types depending on how the elements are linked.
 
 * Pointer "head": pointing to the first element of the list.
 
-![1547034076785](images/1547034076785.png)images/
+![1547034076785](images/1547034076785.png)
 
 **Note:**
 
@@ -105,7 +105,7 @@ There are different types depending on how the elements are linked.
 
 #### Alternatively:
 
-![1547034140522](images/1547034140522.png)images/
+![1547034140522](images/1547034140522.png)
 
 <div style="page-break-after: always;"></div>
 
@@ -118,11 +118,11 @@ There are different types depending on how the elements are linked.
 
 Still has "head".
 
-![1547034203379](images/1547034203379.png)images/
+![1547034203379](images/1547034203379.png)
 
 #### Alternatively
 
-![1547034230988](images/1547034230988.png)images/
+![1547034230988](images/1547034230988.png)
 
 #### Operations
 
@@ -160,15 +160,15 @@ extract-Max(A):
 
 Use a max-heap.
 
-![1547034563073](images/1547034563073.png)images/
+![1547034563073](images/1547034563073.png)
 
 
 
-![1547034569165](images/1547034569165.png)images/
+![1547034569165](images/1547034569165.png)
 
 
 
-![1547034588636](images/1547034588636.png)images/
+![1547034588636](images/1547034588636.png)
 
 
 

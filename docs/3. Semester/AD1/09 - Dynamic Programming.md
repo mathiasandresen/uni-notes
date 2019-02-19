@@ -46,7 +46,7 @@ This is slow!
 
 Here's why:
 
-![1547049343233](images/1547049343233.png)images/
+![1547049343233](images/1547049343233.png)
 
 The same value is calculated over and over!
 
@@ -94,9 +94,9 @@ Goal:
 
 * Cut up the rod to maximize profit.
 
-![1547050218779](images/1547050218779.png)images/
+![1547050218779](images/1547050218779.png)
 
-![1547050232232](images/1547050232232.png)images/
+![1547050232232](images/1547050232232.png)
 
 
 

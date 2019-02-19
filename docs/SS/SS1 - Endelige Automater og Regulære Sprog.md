@@ -205,7 +205,7 @@ $F$ 	mængden af accepttilstande $F\subseteq Q$
 
 $\delta(q,a)=q_1​$
 
-$\delta:Q\times \Sigma \rarr Q$
+$\delta:Q\times \Sigma \rightarrow Q$
 
 
 

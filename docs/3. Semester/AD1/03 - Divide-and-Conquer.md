@@ -88,16 +88,16 @@ Put back the elements into A by merging the sorted sequences $A_1$ and $A_2$ int
 
 ### Running Example
 
-![1547135184394](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547135184394.png)
+![1547135184394](images/1547135184394.png)
 
 ### Running Time
 
 <u>Analysis in lecture-3 slide 53-55</u>
 
 
-![1547135226696](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547135226696.png)
+![1547135226696](images/1547135226696.png)images/
 
-![1547135690297](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547135690297.png)
+![1547135690297](images/1547135690297.png)images/
 
-![1547135268483](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547135268483.png)
+![1547135268483](images/1547135268483.png)images/
 

@@ -28,7 +28,7 @@ An object removed from the stack is taken from the "top" of the stack (`pop`)
 
 **LIFO**: Last in, First out
 
-![1547033771221](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547033771221.png)
+![1547033771221](images/1547033771221.png)
 
 
 
@@ -59,7 +59,7 @@ Elements are removed from a queue in the same order as they were inserted.
 
 **FIFO**: First in, First out.
 
-![1547033810944](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547033810944.png)
+![1547033810944](images/1547033810944.png)images/
 
 ### Operations
 
@@ -96,7 +96,7 @@ There are different types depending on how the elements are linked.
 
 * Pointer "head": pointing to the first element of the list.
 
-![1547034076785](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547034076785.png)
+![1547034076785](images/1547034076785.png)images/
 
 **Note:**
 
@@ -105,7 +105,7 @@ There are different types depending on how the elements are linked.
 
 #### Alternatively:
 
-![1547034140522](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547034140522.png)
+![1547034140522](images/1547034140522.png)images/
 
 <div style="page-break-after: always;"></div>
 
@@ -118,11 +118,11 @@ There are different types depending on how the elements are linked.
 
 Still has "head".
 
-![1547034203379](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547034203379.png)
+![1547034203379](images/1547034203379.png)images/
 
 #### Alternatively
 
-![1547034230988](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547034230988.png)
+![1547034230988](images/1547034230988.png)images/
 
 #### Operations
 
@@ -160,15 +160,15 @@ extract-Max(A):
 
 Use a max-heap.
 
-![1547034563073](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547034563073.png)
+![1547034563073](images/1547034563073.png)images/
 
 
 
-![1547034569165](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547034569165.png)
+![1547034569165](images/1547034569165.png)images/
 
 
 
-![1547034588636](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547034588636.png)
+![1547034588636](images/1547034588636.png)images/
 
 
 

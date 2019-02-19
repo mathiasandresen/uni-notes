@@ -45,7 +45,7 @@ The shortests-path weight, denoted as $\delta(u, v)$, from u to v:
 
 * defined as: 
 
-  ![1547125658046](images\1547125658046.png)
+  ![1547125658046](images/1547125658046.png)
 
 The shortest path between u and v is a path p with the short-path weight $w(p)=\delta(u,v)$
 
@@ -82,7 +82,7 @@ If weights are non-negative, shortest paths are well-defined.
 
 Negative weights effect shortest-path weights?
 
-![1547126460067](images\1547126460067.png)
+![1547126460067](images/1547126460067.png)
 
 ## Cycles
 
@@ -133,7 +133,7 @@ For each vertex v in the graph, we maintain v.**d()**:
 * $w(s,u)+w(u,v)$ vs $w(s,v)$
 * is $u.d +w(u,v)<v.d$ ?
 
-![1547127348836](images\1547127348836.png)
+![1547127348836](images/1547127348836.png)
 
 ```pseudocode
 Relax(u,v,G)
@@ -175,7 +175,7 @@ Works fro graphs with **non-negative** edge weights
 
 <u>A little different from book in syntax, see CLRS p. 658</u>
 
-![1547127952732](images\1547127952732.png)
+![1547127952732](images/1547127952732.png)
 
 
 
@@ -183,17 +183,17 @@ Works fro graphs with **non-negative** edge weights
 
 <u>Explained in Lecture-12 slide 18-21</u>
 
-![1547128084295](images\1547128084295.png)
+![1547128084295](images/1547128084295.png)
 
-![1547128257371](images\1547128257371.png)
+![1547128257371](images/1547128257371.png)
 
-![1547128533856](images\1547128533856.png)
+![1547128533856](images/1547128533856.png)
 
 ### Running Time
 
 <u>Analysis in Lecture-12 slide 23-24</u>
 
-![1547128584299](images\1547128584299.png)
+![1547128584299](images/1547128584299.png)
 
 ### Correctness
 
@@ -229,7 +229,7 @@ Bellman-Ford alg. can handle a graph where edges have negative weights (but no n
 
 ### Pseudocode
 
-![1547129103517](images\1547129103517.png)
+![1547129103517](images/1547129103517.png)
 
 <div style="page-break-after: always;"></div>
 
@@ -237,9 +237,9 @@ Bellman-Ford alg. can handle a graph where edges have negative weights (but no n
 
 <u>Explained in Lecture-11 slide 30-34</u>
 
-![1547129169184](images\1547129169184.png)
+![1547129169184](images/1547129169184.png)
 
-![1547129179004](images\1547129179004.png)
+![1547129179004](images/1547129179004.png)
 
 ### Correctness
 
@@ -256,13 +256,13 @@ Based on Path Relaxation Property
 
 
 
-![1547131267892](images\1547131267892.png)
+![1547131267892](images/1547131267892.png)
 
 ### Running Example
 
-![1547131311680](images\1547131311680.png)
+![1547131311680](images/1547131311680.png)
 
-![1547131321145](images\1547131321145.png)
+![1547131321145](images/1547131321145.png)
 
 ### Correctness
 

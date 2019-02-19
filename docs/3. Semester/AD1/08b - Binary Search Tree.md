@@ -23,11 +23,11 @@ $$
 
 **Example:**
 
-![1547036339419](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547036339419.png)
+![1547036339419](images/1547036339419.png)
 
-![1547036310926](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547036310926.png)
+![1547036310926](images/1547036310926.png)images/
 
-![1547036318130](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547036318130.png)
+![1547036318130](images/1547036318130.png)images/
 
 **Note:** more balanced, the better!
 
@@ -41,7 +41,7 @@ Each node has 3 pointers.
 
 The tree has pointer "Root" pointing to the root of the tree.
 
-![1547036556422](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547036556422.png)
+![1547036556422](images/1547036556422.png)images/
 
 <div style="page-break-after: always;"></div>
 
@@ -67,9 +67,9 @@ DaC algorith.
 
 #### Example
 
-![1547037005683](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547037005683.png)
+![1547037005683](images/1547037005683.png)images/
 
-![1547036999115](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547036999115.png)
+![1547036999115](images/1547036999115.png)images/
 
 ### Preorder tree walk
 
@@ -81,5 +81,5 @@ Visits each node **after** visiting its children.
 
 ### Example
 
-![1547037139978](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547037139978.png)
+![1547037139978](images/1547037139978.png)images/
 

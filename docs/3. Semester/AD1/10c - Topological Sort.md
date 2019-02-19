@@ -9,7 +9,7 @@ date: 08-11-2018
 
 A DAG is a directed graph with no cycles.
 
-![1547111845493](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547111845493.png)
+![1547111845493](images/1547111845493.png)
 
 **Applications:**
 
@@ -23,7 +23,7 @@ A DAG is a directed graph with no cycles.
 
 The professor must put on certain garments before others
 
-![1547112080457](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547112080457.png)
+![1547112080457](images/1547112080457.png)images/
 
 <div style="page-break-after: always;"></div>
 
@@ -31,7 +31,7 @@ The professor must put on certain garments before others
 
 A directed graph is acyclic if and only if the graph has no back edges.
 
-![1547112139734](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547112139734.png)
+![1547112139734](images/1547112139734.png)images/
 
 
 
@@ -57,7 +57,7 @@ Reversely sort vertices according to the finishing times obtained from a DFS.
 
 * If $v.f < u.f$
 
-![1547112431035](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547112431035.png)
+![1547112431035](images/1547112431035.png)images/
 
 * Event *u* happens before event *v*
 
@@ -76,7 +76,7 @@ Topological-Sort(G)
 
 ## Example
 
-![1547112592655](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547112592655.png)
+![1547112592655](images/1547112592655.png)images/
 
 
 

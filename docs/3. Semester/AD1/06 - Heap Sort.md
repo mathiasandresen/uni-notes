@@ -148,7 +148,7 @@ Call heapify from the └n/2┘-th element down to the first element.
 
 ## Sorting
 
-![1547031224599](C:\Users\Mathias\AppData\Roaming\Typora\typora-user-images\1547031224599.png)
+![1547031224599](C:\Users\Mathias\AppData\Roaming\Typora\typora-user-images/1547031224599.png)
 
 <div style="page-break-after: always;"></div>
 

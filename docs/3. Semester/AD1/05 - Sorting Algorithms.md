@@ -83,5 +83,5 @@ Does not require additional array like [Merge Sort](./AD1 - Divide-and-Conquer.m
 
 ### Example
 
-![1547029910612](C:\Users\Mathias\AppData\Roaming\Typora\typora-user-images\1547029910612.png)
+![1547029910612](C:\Users\Mathias\AppData\Roaming\Typora\typora-user-images/1547029910612.png)
 

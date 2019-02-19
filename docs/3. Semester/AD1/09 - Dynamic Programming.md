@@ -24,7 +24,7 @@ A rabbit starts producing offspring on the second generation after its birth and
 
 How many rabbits will there be after *n* generations?
 
-![1547048900411](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547048900411.png)
+![1547048900411](images/1547048900411.png)
 
 ### Straightforward Recursive
 
@@ -46,7 +46,7 @@ This is slow!
 
 Here's why:
 
-![1547049343233](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547049343233.png)
+![1547049343233](images/1547049343233.png)images/
 
 The same value is calculated over and over!
 
@@ -94,9 +94,9 @@ Goal:
 
 * Cut up the rod to maximize profit.
 
-![1547050218779](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547050218779.png)
+![1547050218779](images/1547050218779.png)images/
 
-![1547050232232](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547050232232.png)
+![1547050232232](images/1547050232232.png)images/
 
 
 

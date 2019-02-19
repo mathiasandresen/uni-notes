@@ -28,7 +28,7 @@ Insert the value of T(1) and the expression of i into your expression.
 
 ### Example 1
 
-![1547135735492](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547135735492.png)
+![1547135735492](images/1547135735492.png)
 
 
 
@@ -36,11 +36,11 @@ Insert the value of T(1) and the expression of i into your expression.
 
 ### Example 2
 
-![1547135544227](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547135544227.png)
+![1547135544227](images/1547135544227.png)images/
 
 
 
-![1547135554152](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547135554152.png)
+![1547135554152](images/1547135554152.png)images/
 
 <div style="page-break-after: always;"></div>
 
@@ -168,7 +168,7 @@ We must show three things about loop invariants:
 
 At the start of each for loop, $A[1...j-1]$ consists of elements originally in $A[1...j-1]$ but in sorted order.
 
-![1547136410905](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547136410905.png)
+![1547136410905](images/1547136410905.png)images/
 
 **Initialization**
 

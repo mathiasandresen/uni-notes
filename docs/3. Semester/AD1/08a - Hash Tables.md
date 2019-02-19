@@ -42,7 +42,7 @@ hash(96358904) = 96358904 mod 5 = 4
 hash(96358902) = 96358902 mod 5 = 2
 ```
 
-![1547035245854](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547035245854.png)
+![1547035245854](images/1547035245854.png)
 
 Lookup:
 
@@ -63,7 +63,7 @@ Each entry in the table is pointer to a linked list.
 
 Elements with same hashed key are placed into a linked list.
 
-![1547035424506](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547035424506.png)
+![1547035424506](images/1547035424506.png)images/
 
 ### Linear Probing
 
@@ -71,7 +71,7 @@ If the current location is used, try the next table location.
 
 Lookups walk along the table until the key or an empty slot is found.
 
-![1547035609310](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547035609310.png)
+![1547035609310](images/1547035609310.png)images/
 
 
 

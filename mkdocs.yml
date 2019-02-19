@@ -1,4 +1,5 @@
-site_name: Mathias Andresen's Uni Noter
+site_name: Uni Noter
+site_author: Mathias Andresen
 site_url: http://notes.andresen.xyz/
 repo_name: 'jollycola/uni-notes'
 repo_url: 'https://gitlab.com/jollycola/uni-notes'

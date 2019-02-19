@@ -1,5 +1,5 @@
-# Mine Noter
+# Forside
 
 Velkommen til min side med mine noter fra Aalborg Universitet.
 
-Software Bachelor.
+Jeg læser bachelor i Software.

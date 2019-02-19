@@ -1,5 +1,5 @@
 site_name: Mathias Andresen's Uni Noter
-site_url: https://jollycola.gitlab.io/uni-notes/
+site_url: https://jollycola.gitlab.io/uni-notes/docs/
 
 nav:
     - Home: index.md

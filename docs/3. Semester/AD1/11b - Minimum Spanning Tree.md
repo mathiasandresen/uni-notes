@@ -33,13 +33,13 @@ date: 14-11-2018
 
 * A subset of vertices and edges.
 
-![1547116351129](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547116351129.png)
+![1547116351129](images\1547116351129.png)
 
 **Connected Graph**
 
 * Any two vertices in the graph are connected by some path
 
-![1547116386832](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547116386832.png)
+![1547116386832](images\1547116386832.png)
 
 **Tree**
 
@@ -57,7 +57,7 @@ A spanning tree T of a connected, undirected graph G = (V, E) is a sub-graph of 
 
 T is a tree, since T is <u>acyclic</u> and <u>connects any two vertices</u> of the <u>undirected</u> graph G.
 
-![1547116552981](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547116552981.png)
+![1547116552981](images\1547116552981.png)
 
 # Minimum Spanning Tree (MST)
 
@@ -144,11 +144,11 @@ A special case of the generic MST method.
 
 
 
-![1547117810248](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547117810248.png)
+![1547117810248](images\1547117810248.png)
 
-![1547117818884](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547117818884.png)
+![1547117818884](images\1547117818884.png)
 
-![1547117909565](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547117909565.png)
+![1547117909565](images\1547117909565.png)
 
 ### Complexity
 
@@ -205,13 +205,13 @@ If u and v belong to the same tree in the forest, u and v are a part of a MST - 
 
 
 
-![1547120224386](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547120224386.png)
+![1547120224386](images\1547120224386.png)
 
-![1547120231107](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547120231107.png)
+![1547120231107](images\1547120231107.png)
 
-![1547120240130](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547120240130.png)
+![1547120240130](images\1547120240130.png)
 
-![1547120320524](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547120320524.png)
+![1547120320524](images\1547120320524.png)
 
 
 
@@ -226,13 +226,13 @@ An edge $(u,v)\in E$ **crosses** the cut if
 
 **Light edge** is an edge crossing the cut an has the minimum weight of any edge crossing the cut.
 
-![1547120729521](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547120729521.png)
+![1547120729521](images\1547120729521.png)
 
 Given a cut **(S, V-S)** as a partition of G = (V, E).
 
 Considering a set A of edges, we say the cut **respects** A if no edge in A crosses the cut.
 
-![1547120811336](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547120811336.png)
+![1547120811336](images\1547120811336.png)
 
  
 
@@ -272,21 +272,21 @@ The light edge (u, v) is safe for A, satisfying:
 
 From the AD (DAT/SW) Exam 2015
 
-![1547122042544](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547122042544.png)
+![1547122042544](images\1547122042544.png)
 
-![1547122048348](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547122048348.png)
+![1547122048348](images\1547122048348.png)
 
-![1547122056127](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547122056127.png)
-
-
+![1547122056127](images\1547122056127.png)
 
 
 
-![1547121293675](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547121293675.png)
+
+
+![1547121293675](images\1547121293675.png)
 
 
 
-![1547122090337](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547122090337.png)
+![1547122090337](images\1547122090337.png)
 
 
 

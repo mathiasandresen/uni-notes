@@ -67,17 +67,27 @@ Psychology terms
 
 * Continuity
 
-	![1541447805319](images/1541447805319.png)
+  * "We tend to perceive smooth, continuous patterns rather than disjoint, interrupted ones."
+
+  ![1541447805319](images/1541447805319.png)
 
 * Similarity
 
+  * "Similar figures tend to be grouped together."
+
 <img src="images/1541447479420.png" width="20em">
+
 <center>Round vs diamond shapes -> These have different properties</center>
 
 <img src="images/1541447557480.png" width="20em">
 
 * Closure
+  * "Closed figures are perceived more easily than incomplete (or open) figures"
   * "Images that are not complete that nevertheless provides a complete image"
+
+![1547564370185](D:\Users\Mathias\Documents\GitHub\DEB-exam-notes\images\1547564370185.png)
+
+
 
 
 

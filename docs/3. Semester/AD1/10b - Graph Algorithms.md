@@ -52,19 +52,19 @@ Vertex **attributes**:
 
 ### Algorithm
 
-![1547053018450](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547053018450.png)
+![1547053018450](images\1547053018450.png)
 
 <div style="page-break-after: always;"></div>
 
 ### Running Example
 
-![1547053162862](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547053162862.png)
+![1547053162862](images\1547053162862.png)
 
 <div style="page-break-after: always;"></div>
 
 #### Breadt-first tree
 
-![1547053288192](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547053288192.png)
+![1547053288192](images\1547053288192.png)
 
 
 
@@ -113,19 +113,19 @@ Vertex **attributes**:
 
 ### Algorithm
 
-![1547053848727](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547053848727.png)
+![1547053848727](images\1547053848727.png)
 
 <div style="page-break-after: always;"></div>
 
 ### Running Example
 
-![1547053883827](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547053883827.png)
+![1547053883827](images\1547053883827.png)
 
 <div style="page-break-after: always;"></div>
 
 #### Depth-first forest
 
-![1547053911194](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547053911194.png)
+![1547053911194](images\1547053911194.png)
 
 ### Running Time
 
@@ -194,7 +194,7 @@ $$
   * Remaining edges, between trees or subtrees
     * (w,y)
 
-![1547111144355](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547111144355.png)
+![1547111144355](images\1547111144355.png)
 
 When exploring an edge (x,y), y's color tells something:
 
@@ -202,5 +202,5 @@ When exploring an edge (x,y), y's color tells something:
 * If y is **gray** - visit y, later x, then y again, edge (x, y) is a back edge.
 * If y is **black**, edge (x, y) is a forward or cross edge.
 
-![1547111642298](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547111642298.png)
+![1547111642298](images\1547111642298.png)
 

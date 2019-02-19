@@ -4,7 +4,7 @@
 
 ### Chart
 
-![1547132415926](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547132415926.png)
+![1547132415926](images\1547132415926.png)
 
 <div style="page-break-after: always;"></div>
 ### Table
@@ -19,9 +19,9 @@
 
 ### Sorting Algorithms
 
-![1547132070354](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547132070354.png)
+![1547132070354](images\1547132070354.png)
 
 ### Data Structures
 
-![1547132380527](D:\OneDrive\AAU\OneDrive - Aalborg Universitet\3. Semester\Noter\AD1\images\1547132380527.png)
+![1547132380527](images\1547132380527.png)
 

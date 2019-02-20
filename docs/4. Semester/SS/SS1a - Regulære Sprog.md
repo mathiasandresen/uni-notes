@@ -1,5 +1,5 @@
 ---
-title: Endelige Automater og Regulære Sprog
+title: Regulære Sprog
 course: SS
 session: 1
 date: 13-02-2019
@@ -23,7 +23,7 @@ Skrives $\Sigma$
 
 ### Eksempler
 
-​	$A=\{a,b,c,d,...,æ,ø,å\}$ 	(danske alfabet)
+​	$A=\{a,b,c,d,...,æ,ø,å\}$	(danske alfabet)
 
 ​	$B=\{0,1\}$ 					(binære alfabet)
 
@@ -36,7 +36,7 @@ Skrives $\Sigma$
 **Definition:**
 
 Givet et alfabet $\Sigma$,
-er en streng over $\Sigma$ er en endelig følge af tegn fra $\Sigma$ 
+er en streng over $\Sigma$ er en endelig følge af tegn fra $\Sigma​$ 
 
 **Notation:**
 
@@ -46,7 +46,7 @@ Længden af en streng s betegnes $|s|$
 
 Streng over A
 
-​	$|abe|=3$
+​	$|abe|=3​$
 
 ​	$|kpst|=4$
 
@@ -102,7 +102,7 @@ $\Sigma^*=\{\varepsilon,0,1,00,01,10,11,000,001,... \}​$
 
 
 
-## Concatination
+## Konkatination
 
 **Definition:**
 
@@ -141,7 +141,7 @@ Så vi kan bruge alle de sædvanlige mængdeoperation, **så længe de igen give
 
 $L_1\cup L_2 :\{x|x\in L_1\or x \in L_2\}$
 
-$L_1 \cap L_2 : \{x|x\in L_1 \and x\in L_2\}$
+$L_1 \cap L_2 : \{x|x\in L_1 \and x\in L_2\}​$
 
 $L_1 -L_2: \{x|x \in L_1 \and x \notin L_2 \}$
 
@@ -151,81 +151,53 @@ Men f.eks.:
 
 $L_1 \times L_2$ giver ingen mening
 
- 
 
-# Endelige automater
 
-Man ledte efter en model ag neuroner i hjernen.
+## Regulære Sprog
 
-I datalogi anvendes endelige automater:
+L er regulært hvis $\exists \space \text{DFA} \space A:L=L(A)$
 
-* I den fase af en compiler kaldet 'Leksikalske analyser' (lexer)
-
-* I specifikation af systemer.
+​	L er regulært hvis der findes en DFA der læser L
 
 
 
-Endelige automater er simple algoritmer til sproggendkendelse.
+### Regulære Operationer
 
-"Givet w, har vi $w\in L​$?"
+Foreningsmængde:
 
+​	$L_1 \cup L_2 = \{w \mid w \in L_1 \text{eller} \space w \in L_2\}$
 
+Konkatination:
 
-![1550010065441](images/1550010065441.png)
+​	$L_1 \circ L_2 = \{w \mid \exists u, \exists v:u \in L_1, v \in L_2, w=uv\}$ 
 
-**Tilstand** er markeret af en cirkel.
+L-stjerne (Kleene-stjerne):
 
-**Transition** er markeret med en pil.
-
-**Accepttilstand** er markeret med en ekstra cirkel.
-
-
-
-**Definition**:
-
-En endelig automat (DFA) er en 5-tupel
-
-​	$(Q,\Sigma,q_0,\delta,F)$
-
-$Q$ 	endelig mængde af tilfælde
-
-$\Sigma​$ 	input alfabet
-
-$q_0​$ 	starttilstand $q_0\in Q​$
-
-$\delta$ 	overføringsfunktion
-
-$F$ 	mængden af accepttilstande $F\subseteq Q$
+​	${L_1}^* = \{x_1...x_k \mid k \geq 0, x_i \in L_1 \space \text{for} \space 0 \leq i \leq k\}​$
 
 
 
-### Overføringsfunktion
+### Lukket Under Foreningsmængden
 
-![1550010434871](images/1550010434871.png)
+**Sætning:**
 
-$\delta(q,a)=q_1​$
-
-$\delta:Q\times \Sigma \rightarrow Q$
+Hvis $L_1$ og $L_2$ er regulære sprog, så er $L_1 \cup L_2$ også et regulært sprog.
 
 
 
-### Eksempel
+#### Produktkonstruktionen
 
-![1550010716632](images/1550010716632.png)
-
-$Q=\{q_0,q_1\}$
-
-$\Sigma =\{0,1\}$
-
-$q_0=q_0​$
-
-$F=\{q_0\}$
-
-| $\delta$ | 0     |   1   |
-| -------- | ----- | :---: |
-| $q_0$    | $q_0$ | $q_1$ |
-| $q_1$    | $q_1$ | $q_1$ |
+![1550675848098](images/SS1a - Regulære Sprog/1550675848098.png)
 
 
 
-<!-- Indsæt definition for Accept https://youtu.be/VeM2Riy91SM?t=383 -->
+
+
+
+
+
+
+
+
+
+

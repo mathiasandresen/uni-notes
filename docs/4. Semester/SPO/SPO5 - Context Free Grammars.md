@@ -23,8 +23,8 @@ Lets write a CFG for C-style function prototypes.
 - `void myf1(int x, double y);`
 - `int myf2();`
 - `int myf3(double z);`
-
-![1550585404022](images/1550585404022.png)
+- `double myf4(int, int w, int);`
+- `void myf5(void);`
 
 
 
@@ -48,9 +48,9 @@ Lets write a CFG for C-style function prototypes.
 
 **Components: ** $G=(N,\Sigma,P,S)$
 
-![1550585537334](../../../../OneDrive%20-%20Aalborg%20Universitet/4.%20Semester/Noter/SPO/images/1550585537334.png)
+![1550585537334](/images/1550585537334.png)
 
-**Vocabulary** $V=N\cup \Sigma$
+**Vocabulary** $V=N\cup \Sigma​$
 
 * $N \cap \Sigma = \phi​$
 

@@ -4,7 +4,7 @@ title: Indhold
 
 # Indhold
 
-Består af:
+Kurser:
 
 * [SPO - Languages and Compilers](SPO/index.md)
 * [SS - Syntax og Semantik](SS/index.md)

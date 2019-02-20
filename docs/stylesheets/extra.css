@@ -1,3 +1,11 @@
 article p{
     white-space: pre-wrap;
 }
+
+.md-tabs__item {
+    text-transform: uppercase;
+}
+
+.md-nav__title {
+    text-transform: uppercase;
+}

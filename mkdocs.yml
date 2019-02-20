@@ -12,6 +12,10 @@ theme:
     feature:
         tabs: true
 
+nav:
+    - 'Forside': index.md
+    - '3. Semester': 3-semester/index.md        
+    - '4. Semester': 4-semester/index.md        
 
 extra_css:
   - 'stylesheets/extra.css'

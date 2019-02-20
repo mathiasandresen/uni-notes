@@ -48,7 +48,7 @@ Lets write a CFG for C-style function prototypes.
 
 **Components: ** $G=(N,\Sigma,P,S)$
 
-![1550585537334](/images/1550585537334.png)
+![1550585537334](images/1550585537334.png)
 
 **Vocabulary** $V=N\cup \Sigma​$
 

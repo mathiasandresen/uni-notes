@@ -1,3 +1,9 @@
+---
+title: Classes and Objects
+course: SU
+---
+
+
 # Classes and Objects
 
 **Class:**

@@ -1,3 +1,8 @@
+---
+title: Earlier Knowledge
+course: AD1
+---
+
 # Standard Knowledge
 
 ## Logarithm

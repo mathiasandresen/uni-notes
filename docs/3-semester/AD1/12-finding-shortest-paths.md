@@ -1,5 +1,5 @@
 ---
-½title: Finding Shortest Paths
+title: Finding Shortest Paths
 course: AD1
 session: 12
 ---

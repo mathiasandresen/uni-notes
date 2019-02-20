@@ -1,5 +1,4 @@
 ---
-
 title: Minimum Spanning Tree
 course: AD1
 session: 11

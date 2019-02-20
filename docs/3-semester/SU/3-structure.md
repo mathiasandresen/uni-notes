@@ -1,4 +1,7 @@
-<!-- Mathias Andresen - 26-09-2018 -->
+---
+title: Structure
+course: SU
+---
 
 # Structure
 

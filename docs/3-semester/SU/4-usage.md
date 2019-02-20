@@ -1,4 +1,7 @@
-<!-- Mathias Andresen - 27-09-2018 -->
+---
+title: Usage
+course: SU
+---
 
 # Usage
 

@@ -1,3 +1,8 @@
+---
+title: FACTOR
+course: SU
+---
+
 # System Definition
 
 ## FACTOR

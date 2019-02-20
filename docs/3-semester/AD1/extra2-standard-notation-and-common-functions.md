@@ -1,3 +1,8 @@
+---
+title: Standard Notation and Common Functions
+course: AD1
+---
+
 # Standard Notation and Common Functions
 
 See CLRS p. 53-

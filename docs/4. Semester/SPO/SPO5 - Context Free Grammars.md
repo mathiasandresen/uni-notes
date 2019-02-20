@@ -145,20 +145,28 @@ Rewritten to:
 
 A non-terminal N is **left-recursive** if starting with at sentential form N, we can produce another sentential form starting with N
 
-​	expression 	->	expression '+' factor | factor
+```
+	expression 	->	expression ‘+’ factor | factor
+```
 
 Right-recursion also exists, is less important
 
-​	expression 	->	term '+' expression
+```
+	expression 	->	term '+' expression
+```
 
 A non-terminal N is **nullable**, if starting with a sentential form N, we can produce an empty sentential form.
 
-​	expression 	->	λ
+```
+	expression 	->	λ
+```
 
 A non-terminal is **useless**, if it can never produce a string of terminal symbols.
 
-​	expression	->	+ expression
-​				   |	  - expression		
+```
+	expression	->	+ expression
+				|	- expression
+```
 
 
 

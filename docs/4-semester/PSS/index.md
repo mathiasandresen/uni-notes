@@ -1,5 +1,5 @@
 ---
-title: Principles of Operating Systems and Concurrency
+title: Course
 ---
 
 # PSS - PRINCIPLES OF OPERATING SYSTEMS AND CONCURRENCY

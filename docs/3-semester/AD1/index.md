@@ -1,5 +1,5 @@
 ---
-title:  
+title: Course
 ---
 
 # AD1 - ALGORITHMS AND DATA STRUCTURES

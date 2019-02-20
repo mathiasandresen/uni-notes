@@ -1,5 +1,5 @@
 ---
-title:  
+title: Course
 ---
 
 # SU - SYSTEMS DEVELOPMENT

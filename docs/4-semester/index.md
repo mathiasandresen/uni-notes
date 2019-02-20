@@ -1,5 +1,5 @@
 ---
-title: Indhold
+title: Index
 ---
 
 # Indhold

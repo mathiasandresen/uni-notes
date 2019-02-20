@@ -1,5 +1,5 @@
 ---
-title: Syntax og Semantik
+title: Course
 ---
 
 # SS - SYNTAX OG SEMANTIK

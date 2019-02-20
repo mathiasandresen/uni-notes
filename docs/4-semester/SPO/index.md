@@ -1,5 +1,5 @@
 ---
-title: Languages and Compilers
+title: Course
 ---
 
 # SPO - LANGAUGES AND COMPILERS

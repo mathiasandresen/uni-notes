@@ -1,5 +1,5 @@
 ---
-title: 
+title: Course
 ---
 
 # DEB - DESIGN AND EVALUATION OF USER INTERFACES

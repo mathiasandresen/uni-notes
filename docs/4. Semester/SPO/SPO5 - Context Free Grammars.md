@@ -133,7 +133,7 @@ Rewritten to:
 
 ​	`term_tmp -> + term term_tmp`
 
-​			`| \lambda`
+​			`| λ`
 
 
 

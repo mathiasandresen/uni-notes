@@ -1,7 +1,9 @@
+---
 title: Lexical Analysis
 course: SPO
 session: 6
 date: 21-02-2019
+---
 
 # Lexical Analysis
 
@@ -40,8 +42,7 @@ This can be done to reduce the amount of memory used.
 You need to decide what to use
 
 !!! warning
-
-​	slide 8
+    slide 8
 
 
 
@@ -50,8 +51,7 @@ You need to decide what to use
 The Lexem structure can be more detailed and subtle than one might expext.
 
 !!! tip "Rule of thumb"
-
-​	If the lexem structure is complex then examine the language for design flaws!!
+    If the lexem structure is complex then examine the language for design flaws!!
 
 
 
@@ -68,16 +68,14 @@ Can be transformed to a regular expression:
 ### Regular Expressions
 
 !!! warning
-
-​	slide 13
+    slide 13
 
 
 
 ### Regular Grammars
 
 !!! warning
-
-​	slide 15
+    slide 15
 
 
 
@@ -88,24 +86,21 @@ Can be transformed to a regular expression:
 
 
 !!! warning
-
-​	slide 17-19
+    slide 17-19
 
 
 
 ## Implement Scanner Based on RE by Hand
 
 !!! warning
-
-​	slide 25
+    slide 25
 
 ## Developing a Scanner
 
 Lexical grammar of Mini-Triangle
 
 !!! warning
-
-​	slide 26-
+    slide 26-
 
 ### Developing a Scanner by Hand
 

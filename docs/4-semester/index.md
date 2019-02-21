@@ -6,9 +6,9 @@ title: Index
 
 Kurser:
 
+* [PSS - Principles of Operating Systems and Concurrency](PSS/index.md)
 * [SPO - Languages and Compilers](SPO/index.md)
 * [SS - Syntax og Semantik](SS/index.md)
-* [PSS - Principles of Operating Systems and Concurrency](PSS/index.md)
 
 
 

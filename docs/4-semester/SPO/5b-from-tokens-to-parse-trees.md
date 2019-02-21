@@ -150,11 +150,10 @@ Most commonly used for automatic tools today (LALR in particular)
 
 * kfG Edit
 * Contex Free Grammar tool
-* ACLA
+* [ACLA](http://services2.brics.dk/java/grammar/demo.html)
 
 
 
 !!! warning
-
 Kig på predictset! Side 176 i Fisher et. al. PDF
 

@@ -151,3 +151,10 @@ Most commonly used for automatic tools today (LALR in particular)
 * kfG Edit
 * Contex Free Grammar tool
 * ACLA
+
+
+
+!!! warning
+
+Kig på predictset! Side 176 i Fisher et. al. PDF
+

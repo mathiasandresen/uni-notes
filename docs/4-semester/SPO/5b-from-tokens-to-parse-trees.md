@@ -154,7 +154,5 @@ Most commonly used for automatic tools today (LALR in particular)
 
 
 
-!!! warning
-
-​	Kig på predictset! Side 176 i Fisher et. al. PDF
-
+!!! warning "Udvid"
+	Kig på predictset! Side 176 i Fisher et. al. PDF

@@ -79,6 +79,12 @@ $F=\{q_0\}$
 
 
 
+## Andet
+
+Et lille værktøj til at tegne endelige automater:
+
+[http://madebyevan.com/fsm/](http://madebyevan.com/fsm/)
+
 
 
 <!-- Indsæt definition for Accept https://youtu.be/VeM2Riy91SM?t=383 -->

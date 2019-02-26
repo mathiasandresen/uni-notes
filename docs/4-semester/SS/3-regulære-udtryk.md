@@ -84,3 +84,38 @@ Kan tegnes som NFA:
 
 Og som vi så i [Lektion 2](../SS/2-nondertiminstiske-endelige-automater.md#kvivalens-mellem-dfa-og-nfa), så kan en NFA skrives om til en DFA.
 
+
+
+### Generaliseret NFA (GNFA)
+
+**Definition**:
+
+En GNFA er en 5-tupel
+
+​	$(Q, \Sigma,q_{start},q_{accept},\delta)​$
+
+Q:           mængde af tilstande
+
+$\Sigma$:           input alfabet
+
+$q_{start}$:     starttilstand $q_{start} \in Q$
+
+$q_{accept}​$:   accepttilstand $q_{accept} \in Q​$
+
+$\delta$:            Skal over en "**bordskik**"
+
+
+
+**Bordskik**:
+
+* Én transition mellem hvert par af  tilstande, dog
+* Ingen transitioner fra $q_{accept}​$
+* Ingen transition til $q_{start}$
+* Regulære udtryk på transitionerne.
+
+
+
+#### Eksempel
+
+![1551222564332](images/3-regulære-udtryk/1551222564332.png)
+

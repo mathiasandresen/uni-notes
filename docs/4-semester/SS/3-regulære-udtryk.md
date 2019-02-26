@@ -37,6 +37,7 @@ Man taler om regulære udtryk over et alfabet.
 $$
 (aa \space \cup \space b)^*
 $$
+Kan tegnes som NFA:
 
 <svg width="800" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg">
 	<ellipse stroke="black" stroke-width="1" fill="none" cx="101.5" cy="224.5" rx="30" ry="30"/>
@@ -81,5 +82,5 @@ $$
 	<text x="318.5" y="373.5" font-family="Times New Roman" font-size="20">&#949;</text>
 </svg>
 
-
+Og som vi så i [Lektion 2](2-nondertiminstiske-endelige-automater#lukning-under-de-regulre-operationer), så kan en NFA skrives om til en DFA.
 

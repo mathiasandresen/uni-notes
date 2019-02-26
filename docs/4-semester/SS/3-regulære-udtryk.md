@@ -82,5 +82,4 @@ Kan tegnes som NFA:
 	<text x="318.5" y="373.5" font-family="Times New Roman" font-size="20">&#949;</text>
 </svg>
 
-Og som vi så i [Lektion 2](2-nondertiminstiske-endelige-automater#kvivalens-mellem-dfa-og-nfa), så kan en NFA skrives om til en DFA.
-
+Og som vi så i [Lektion 2](2-nondertiminstiske-endelige-automater.md#kvivalens-mellem-dfa-og-nfa), så kan en NFA skrives om til en DFA.

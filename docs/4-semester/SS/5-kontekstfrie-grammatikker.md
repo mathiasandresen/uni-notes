@@ -14,7 +14,7 @@ date: 13-03-2019
 
 
 
- ## Definition
+ ## Definition - CFG
 
 En **kontekstfri grammatik** er en 4-tupel
 $$
@@ -70,12 +70,12 @@ $$
 $$
 
 
-## Definition
+## Definition - Derivition
 
 **Derivition**
 
-Lad G være en CFG hvor $G=(V,\Sigma,R,S)$ 
-og lad $u,v \in (V\cup\Sigma)^*$
+Lad G være en CFG hvor $G=(V,\Sigma,R,S)​$ 
+og lad $u,v \in (V\cup\Sigma)^*​$
 
 Hvis
 $$
@@ -98,7 +98,16 @@ $$
 
 
 
+## Definition - Sproget beskrevet af en CFG
 
+Lad $G=(V,\Sigma,R,S)$  være en CFG
+
+Sproget defineret af G er
+$$
+L(G)=\{w\in\Sigma^* \ | \ S \Rightarrow^*w\}
+$$
+Et sprog L kalder vi **kontekstfrit** hvis
+der findes en CFG G så $L=L(G)$
 
 
 

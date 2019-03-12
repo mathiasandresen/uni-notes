@@ -29,4 +29,3 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.arithmatex
-  - mdx_math

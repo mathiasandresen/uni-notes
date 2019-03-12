@@ -61,13 +61,10 @@ Strengen *aaabbb*
 
 $$
 \begin{align*}
-
 \text{S} &\Rightarrow \text{aSb} \\
 & \Rightarrow \text{aaSbb} \\
 & \Rightarrow \text{aaaSbbb} \\
 & \Rightarrow \text{aaabbb}
-
-
 \end{align*}
 $$
 
@@ -94,13 +91,13 @@ $$
 u \Rightarrow v
 $$
 
-<center> u deriverer i et skridt til v
+<center> u deriverer i et skridt til v </center>
 
 $$
 u \Rightarrow^* v
 $$
 
-<center> u deriverer i 0 eller flere et skridt til v
+<center> u deriverer i 0 eller flere et skridt til v </center>
 
 
 

@@ -28,7 +28,5 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.arithmatex:
-      TeX: {
-        extensions: ["AMSmath.js", "AMSsymbols.js"]
-        }
+      extensions: ["AMSmath.js", "AMSsymbols.js"]
   - mdx_math

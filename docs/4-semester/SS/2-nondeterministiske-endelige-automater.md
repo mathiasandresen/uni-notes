@@ -38,13 +38,13 @@ Transitioner beskriver mængden af mulige efterfølgertilstande for ethvert tegn
 
 ![1550677021774](images/SS2 - Nondertiminstiske Endelige Automater/1550677021774.png)
 
-$\delta(q_1,a)=\O$
+$\delta(q_1,a)=Ø$
 
 $\delta(q_2,a)=\{q_1,q_2\}​$
 
 $\delta(q_1,\varepsilon)=\{q_2\}​$
 
-$\delta(q_2, \varepsilon)=\O$ 
+$\delta(q_2, \varepsilon)=Ø$ 
 $$
 \delta:Q\times\Sigma_\varepsilon \rightarrow \mathcal{P}(Q)
 $$

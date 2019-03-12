@@ -14,7 +14,7 @@ date: 13-03-2019
 
 <br />
 
- ## Definition - CFG
+## Definition - CFG
 
 En **kontekstfri grammatik** er en 4-tupel
 $$

@@ -169,3 +169,44 @@ Hvis $\delta(q,a)=q'$ lav reglen:
 ### Verdenskort
 
 ![1552401982796](images/5-kontekstfrie-grammatikker/1552401982796.png)
+
+
+
+## Derivitionstræer / Parsetræer
+
+Et parsetræ er en trærepræsentation af en derivition.
+
+### Eksempel
+
+Aritmetiske udtryk
+$$
+V=\{E\},\Sigma=\{+,*,a\} \\
+E \longrightarrow E+E \ | \ E*E \ | \ a
+$$
+"a+a*a"
+$$
+E\Rightarrow E+E \Rightarrow a+E \Rightarrow a+E*E \Rightarrow a+a*E \Rightarrow a+a*a
+$$
+
+#### Parsetræ
+
+![1552402844589](images/5-kontekstfrie-grammatikker/1552402844589.png)
+
+### MEN
+
+Kan også deriveres på en anden måde:
+$$
+E\Rightarrow E*E \Rightarrow E+E*E \Rightarrow a+E*E \Rightarrow a+a*E \Rightarrow a+a*a
+$$
+![1552402983190](images/5-kontekstfrie-grammatikker/1552402983190.png)
+
+Grammatikken er **tvetydig** (ambigous).
+
+Begge derivitioner er **venstrederivitioner**, 2 forskellige venstrederivitioner.
+
+
+
+
+
+
+

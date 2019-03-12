@@ -47,6 +47,7 @@ $$
 $$
 
 ​	svarer til:
+
 $$
 \begin{align*}
 \text{S} &\longrightarrow \varepsilon \\

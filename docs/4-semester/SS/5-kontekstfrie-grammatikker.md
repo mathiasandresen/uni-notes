@@ -58,6 +58,7 @@ $$
 #### Byggelse af en streng
 
 Strengen *aaabbb*
+
 $$
 \begin{align*}
 
@@ -79,16 +80,20 @@ Lad G være en CFG hvor $G=(V,\Sigma,R,S)​$
 og lad $u,v \in (V\cup\Sigma)^*​$
 
 Hvis
+
 $$
 \begin{align*}
 u&=u_1Au_2 \quad og \quad A\longrightarrow w \\
 og \quad v &=u_1wu_2 
 \end{align*}
 $$
+
 så skriver vi
+
 $$
 u \Rightarrow v
 $$
+
 <center> u deriverer i et skridt til v
 
 $$
@@ -104,9 +109,11 @@ $$
 Lad $G=(V,\Sigma,R,S)$  være en CFG
 
 Sproget defineret af G er
+
 $$
 L(G)=\{w\in\Sigma^* \ | \ S \Rightarrow^*w\}
 $$
+
 Et sprog L kalder vi **kontekstfrit** hvis
 der findes en CFG G så $L=L(G)$
 

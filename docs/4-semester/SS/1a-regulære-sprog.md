@@ -139,11 +139,11 @@ Et sprog er bare en mængde af strenge.
 
 Så vi kan bruge alle de sædvanlige mængdeoperation, **så længe de igen giver os et sprog.**
 
-$L_1\cup L_2 :\{x|x\in L_1\or x \in L_2\}$
+$L_1\cup L_2 :\{x|x\in L_1\lor x \in L_2\}$
 
-$L_1 \cap L_2 : \{x|x\in L_1 \and x\in L_2\}​$
+$L_1 \cap L_2 : \{x|x\in L_1 \land x\in L_2\}$
 
-$L_1 -L_2: \{x|x \in L_1 \and x \notin L_2 \}$
+$L_1 -L_2: \{x|x \in L_1 \land x \notin L_2 \}$
 
 
 

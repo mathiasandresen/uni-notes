@@ -116,3 +116,56 @@ der findes en CFG G så $L=L(G)$
 
 
 
+## Eksempel 2
+
+Sprog
+
+$$
+L_2=\{w \in \{a,b\}^* \ | \ \text{w er et palindrom}\}
+$$
+
+​	Eksempler:
+$$
+aaa \in L_2 \quad abba \in L_2 \quad ab \notin L_2
+$$
+Regler:
+$$
+S \longrightarrow \varepsilon \ | \ a \ | \ b \ | \ aSa \ | \ bSb
+$$
+Derivation af *abba*
+$$
+S \Rightarrow aSa \Rightarrow abSba \Rightarrow abba
+$$
+
+
+## Kontekstfrie sprog vs Regulære sprog
+
+**<u>Sætning</u>**
+
+Hvis M er en DFA, kan vi konstruere en CFG G så $L(G)=L(M)​$
+
+**Eksempel:**
+
+​	M:
+
+![1552399948132](images/5-kontekstfrie-grammatikker/1552399948132.png)
+
+Ide i konstruktion: Til hver tilstand svarer en variabel i vores CFG
+
+$$
+\begin{align*}
+A_1 &\longrightarrow aA_1 \ | \ bA_2 \ | \ b\\ 
+A_2 &\longrightarrow vA_2 \ | \ aA_1 \ | \ b \ | \ \varepsilon
+\end{align*}
+$$
+
+**Generelt:**
+
+Hvis $\delta(q,a)=q'$ lav reglen:
+
+​	$A_q\longrightarrow aA_{q'}$ 	Hvis $q'\in F: \quad A_q\longrightarrow a$
+​					Hvis $q\in F : \quad A_q\longrightarrow \varepsilon$
+
+### Verdenskort
+
+![1552401982796](images/5-kontekstfrie-grammatikker/1552401982796.png)

@@ -22,7 +22,7 @@ Endelige automater er simple algoritmer til sproggendkendelse.
 
 
 
-![1550010065441](../../4.%20Semester/SS/images/1550010065441.png)
+![1550010065441](../../4-semester/SS/images/1550010065441.png)
 
 **Tilstand** er markeret af en cirkel.
 
@@ -52,7 +52,7 @@ $F$ 	mængden af accepttilstande $F\subseteq Q$
 
 ### Overføringsfunktion
 
-![1550010434871](../../4.%20Semester/SS/images/1550010434871.png)
+![1550010434871](../../4-semester/SS/images/1550010434871.png)
 
 $\delta(q,a)=q_1$
 
@@ -62,7 +62,7 @@ $\delta:Q\times \Sigma \rightarrow Q$
 
 ### Eksempel
 
-![1550010716632](../../4.%20Semester/SS/images/1550010716632.png)
+![1550010716632](../../4-semester/SS/images/1550010716632.png)
 
 $Q=\{q_0,q_1\}$
 

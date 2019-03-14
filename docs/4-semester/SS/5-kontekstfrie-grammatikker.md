@@ -211,7 +211,7 @@ Begge derivitioner er **venstrederivitioner**, 2 forskellige venstrederivitioner
 
 
 
-## Chomsky Normalform
+## Chomsky Normalform (CNF)
 
 **Definition**
 

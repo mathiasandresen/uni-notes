@@ -101,3 +101,10 @@ Lad $w\in\Sigma^*$, hvor $w=u_1...u_k$, hvor $u_i\in\Sigma_{\varepsilon} \quad (
     
 
     * $r_k\in F$
+
+
+
+## Eksempel 2-3
+
+!!! warn "Udvid noter"
+    indsæt eksempler fra SS6 afsnit 4 [https://www.youtube.com/watch?v=eBgtVhYUf50&list=PLA8H0-CuqhGGH6lTKmcgzzmK7kkwX75rF&index=4]

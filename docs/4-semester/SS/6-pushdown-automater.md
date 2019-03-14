@@ -40,7 +40,7 @@ $$
 
 ## PDA Som en Orienteret Graf
 
-![1552589067883](images/6-pushdown-automater/1552589067883.png)
+![1552589067883](images/6-pushdown-automater/1552589080903.png)
 
 **Betyder:**
 
@@ -78,4 +78,26 @@ Lad $w\in\Sigma^*$, hvor $w=u_1...u_k$, hvor $u_i\in\Sigma_{\varepsilon} \quad (
 
 **M accepterer w** hvis:
 
-* 
+1. Der findes en følge af tilstande $r_0...r_k​$
+
+2. Der findes en følge af stakindhold $s_0...s_k​$
+
+    $(s_i\in\Gamma^* \ \text{for} \ 0\leq i \leq k)$
+
+    
+
+    Der gælder om (1) og (2) at:
+
+    * $r_0=q_0,\quad s_0=\varepsilon$
+    * $\text{for alle}\ 0\leq i \leq k$ gælder:
+
+    $$
+    \begin{align*} 
+    && s_i &=a_iS_i' \\
+    (r_{i+1}&,a_{i+1}) \in \delta(r_i,u_{i+1},a_i) & s_{i+1} &=a_{i+1}S_i'
+    \end{align*}
+    $$
+
+    
+
+    * $r_k\in F$

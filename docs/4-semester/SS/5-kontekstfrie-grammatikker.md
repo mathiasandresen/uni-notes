@@ -300,7 +300,7 @@ $$
 
 **2)** (fix $\epsilon$-regler)
 
-Fjern reglerne $A\longrightarrow \varepsilon $ en ad gangen (epsilonregler) og
+Fjern reglerne $A \longrightarrow \varepsilon$ en ad gangen (epsilonregler) og
 
 Tilføj nye regler hvor 0 eller flere forekomster af A er blevet fjernet.
 

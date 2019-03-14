@@ -14,7 +14,9 @@ date: 13-03-2019
 
 <br />
 
-## Definition - CFG
+## Kontekstfri Grammatik - CFG
+
+**Definition**:
 
 En **kontekstfri grammatik** er en 4-tupel
 $$
@@ -69,9 +71,9 @@ $$
 $$
 
 
-## Definition - Derivition
+## Derivition
 
-**Derivition**
+**Definition:**
 
 Lad G være en CFG hvor $G=(V,\Sigma,R,S)​$ 
 og lad $u,v \in (V\cup\Sigma)^*​$
@@ -91,33 +93,14 @@ $$
 u \Rightarrow v
 $$
 
-<center> u deriverer i et skridt til v </center>
-
+​	u **deriverer** i et skridt til v
 $$
 u \Rightarrow^* v
 $$
 
-<center> u deriverer i 0 eller flere et skridt til v </center>
+​	u **deriverer** i 0 eller flere et skridt til v
 
-
-
-## Definition - Sproget beskrevet af en CFG
-
-Lad $G=(V,\Sigma,R,S)$  være en CFG
-
-Sproget defineret af G er
-
-$$
-L(G)=\{w\in\Sigma^* \ | \ S \Rightarrow^*w\}
-$$
-
-Et sprog L kalder vi **kontekstfrit** hvis
-der findes en CFG G så $L=L(G)$
-
-
-
-## Eksempel 2
-
+### Eksempel
 Sprog
 
 $$
@@ -136,6 +119,24 @@ Derivation af *abba*
 $$
 S \Rightarrow aSa \Rightarrow abSba \Rightarrow abba
 $$
+
+
+
+## Kontekstfrie sprog
+
+**Definition:**
+
+Lad $G=(V,\Sigma,R,S)​$  være en CFG
+
+Sproget defineret af G er
+
+$$
+L(G)=\{w\in\Sigma^* \ | \ S \Rightarrow^*w\}
+$$
+
+Et sprog L kalder vi **kontekstfrit** hvis
+der findes en CFG G så $L=L(G)$
+
 
 
 ## Kontekstfrie sprog vs Regulære sprog
@@ -166,7 +167,7 @@ Hvis $\delta(q,a)=q'$ lav reglen:
 ​	$A_q\longrightarrow aA_{q'}$ 	Hvis $q'\in F: \quad A_q\longrightarrow a$
 ​					Hvis $q\in F : \quad A_q\longrightarrow \varepsilon$
 
-### Verdenskort
+### Verdenskort (Venn diagram)
 
 ![1552401982796](images/5-kontekstfrie-grammatikker/1552401982796.png)
 
@@ -211,13 +212,45 @@ Begge derivitioner er **venstrederivitioner**, 2 forskellige venstrederivitioner
 
 
 
+## Tvetydighed
+
+**Definition**:
+
+En CFG G er **tvetydig** hvis der findes en $w\in L(G)$ så $S\Rightarrow^*w$ med to (eller flere) forskellige **venstrederivitioner**
+
+
+
+**Sætning:**
+
+En CFG G er tvetydig hvis og kun hvis der findes en $w\in L(G)$ som har mindst to forskellige parsetræer.
+
+
+
+### Indbygget Tvetydighed
+
+Der findes kontekstfrie sprog L så **enhver** CFG G så $L(G)=L$ vil være tvetydig.
+
+Den slags sprog kaldes **indbygget tvetydig**
+
+
+
+### Bestem Tvetydighed
+
+**Sætning**
+
+Der findes **ikke** nogen algoritme, der altid kan fortælle os om en CFG er tvetydig.
+
+(umulighedsresultat)
+
+
+
 ## Chomsky Normalform (CNF)
 
 **Definition**
 
 En CFG er på Chomsky-Normalform (CNF) hvis reglerne overholder:
 
-* Eneste tilladte $\varepsilon$-regel er $S\longrightarrow\varepsilon$
+* Eneste tilladte $\varepsilon$-regel er $S\longrightarrow\varepsilon​$
 * Alle andre regler er på formerne:
     * $A\longrightarrow BC$
     * $A\longrightarrow a$

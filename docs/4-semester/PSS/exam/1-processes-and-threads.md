@@ -12,7 +12,7 @@ After lecture 1 you can:
 
 * :heavy_check_mark: Define and explain the concept of a **process **
 * :heavy_check_mark: ​Explain what a **process image** is. 
-* Explain what a **process control block** is, what it is used for and why it is needed..
+* Explain what a **process control block** is, what it is used for and why it is needed.
 * Explain in general terms, how process creation, switching and termination works
 * Define and discuss **process states**
 * Define and explain the concept of a **thread**
@@ -42,6 +42,26 @@ Et **process image** er en samling af process relateret data. Det består af:
 * **Heap** (user data)
 
 
+
+#### Process Control Block (PCB)
+
+PCB er en datastruktur der indeholder data om en process.
+
+Indeholder ting som:
+
+* Identifier
+* State (tilstand)
+* Prioritet
+* Program Counter (PC)
+* Memory counter
+* I/O Status
+
+* Context (gemte registre til hvis processen skal køre igen)
+
+
+
+!!! snippet "XV6"
+	Implementering i xv6 kan findes i filen ``proc.h``
 
 
 

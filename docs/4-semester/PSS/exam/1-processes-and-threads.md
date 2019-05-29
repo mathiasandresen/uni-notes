@@ -4,7 +4,7 @@ title: (1) Processes and Threads
 
 # Processes and Threads
 
-
+*Keywords:* Definition of process/thread, process-/thread-control block, 5-state process model, process creation, process image, process/thread switching, multithreading, implementation strategies for thread support, user-/kernel-mode.
 
 ## Learning Goals
 
@@ -14,11 +14,11 @@ After lecture 1 you can:
 * :heavy_check_mark: ​Explain what a **process image** is. 
 * :heavy_check_mark: Explain what a **process control block** is, what it is used for and why it is needed.
 * :heavy_check_mark: Explain in general terms, how process creation, switching and termination works
-* Define and discuss **process states**
-* Define and explain the concept of a **thread**
-* Discuss when, where and how (multi-)threads are usefull
-* Explain what a **thread control block** is, what it is used for and why it is needed
-* Discuss **implementation strategies** for thread support and explain the associated **trade-offs**
+* :heavy_check_mark: Define and discuss **process states**
+* :heavy_check_mark: Define and explain the concept of a **thread**
+* :heavy_check_mark: Discuss when, where and how (multi-)threads are usefull
+* :heavy_check_mark: Explain what a **thread control block** is, what it is used for and why it is needed
+* :heavy_exclamation_mark: Discuss **implementation strategies** for thread support and explain the associated **trade-offs**
 
 
 
@@ -101,23 +101,94 @@ Den nye process køres, via den nyindstillede PC (program counter)
 
 
 
+Ekstra info
+
+<https://medium.com/@ppan.brian/context-switch-from-xv6-aedcb1246cd>
+
+#### Process state
+
+En process's tilstande bruges af scheduleren til at vide hvilke processer den kan køre. OSTEP definerer følgende tilstande.
+
+* **Running:** Processen kører lige nu på en processor, instruktioner udføres.
+* **Ready:** Processen er klar til at køre, men af en eller anden grund, har OS valgt ikke at køre den.
+* **Blocked:** Processen er **ikke** klar til at køre. Et eksempel kan være mens den venter på I/O.
+
+xv6 har tilmed: ``EMBROYO`` : den er oprettet, men ikke udfyldt med nødvendig data endnu. 
+``ZOMBIE``: den er termineret, men endnu ikke opryttet af OS endnu. (Bruges af f.eks. parent processes, til at se return code)
+
 ### Thread
 
 En tråd (**thread**) er den mindste eksekverbare del af en process.
 
 En process kan have 1 eller flere tråde.
 
+#### Multithreading
+
+Opsplitningen af en process i flere tråde. 
+
+![1559130317722](images/1-processes-and-threads/1559130317722.png)
+
+Multithreading kan eksempelvis være **nyttigt ved GUI.**
+
+* Nogle tråde arbejder på hovedarbejdet (baggrunden)
+* Nogle tråde arbejder på at opdatere GUI, så den virker mere responsiv.
+
+Eksempel: Der trykkes på en opdateringsknap med der opdatere en liste med data fra internettet. Ved single-thread, vil GUI'en "holde stille" og vente på al data. Ved multithreading, kan man hente data i en anden tråd, og dermed er GUI stadig brugbar imens.
+
+* **Low cost** creation, switching and termination
+* Interthread communication (**memory sharing**)
+
+* Kan udnytte **multi-processor/-core** platforme.
+
+Skaber bedre arkitektur / design.
+
+* Modularitet
+
+![1559134286595](images/1-processes-and-threads/1559134286595.png)
 
 
 
+Thread-local data:
+
+* thread-ID
+* priority
+* stack
+
+Process-local data:
+
+* Address space, heap, open files
+* process-ID
+* parent, ownership, CPU reg (copy)
+
+Shared data:
+
+* Program text
+
+#### Thread Control Block
+
+Ligesom process control block (PCB), men indeholder information om tråden som thread-ID, som beskrevet ovenfor.
 
 
 
+#### Thread Support Implementation Strategies
+
+![1559136064896](images/1-processes-and-threads/1559136064896.png)
+
+![1559136073036](images/1-processes-and-threads/1559136073036.png)
+
+![1559136096279](images/1-processes-and-threads/1559136096279.png)
 
 
 
+### Amdahls Law
 
+Potientel performance speedup:
+$$
+Speedup=\frac{1}{(1-f)+\frac{f}{N}}
+$$
+hvor
 
+​	$f$ er "parallelisable fraction" (hvor meget execution time der bliver paralleliseret)
+​	$N$ er antallet af tilgængelige cores/CPUs
 
-
-
+![1559136342889](images/1-processes-and-threads/1559136342889.png)

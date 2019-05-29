@@ -1,10 +1,14 @@
 ---
-title: (1) Processes and Threads
+title: 1 - Processes and Threads
 ---
 
-# Processes and Threads
+# 1 - Processes and Threads
 
 *Keywords:* Definition of process/thread, process-/thread-control block, 5-state process model, process creation, process image, process/thread switching, multithreading, implementation strategies for thread support, user-/kernel-mode.
+
+## Litterature
+
+OSTEP Chapters 3, 4, 5
 
 ## Learning Goals
 

@@ -30,4 +30,40 @@ After lecture 2 you:
   * MLFQ
   * Lottery scheduling
 
- 
+ ## Noter 
+
+### Limited Direct Execution (LDE)
+
+The direct execution part: Run the program directly on the CPU
+
+![1559151779305](images/2-scheduler/1559151779305.png)
+
+Direct execution is fast, running directly on the CPU. 
+
+How do allow a process to perform restricted operations without giving complete control?
+
+For at undgå malicious processer, findes 2 modes. **User**- og **kernel-mode**.
+
+Restriktede operationer, kan kun laves i kernel mode. **System kald**, er kald som user-processer kan eksekvere, der kan eksekvere kode i kernel mode.
+
+For at eksekvere system kald, eksekvere programmer en **trap** instruktion.
+
+Når systemet er færdig, eksekveres en **return-from-trap** instruktion, der returnerer til det kaldende bruger-program.
+
+#### Trap
+
+Når et trap eksekveres, gemmes kalderens registrer, så den kan returnere igen. x86 pusher PC, flags og andre registre til en **kernel stack**. Som så bliver popped igen når return-from-trap eksekveres.
+
+#### Trap Table
+
+For at kernel ved hvad der må eksekveres under et trap, opsættes et **trap-table** under boot. 
+
+Trap table fortæller hardware hvilket kode der skal eksekveres under hvilke events (**trap handlers**).
+
+Et **system-call number** er assigned til hvert system kald. User programmet placerer dette nummer i et bestemt register, eller bestemt sted i stakken.
+
+OS tjekker dette nummers validitet og kører det tilsvarende kode. Denne indirekthed fungerer som besykttelse.
+
+!!! snippet "xv6"
+	System call numbers i xv6 kan ses i ``syscall.h``. De gemmes i %eax. Og kaldes ved at eksekvere trap med ``T_SYSCALL``. 
+

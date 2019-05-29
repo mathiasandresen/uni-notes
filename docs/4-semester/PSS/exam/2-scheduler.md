@@ -16,7 +16,7 @@ OSTEP Chapters 6, 7, 8, 9
 
 After lecture 2 you:
 
-* Can explain the notion of **limited direct execution** and how it relates to scheduling
+* :heavy_check_mark: Can explain the notion of **limited direct execution** and how it relates to scheduling
 * Will know the **simplified process model**
 * Will know and can explain important **metrics** for measuring a scheduling policy:
   * Fairness
@@ -30,7 +30,7 @@ After lecture 2 you:
   * MLFQ
   * Lottery scheduling
 
- ## Noter 
+## Noter 
 
 ### Limited Direct Execution (LDE)
 
@@ -67,3 +67,27 @@ OS tjekker dette nummers validitet og kører det tilsvarende kode. Denne indirek
 !!! snippet "xv6"
 	System call numbers i xv6 kan ses i ``syscall.h``. De gemmes i %eax. Og kaldes ved at eksekvere trap med ``T_SYSCALL``. 
 
+#### Switching Process (Scheduling)
+
+2 method: **cooperative approach** og **non-cooperative**. 
+
+##### Cooperative Approach
+
+Processer står selv for at overgive kontrollen til OS. Eksempelvis gennem system kald eller **yield** kald.
+Overgiver også kontrollen ved fejl, ex divide-by-zero. Generer trap.
+
+##### Non-Cooperative
+
+**Timer-interrupts**: en timer kører i hardware og interrupter. Under interrupt, pauses den kørende process, og OS's **interrupt-handler** kører. 
+
+Hvilket kode der skal køre (interrupt-handler) meddeles til hardware under boot. Timer startes under boot.
+
+
+
+##### Context Switch
+
+**Scheduler** bestemmer om der skal skiftes process. Hvis der skiftes process udføres **context switch**.
+
+Registre **gemmes** fra kørende process (til **kernel stack**), og registre **genoprettes** fra soon-to-be-running process (fra **kernel stack**).
+
+Når return-from-trap udføres, returneres til process B.

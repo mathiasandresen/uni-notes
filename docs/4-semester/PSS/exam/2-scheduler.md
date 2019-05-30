@@ -1,12 +1,10 @@
 ---
-title: 2 - Scheduler
+**title**: 2 - Scheduler
 ---
 
 # 2 - Scheduler
 
-*Keywords*: Metrics for scheduling (turnaround time, response time), simple process
-model, scheduling policies (FIFO, SJF, STCF, Round Robin, MLFQ, lottery
-scheduler).
+*Keywords*: Metrics for scheduling (turnaround time, response time), simple process model, scheduling policies (FIFO, SJF, STCF, Round Robin, MLFQ, lottery scheduler).
 
 ## Litterature
 
@@ -17,15 +15,15 @@ OSTEP Chapters 6, 7, 8, 9
 After lecture 2 you:
 
 * :heavy_check_mark: Can explain the notion of **limited direct execution** and how it relates to scheduling
-* Will know the **simplified process model**
+* :heavy_check_mark: Will know the **simplified process model**
 * Will know and can explain important **metrics** for measuring a scheduling policy:
   * Fairness
-  * Turnaround time
+  * :heavy_check_mark: Turnaround time
   * Response time
 * Can explain important **scheduling policies** and their pros and cons:
-  * FIFO
-  * SJF
-  * STCF
+  * :heavy_check_mark: FIFO (First In First Out)
+  * :heavy_check_mark: SJF (Shortest Job First)
+  * :heavy_check_mark: STCF (Shortest Time-to-Completion First)
   * Round Robin
   * MLFQ
   * Lottery scheduling
@@ -91,3 +89,92 @@ Hvilket kode der skal køre (interrupt-handler) meddeles til hardware under boot
 Registre **gemmes** fra kørende process (til **kernel stack**), og registre **genoprettes** fra soon-to-be-running process (fra **kernel stack**).
 
 Når return-from-trap udføres, returneres til process B.
+
+
+
+### Simplified Process Model
+
+1. Each job runs for the same amount of time
+2. All jobs arrive at the same time
+3. Once started each job runs to completion
+4. All jobs only use the CPU (no I/O)
+5. The run-time of each job is known
+
+Terminologi: $job==process\ |\ job == thread$
+
+
+
+### Scheduling Metrics
+
+**Turnaround time**: Tid fra arrival til færdiggørrelse
+$$
+T_{turnaround}=T_{complition}-T_{arrival}
+$$
+Dette er en **performance** metric.
+
+**Response time:** Tid fra arrival til første schedule
+$$
+T_{response}=T_{firstrun}-T_{arrival}
+$$
+
+
+### First In, First Out (FIFO)
+
+AKA **First Come, First Served (FCFS)**
+
+* Nem at implementere
+
+![1559199685412](images/2-scheduler/1559199685412.png)
+
+Average turnaround time:
+
+​	$\frac{10+20+30}{3}=20$
+
+Men hvis vi relaxer assumtion 1:
+
+![1559199510822](images/2-scheduler/1559199510822.png)
+
+**Convoy effect**: Korte jobs bliver sat i kø bag store jobs.
+
+Average turnaround time høj:
+
+​	$\frac{100+110+120}{3}=110$
+
+
+
+### Shortest Job First (SJF)
+
+![1559199807956](images/2-scheduler/1559199807956.png)
+
+Average turnaround time:
+
+​	$\frac{10+20+120}{3}=50$
+
+Givet vores assumptions om at alle jobs ankommer på samme tid, kan SJF bevises til at være **optimal** scheduling algoritme.
+
+Men hvis vi relaxer assumption 2.
+
+Hvis A ankommer før B og C vil den få høj turnaround time igen. 
+
+​	($103.33$)
+
+
+
+### Shortest Time-to-Completion First (STCF)
+
+AKA Preemptive Shortest Job First (PSJF)
+
+Vi relaxer assumption 3. 
+
+![1559200319934](images/2-scheduler/1559200319934.png)
+
+Giver os bedre average turnaround time: $50$
+
+Givet vores nuværende assumptions er STCF beviseligt optimal.
+
+
+
+### Round Robin (RR)
+
+RR kører jobs for en **time slice** (også kaldt **scheduling quantum**)
+

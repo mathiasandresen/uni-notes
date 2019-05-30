@@ -1,5 +1,5 @@
 ---
-**title**: 2 - Scheduler
+title: 2 - Scheduler
 ---
 
 # 2 - Scheduler
@@ -19,12 +19,12 @@ After lecture 2 you:
 * Will know and can explain important **metrics** for measuring a scheduling policy:
   * Fairness
   * :heavy_check_mark: Turnaround time
-  * Response time
+  * :heavy_check_mark: Response time
 * Can explain important **scheduling policies** and their pros and cons:
   * :heavy_check_mark: FIFO (First In First Out)
   * :heavy_check_mark: SJF (Shortest Job First)
   * :heavy_check_mark: STCF (Shortest Time-to-Completion First)
-  * Round Robin
+  * :heavy_check_mark: Round Robin
   * MLFQ
   * Lottery scheduling
 
@@ -140,7 +140,7 @@ Average turnaround time høj:
 
 ​	$\frac{100+110+120}{3}=110$
 
-
+Dårlig response time
 
 ### Shortest Job First (SJF)
 
@@ -158,7 +158,7 @@ Hvis A ankommer før B og C vil den få høj turnaround time igen.
 
 ​	($103.33$)
 
-
+Skidt for response time
 
 ### Shortest Time-to-Completion First (STCF)
 
@@ -172,9 +172,25 @@ Giver os bedre average turnaround time: $50$
 
 Givet vores nuværende assumptions er STCF beviseligt optimal.
 
-
+Skidt for response time
 
 ### Round Robin (RR)
 
 RR kører jobs for en **time slice** (også kaldt **scheduling quantum**)
+
+Time slices skal være dividerbar med timer-interrupt perioden.
+
+![1559200841721](images/2-scheduler/1559200841721.png)
+
+Jo kortere time slice, jo bedre response time.
+
+MEN: Hvis time slice bliver så kort, at kosten ved context switching dominerer overall performance.
+
+**Armortization**: hvis noget har en fixed cost, så kald denne operation så få gange som muligt. 
+
+Average turnaround time: 14, rimelig skidt.
+
+* RR er en af de værste policies set fra Turnaround time
+
+Generalt, policies, som RR, som er **fair** (deler cpu ligeligt bland aktive processer i lille tidsscala) performer dålrigt på metrics som turnaround time.
 

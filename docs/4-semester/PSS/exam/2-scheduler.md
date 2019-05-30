@@ -194,3 +194,33 @@ Average turnaround time: 14, rimelig skidt.
 
 Generalt, policies, som RR, som er **fair** (deler cpu ligeligt bland aktive processer i lille tidsscala) performer dålrigt på metrics som turnaround time.
 
+
+
+### Multi Level Feedback Queue (MLFQ)
+
+**Goal:**
+
+Optimer turnaround time og minmer response time
+
+Hver process får en priorietet
+
+Hvert prioritet level har sin egen process kø (queue)
+
+**Basic rules:**
+$$
+\begin{align*}
+&\text{if } Pri(A)>Pri(B) \text{ run } A
+\tag{Rule 1}
+\end{align*}
+$$
+
+$$
+\begin{equation}
+\text{if } Pri(A)=Pri(B) \text{ use RR for } A \text{ and } B
+\tag{Rule 2}\label{rule2}
+\end{equation}
+$$
+
+Handler om hvordan scheduleren sætter prioriteter.
+
+Et program der ofte giver afkald på CPU for at vente på I/O får høj prioritet.

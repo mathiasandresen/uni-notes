@@ -185,3 +185,14 @@ Nogle systemer har **address space identifer (ASID)** felt i TLB.
 * Kan tænkes som **process identifer (PID)** men ofte færre bits
 
 ![1559332034002](images/4-paged-memory/1559332034002.png)
+
+
+
+### Formindsk Page Tables
+
+En løsning er større pages.
+
+32-bit addresser igen. Denne gang 16KB pages. Giver 18-bit VPN plus 14-bit offset. PTE (4 bytes) giver: $2^{18}$ entries, derfor 1MB per page table.
+
+* Leder til **internal fragmentation**
+

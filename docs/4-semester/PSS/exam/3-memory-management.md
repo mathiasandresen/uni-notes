@@ -30,6 +30,9 @@ After Lecture 5 you:
 
 ## Noter
 
+!!! snippet "XV6"
+	XV6 memory management i `vm.c` `memlayout.h` `mmu.h`
+
 ### Adress Space
 
 ![1559288966769](images/3-memory-management/1559288966769.png)
@@ -133,4 +136,72 @@ Logisk: code, stack og heap.
 Segmentation lader os placere dem forskellige steder i fysisk.
 
 ![1559312466549](images/3-memory-management/1559312466549.png)
+
+![1559312546139](images/3-memory-management/1559312546139.png)
+
+Ubrugt address space kaldes **sparce address space**
+
+En referance til en adresse uden for segmentet -> **segmentation violation** eller **segmentation fault**
+
+Vi kan bruge bits i virtuelle adresse til at præcisere segment (**explicit approach**)
+
+![1559312710876](images/3-memory-management/1559312710876.png)
+
+```c
+Segment = (VirtualAddress & SEG_MASK) >> SEG_SHIFT
+Offset	= VirtualAddress & OFFSET_MASK
+if (Offset >= Bounds[Segment])
+    RaiseException(PROTECTION_FAULT)
+else
+    PhysAddr = Base[Segment] + Offset
+    Register = AccessMemory(PhysAddr)
+```
+
+```c
+SEG_MASK 	= 0x3000
+SEG_SHIFT	= 12
+OFFSET_MASK	= 0xFFF
+```
+
+**Implicit approach:** Hardware bestemmer segment ved at se på hvor addressen blev dannet. (Eks. fra PC, så er addr. fra code segment)
+
+#### The Stack
+
+Stack vokser bagud. Vi tilføjer bit til hardware der fortæller om adresser vokser fremad.
+
+![1559313170799](images/3-memory-management/1559313170799.png)
+
+#### Sharing
+
+Noget hukommelse kan deles mellem address spaces.
+
+* **code sharing**.
+
+Vi tilføjer **protection bits** til hukommelse.
+
+![1559314034202](images/3-memory-management/1559314034202.png)
+
+#### Fine- vs Coars-grained Segmentation
+
+Det vi har ovenover kaldes **coarse-grained** segmentation.
+
+**Fine-grained** segmentation: Mange små segments.
+Kræver et **segment table** i memory.
+
+* OS kan lære hvordan de forskellige segments bruges. Og derved optimere.
+
+
+
+#### OS Support
+
+Problem: **external fragmentation**: fysisk hukommelse bliver fyldt med små huller af ubrugt plads, som er for små til et segment.
+
+* Løsning kan være at **compact** fysisk memory.
+  * Dyrt,  memory-intensivt at kopiere segments.
+  * Kan gøre segment-growing requests svære at servere.
+
+* Simplere løsning: **free-list** management algoritme.
+  * **best-fit** holder liste af frit lager, og giver den der passer bedst i størrelse.
+  * **worst-fit**
+  * **first-fit**
 

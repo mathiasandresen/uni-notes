@@ -16,14 +16,14 @@ Kapitler med parenteser skimmes: (x)
 
 After Lecture 5 you:
 
-* ... will know and can discuss the **three goals** of memory management:
-  *  Transparency 
-  * Efficiency 
-  * Protection (isolation)
-* ... can explain what an **address space** is 
-* ... define and explain the notion of **virtual memory** 
-* ... perform simple **address translation** from virtual to physical 
-* ... can explain the need for and use of **base/bound registers** 
+* :heavy_check_mark: ... will know and can discuss the **three goals** of memory management:
+  * :heavy_check_mark: Transparency 
+  * :heavy_check_mark: Efficiency 
+  * :heavy_check_mark: Protection (isolation)
+* :heavy_check_mark: ... can explain what an **address space** is 
+* :heavy_check_mark: ... define and explain the notion of **virtual memory** 
+* :heavy_check_mark: ... perform simple **address translation** from virtual to physical 
+* :heavy_check_mark: ... can explain the need for and use of **base/bound registers** 
 * ... define and explain the use of **segmentation**
 
 
@@ -41,3 +41,96 @@ After Lecture 5 you:
 Dette kaldes **virtualizing memory**.
 
 Hvis eksempelvis process A vil læse fra adresse 0 (**virtual address**), så vil OS i samarbejde med hardware oversætte til den fysiske (virkelige) adresse.
+
+### Mål med Memory Management
+
+**Transparency**:
+
+OS skal implementere virtuel memory så det er usynligt for det kørende program. (Programmet skal ikke vide at det er virtuel hukommelse)
+
+**Efficiency:**
+
+Virtualizeringen skal være så effektiv som muligt.
+
+* Tid og plads
+
+Udnytter hardware support som TLB'er
+
+**Protection:**
+
+Beskyt processer fra hinanden, og OS fra processer.
+
+* De skal ikke kunne skrive og læse uden for deres egen adress space.
+* **Isolation** processer er isoleret fra hinanden
+
+
+
+### Adress Translation
+
+AKA **hardware-based address translation**
+
+Hardware oversætter hver memory adresse, **virtuel** $\rightarrow$ **physical**.
+
+OS **manages memory**.
+
+#### Antagelser
+
+* Sammenhængende allokation (Contiguous allocation)
+* Lille address space (mindre end fysisk hukommelse)
+* Fixed størrelse address space
+
+#### Eksempel
+
+![1559307451538](images/3-memory-management/1559307451538.png)
+
+
+
+#### Base and Bounds
+
+AKA **dynamic relocation**
+
+2 Hardware registre: **base**- og **bounds**- (også kaldt **limit**) register.
+
+* Lader os placere adress space hvor vi vil i fysisk.
+
+Memory referancer oversættes nu med:
+$$
+Address_{physical}=Address_{virtual}+base\\
+\textbf{address translation}
+$$
+Teknikken kaldes ofte **dynamic relocation**.
+
+**Bounds** bruges til **protection**. Undgå at process læser uden for address space.
+
+Delen af CPU der hjælper med adress translation kaldes **memory management unit (MMU)**.
+
+**Eksempler:**
+
+![1559307937409](images/3-memory-management/1559307937409.png)
+
+**Hardware Requirements**
+
+![1559308302962](images/3-memory-management/1559308302962.png)
+
+##### OS Problemer
+
+* OS har en **free list**, en liste over ledigt hukommelse.
+
+* Under **context-switch** skal base og bounds registre gemmes og læses.
+
+![1559308440725](images/3-memory-management/1559308440725.png)
+
+
+
+### Segmentation
+
+Base og bounds par pr **segment** address space.
+
+Et segment er et sammenhængende portion address space.
+
+Logisk: code, stack og heap.
+
+Segmentation lader os placere dem forskellige steder i fysisk.
+
+![1559312466549](images/3-memory-management/1559312466549.png)
+

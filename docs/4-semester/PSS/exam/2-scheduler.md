@@ -1,8 +1,8 @@
 ---
-title: 2 - Scheduler
+title: 2 - Scheduling
 ---
 
-# 2 - Scheduler
+# 2 - Scheduling
 
 *Keywords*: Metrics for scheduling (turnaround time, response time), simple process model, scheduling policies (FIFO, SJF, STCF, Round Robin, MLFQ, lottery scheduler).
 
@@ -16,17 +16,17 @@ After lecture 2 you:
 
 * :heavy_check_mark: Can explain the notion of **limited direct execution** and how it relates to scheduling
 * :heavy_check_mark: Will know the **simplified process model**
-* Will know and can explain important **metrics** for measuring a scheduling policy:
-  * Fairness
+* :heavy_check_mark: Will know and can explain important **metrics** for measuring a scheduling policy:
+  * :heavy_check_mark: Fairness
   * :heavy_check_mark: Turnaround time
   * :heavy_check_mark: Response time
-* Can explain important **scheduling policies** and their pros and cons:
+* :heavy_check_mark: Can explain important **scheduling policies** and their pros and cons:
   * :heavy_check_mark: FIFO (First In First Out)
   * :heavy_check_mark: SJF (Shortest Job First)
   * :heavy_check_mark: STCF (Shortest Time-to-Completion First)
   * :heavy_check_mark: Round Robin
   * :heavy_check_mark: MLFQ
-  * Lottery scheduling
+  * :heavy_check_mark: Lottery scheduling
 
 ## Noter 
 
@@ -259,3 +259,36 @@ Så vi ender ud med:
 
 ![1559283868218](images/2-scheduler/1559283868218.png)
 
+
+
+### Proportional Share (Lottery Scheduling)
+
+AKA **fair-share** scheduler
+
+**Princip:** Et antal **tickets** er i spil. Efter hver time slice, holdes lotteri. Processen, der ejer den ticket der bliver trukket, bliver kørt.
+
+#### Ticket Mechanics
+
+**Ticket currency**: Lader brugeren allokere tickets mellem dens egen jobs.
+Currency converteres til rigtige tickets.
+
+![1559287023934](images/2-scheduler/1559287023934.png)
+
+**Ticket transfer:** En process kan midlertidigt give sine tickets til en anden process.
+
+Ex en client/server struktur. Klienten kan give serveren sine tickets når den beder den om noget arbejde.
+
+**Ticket inflation**: En process kan midlertidigt hæve eller sænke dets antal tickets. 
+
+Giver ikke mening i et kompetitativt miljø.
+
+#### Unfairness Metric
+
+$U$, tiden det første job er færdigt divideret med tiden det andet job er færdigt.
+
+Hvis job A er færdig efter 10 og job B efter 20: 
+$$
+U=\frac{10}{20}=0.5
+$$
+Når jobs bliver færdigt næsten sammentidigt vil $U$ nærme sig 1.
+En perfectly fair scheduler har $U=1$

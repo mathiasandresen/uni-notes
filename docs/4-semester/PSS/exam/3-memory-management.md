@@ -2,7 +2,7 @@
 title: 3 - Memory Management
 ---
 
-# 1 - Memory Management
+# 3 - Memory Management
 
 *Keywords*: Memory hierarchy, goals for memory management (transparency, efficiency, isolation), address space, challenges for memory management, features (relocation, protection, and sharing), virtual addresses vs. physical addresses, address translation, base and bound registers, simple allocation, static allocation (nonuniform), dynamic allocation, virtual memory, segmentation.
 

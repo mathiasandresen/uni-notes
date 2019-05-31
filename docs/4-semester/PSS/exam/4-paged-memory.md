@@ -23,3 +23,165 @@ After Paged Memory you can:
 * ... define, explain, and discuss various **page replacement algorithms** and their pros and cons
 
 ## Noter
+
+### Paging
+
+Chopping up space into fixed size pieces.
+
+Simple example:
+
+![1559328454943](images/4-paged-memory/1559328454943.png)
+
+For at holde styr på virtual pages, OS holder en per-process data struktur kaldet **page table**.
+
+* Holder **address translations** for hver virtual page
+
+Virtuel adresse splittes op i **virtual page number (VPN)** og **offset**
+
+![1559328302201](images/4-paged-memory/1559328302201.png)
+
+16 bit page. 2 bit vpn.
+
+Vi indexer nu page table.  Page 1 ligger i page frame 7 i ovenstående billede.
+
+Dette er **physical frame number (PFN)** aka **physical page number (PPN)** 7.
+
+![1559328621597](images/4-paged-memory/1559328621597.png)
+
+### Page Tables
+
+Page tables kan blive meget store. 32-bit adresse, 4KB pages.
+
+Virtuel adresse splittes til 20-bit VPN og 12-bit offset.
+
+20-bit VPN betyder $2^{20}$ translations. 4 bytes per **page table entry (PTE)** giver 4MB per page table!
+
+Derfor er page tables ikke i MMU (hardware memory management unit)
+
+* Vi holder page tables i memory.
+
+![1559328898172](images/4-paged-memory/1559328898172.png)
+
+#### Linear Page Table
+
+Simpelt array af page table entries (PTE). Indexes med VPN, for at finde PFN.
+
+##### Page table entry
+
+En **valid bit** er normalt. Indikerer om translation er valid.
+
+* Eksempel, stack og heap der vokser mod hinanden. Alt imellem er **invalid**.
+* Access af invalid lager generer trap.
+
+**Protection bits** indikerer om page må læses fra, skrives til eller executes fra.
+
+**Present bit** indikerer om denne page er i fysisk memory eller på disk.
+
+* **swapped out**
+
+**Dirty bit** indikerer om den er ændret siden den blev bragt til hukommelse.
+
+**Reference bit** aka **accessed bit**: indikerer om en page har været tilgået
+
+* buges i **page replacement**
+
+![1559329116290](images/4-paged-memory/1559329116290.png)
+
+(P) present bit, (R/W) read/write, (U/S) user/supervisor, (PWT, PCD, PAT, G) bruges i hardware caching system, (A) accessed, (D) dirty bit, (PFN).
+
+##### Translation
+
+Lad os sige at **page-table base register** indeholder den fysiske adresse på start lokationen for page table. Giver os:
+
+```C
+VPN			= (VirtualAddress & VPN_MASK) >> SHIFT
+PTEAddr		= PageTableBaseRegister + (VPN * sizeof(PTE))
+    
+VPN_MASK 	= 0x30
+SHIFT		= 4
+
+ 
+offset		= VirtualAddress & OFFSET_MASK
+PhysAddr	= (PFN << SHIFT) | offset
+
+```
+
+
+
+### Translation Lookaside Buffer (TLB)
+
+For at gøre translation hurtigere tilføjes **tanslation-lookaside buffer (TLB)** til hardware (MMU).
+
+* En hardware **cache** af populære v2p translations.
+* Kunne kaldes **address-translation cache**
+
+Ved hver virtual memory referance, tjekkes TLB for at se om den indeholder translation'en.
+
+Hvis TLB indeholder translation, har vi **TLB hit**.
+
+* Hvis ikke, har vi **TLB miss**
+
+Simpelt algoritme indsætter translation i TLB ved TLB miss.
+
+Det er vigtigt at vi oftest får TLB hit.
+
+#### **Locality**
+
+* **Spacial locality**: access af elementer der ligger tæt på hinanden giver højere **hit rate**
+* **Temporal locality**: hurtig re-referencing af elementeri tid giver højere hit rate.
+
+
+
+#### TLB Miss Handling
+
+Kan håndteres af Hardware eller OS.
+
+Eksempel på **hardware-managed TLB** er Intel x86. Bruger **multi-level page table**.
+
+* Current page table bliver pointed på af CR3 register.
+
+**Software-managed TLB**: Hardware raiser exception, og **trap handler** håndtere TLB miss
+
+* **Return-from trap** er anderledes end ved system call, da vi skal kalde den foråsagende instruktion. Denne gang med TLB hit.
+* Man skal sørge for at undgå infinite loop, eksempelvis ved at holde TLB miss handlers i fysisk memory.
+  * Eller reservere entries i TLB for permanente translations.
+* Software-managed løsning giver *flexibilitet* og *simplicitet*
+
+
+
+#### TLB Indhold
+
+Typisk TLB har 32, 64 eller 128 entries, og er **fully associative.**
+
+* En translation kan være overalt i TLB
+* Hele TLB søges i parallel.
+
+En entry kan se ud som:
+$$
+\text{VPN}\ |\ \text{PFN}\ |\ \text{other bits}
+$$
+**Other bits**:
+
+* **valid bit**: har entry en valid translation
+* **protection bit**: hvordan kan page tilgås (som i page table)
+* **address-space identifier**, **dirty bit** osv.
+
+
+
+#### TLB Problemer
+
+**TLB indeholder v2p translations kun gyldige for nuværende process.**
+
+* Når der skiftes process skal hardware, OS eller begge sikre sig at den næste process ikke bruge forkeret translations.
+
+En mulig løsning er at **flush** TLB ved context switch.
+
+* Sætter alle valid bits til 0
+
+* Kan være kostbart, da der vil være TLB miss'es efter hver context switch.
+
+Nogle systemer har **address space identifer (ASID)** felt i TLB.
+
+* Kan tænkes som **process identifer (PID)** men ofte færre bits
+
+![1559332034002](images/4-paged-memory/1559332034002.png)

@@ -24,14 +24,14 @@ After Lecture 5 you:
 * :heavy_check_mark: ... define and explain the notion of **virtual memory** 
 * :heavy_check_mark: ... perform simple **address translation** from virtual to physical 
 * :heavy_check_mark: ... can explain the need for and use of **base/bound registers** 
-* ... define and explain the use of **segmentation**
+* :heavy_check_mark: ... define and explain the use of **segmentation**
 
 
 
 ## Noter
 
 !!! snippet "XV6"
-	XV6 memory management i `vm.c` `memlayout.h` `mmu.h`
+	XV6 memory management i `vm.c` `memlayout.h` `mmu.h` `kalloc.c`
 
 ### Adress Space
 
@@ -181,6 +181,8 @@ Vi tilføjer **protection bits** til hukommelse.
 
 ![1559314034202](images/3-memory-management/1559314034202.png)
 
+
+
 #### Fine- vs Coars-grained Segmentation
 
 Det vi har ovenover kaldes **coarse-grained** segmentation.
@@ -204,4 +206,102 @@ Problem: **external fragmentation**: fysisk hukommelse bliver fyldt med små hul
   * **best-fit** holder liste af frit lager, og giver den der passer bedst i størrelse.
   * **worst-fit**
   * **first-fit**
+
+Modsat **internal fragmentation**: Allokeret lager, er for stort og meget ubrugt.
+
+![Billedresultat for internal vs external fragmentation](images/3-memory-management/Difference-Between-Internal-Fragmentation-and-External-Fragmentation-.png)
+
+
+
+### Free Space Management
+
+![1559315508735](images/3-memory-management/1559315508735.png)
+
+**Free-list**
+
+![1559315516835](images/3-memory-management/1559315516835.png)
+
+!!! snippet "XV6"
+	Se `line 22 in kalloc.c`
+
+**Splitting:**
+
+Request for 1 byte. Allocator finder free chunk, splitter den op. Returnerer den ene del, og anden del bliver i listen.
+
+![1559316069559](images/3-memory-management/1559316069559.png)
+
+**Coalescing:**
+
+Der kaldes `free(10)`. List vil se ud som følger:
+
+![1559316183577](images/3-memory-management/1559316183577.png)
+
+Vi samler frie segmenter der er sammenhængende:
+
+![1559316225895](images/3-memory-management/1559316225895.png)
+
+#### Header
+
+Bruges til at holde styr på størrelsen på allokerede regioner.
+
+![1559316451698](images/3-memory-management/1559316451698.png)
+
+![1559316462261](images/3-memory-management/1559316462261.png)
+
+!!! snippet "XV6"
+	kan ses i `umalloc.c`
+
+#### Embed Free List
+
+Listen laves i det frie hukommelse
+
+```c
+typedef struct __node_t {
+	int				 size;
+	struct __node_t *next;
+} node_t
+```
+
+![1559322334193](images/3-memory-management/1559322334193.png)
+
+
+
+#### Basic Strategies
+
+##### Best Fit
+
+* Find de chunks der er så stor eller større end det ønskede.
+* Returner det mindste af dem.
+
+Kan koste meget performance når den skal søge efter den bedste frie blok.
+
+##### Worst Fit
+
+* Find den største chunk og returner den ønskede størrelse.
+* Behold resten på free-list
+
+Kan være dyr i performance. Studier viser at den performer dårligt. 
+
+Leder til excess fragmentation, mens den stadig har høj overheads.
+
+##### First Fit
+
+* Finder den første blok der er stor nok.
+* Returnerer den ønskede størrelse.
+
+Hurtig metode.
+Fylder dog nogen gange starten op med små objekter.
+
+* Hvordan allocator manager free-listens rækkefølge betyder noget.
+
+En løsning er **address-based ordering**
+
+* Gør det nemmere at coalesce, og fragmentering er reduceret.
+
+##### Next Fit
+
+Ligesom first-fit, men algoritmen holder en pointer til der hvor den ledte sidst.
+
+* Spreder søgningen mere uniformt.
+* Høj performance, som first-fit.
 

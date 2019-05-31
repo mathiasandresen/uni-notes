@@ -25,7 +25,7 @@ After lecture 2 you:
   * :heavy_check_mark: SJF (Shortest Job First)
   * :heavy_check_mark: STCF (Shortest Time-to-Completion First)
   * :heavy_check_mark: Round Robin
-  * MLFQ
+  * :heavy_check_mark: MLFQ
   * Lottery scheduling
 
 ## Noter 
@@ -207,20 +207,55 @@ Hver process får en priorietet
 Hvert prioritet level har sin egen process kø (queue)
 
 **Basic rules:**
+
 $$
-\begin{align*}
-&\text{if } Pri(A)>Pri(B) \text{ run } A
-\tag{Rule 1}
-\end{align*}
+\begin{equation}
+\text{if } Pri(A)>Pri(B) \text{ run } A
+\tag{Rule 1}\label{rule1}
+\end{equation}
 $$
 
 $$
 \begin{equation}
 \text{if } Pri(A)=Pri(B) \text{ use RR for } A \text{ and } B
-\tag{Rule 2}\label{rule2}
+\tag{Rule 2}
 \end{equation}
 $$
 
 Handler om hvordan scheduleren sætter prioriteter.
 
 Et program der ofte giver afkald på CPU for at vente på I/O får høj prioritet.
+
+**Regler for prioritetsændring**
+
+**Rule 3:**
+	Nye processer starter på højeste prioritet
+
+**Rule 4a:**
+	Prioritet af process der bruger al sin time-slice bliver reduceret
+
+**Rule 4b:**
+	En process der slipper CPU før tid, bliver på samme prioritet
+
+#### Problemer
+
+**Starvation:** Hvis der er for mange interaktive jobs, tager de al CPU-tid, og starverer de lange jobs.
+
+En smart bruger kan rewrite et program til at **game the scheduler**
+
+Et lang job kan ændre sin behavior og blive interaktiv efter noget tid. Dette bliver ikke rewardet i nuværende system.
+
+#### Ny regel
+
+**Rule 5:**
+	Efter noget tid *S*, **boostes** alle jobs til øverste prioritet (kø)
+
+**Rule 4 (samling af 4a og 4b):**
+	Altid reducer prioriteten på et job, når den bar brugt alt tildelt (alloted) tid.
+
+
+
+Så vi ender ud med:
+
+![1559283868218](images/2-scheduler/1559283868218.png)
+

@@ -305,3 +305,69 @@ Hver entry fortæller os hvilken process der bruger denne page, og hvilken virtu
 
 * Søg gennem den struktur for at finde den korrekte.
 * Bruger ofte hash-tables, da linear search er dyrt.
+
+
+
+### Swapping
+
+Vi tænker nu på at alle address spaces tilsammen kan være større end fysisk memory.
+
+Vi bruger et ekstra level i **memory hierarchy**
+
+Et eksempel på memory hierarchy:
+
+![Billedresultat for memory hierarchy](images/4-paged-memory/memory_hierarchy.jpg)
+
+Vi bruger **hard disk** til at opbevare portioner af adress spaces, der ikke er i great demand.
+
+* Før i tiden brugt man, **memory overlays**, hvor programmører selv skulle flytte data ind og ud af memory.
+
+
+
+#### Swap Space
+
+Vi reservere noget plads på disk, til at flytte pages frem og tilbage imellem. Vi kalder dette for **swap space**.
+
+* Vi **swap**per pages ud af memory til det, og memory ind i memory fra det.
+
+Derfor skal OS huske **disk address** for en given page.
+
+![1559400231929](images/4-paged-memory/1559400231929.png)
+
+Hver page table entry (PTE) får en **present bit**.
+
+* Siger om page er i fysisk memory.
+
+#### Page Fault
+
+Accessing af en page der ikke er i fysisk kaldes **page fault** aka page miss.
+
+* Kalder **page-fault handler **i OS
+
+Disk adresse kan stores i PTE.
+
+* OS finder adresse, og requester disk fetch.
+* Opdaterer page table (markerer present)
+* Prøver instruktion igen.
+
+Dette kan generere TLB miss.
+
+* Alternativt kan man opdatere TLB under page fault
+
+(Under I/O vil processen være i **blocked state**, og andre processer kan køre)
+
+
+
+##### Hvad Hvis Memory Er Fyldt?
+
+Hvis der ikke er plads til at **page in** en page, vil OS først **page ud** en eller flere pages.
+
+Dette styres af **page-replacement policy**
+
+For at holde en lille smule memory frit, bruger de fleste OS: HW og LW
+
+* **Low watermark (LW):** His der er færre end *LW* pages tilgængelige, kaldes en baggrundstråd til at frigøre memory.
+* **High watermark (HW)**: Dette gøres indtil der er *HW* pages ledige.
+
+Denne baggrundstråd kaldes ofte **swap daemon** eller **page daemon**.
+

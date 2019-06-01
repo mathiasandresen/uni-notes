@@ -231,9 +231,13 @@ Eksempel: Hvis code kun bruger første 3 pages, vil code page table kun have 3 e
 
 
 
-#### Multi-Level Page Tables
+**Multi-Level Page Tables** kan løse problemet.
+
+### Multi-Level Page Tables
 
 Skær page table op i page-sized stykker.
+
+* Hver page table passer i en enkelt page.
 
 Hvis en hel page af PTE (page-table-entries) er invalid, allokeres ikke plads.
 
@@ -260,3 +264,44 @@ En PDE har som minium en **valid bit** og **page frame number (PFN)**.
 * **time-space trade-off**
 * *complexity*: Mere complex at implementere.
 
+
+
+Eksempel med 256 entry page table
+
+![1559396195156](images/4-paged-memory/1559396195156.png)
+
+
+
+#### More Than 2 Levels
+
+Hvad hvis page directory bliver for stor?
+
+Eksempel:
+
+30-bit virtual address space, 512 byte page. PTE 4 bytes.
+
+Giver:
+
+* 21-bit VPN og 9-bit offset
+
+* 128 PTE's per page.
+* 7 bits til index
+
+![1559396610042](images/4-paged-memory/1559396610042.png)
+
+14 bits PDI: $2^{14}$ entries. Fylder 128 pages.
+
+Vi bygger endnu et niveau på.
+
+![1559396800516](images/4-paged-memory/1559396800516.png)
+
+
+
+### Inverted Page Tables
+
+Her holder vi ét page table, der har en entry for hver fysisk page.
+
+Hver entry fortæller os hvilken process der bruger denne page, og hvilken virtuel page der mapper til denne fysiske page.
+
+* Søg gennem den struktur for at finde den korrekte.
+* Bruger ofte hash-tables, da linear search er dyrt.

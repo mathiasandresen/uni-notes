@@ -190,9 +190,73 @@ Nogle systemer har **address space identifer (ASID)** felt i TLB.
 
 ### Formindsk Page Tables
 
-En løsning er større pages.
+En løsning er **større pages**.
 
 32-bit addresser igen. Denne gang 16KB pages. Giver 18-bit VPN plus 14-bit offset. PTE (4 bytes) giver: $2^{18}$ entries, derfor 1MB per page table.
 
 * Leder til **internal fragmentation**
+
+
+
+**Hybrid apporach**
+
+Et page table per logisk segment (code, heap og stack).
+
+Vi bruger **base** til holde fysisk adresse på page table. Og **bound** til at holde slutningen på page table.
+
+Eksempel:
+
+32-bit adress space, 4KB pages, adress space splittet i 4 segments.
+
+![1559393176984](images/4-paged-memory/1559393176984.png)
+
+Registers skal skiftes ved context-switch.
+
+```c
+SN				= (VirtualAddress & SEG_MASK) >> SN_SHIFT
+VPN				= (VirtualAddress & VPN_MASK) >> VPN_SHIFT
+AddressOfPTE 	= Base[SN] + (VPN * sizeof(PTE))
+```
+
+Eksempel: Hvis code kun bruger første 3 pages, vil code page table kun have 3 entries, og bounds er sat til 3.
+
+**Fordele:**
+
+* Ubrugte pages mellem stack og heap fylder ikke i page table.
+
+**Ulemper**:
+
+* Kræver at segmentation brgues.
+* Giver **external fragmentation**
+
+
+
+#### Multi-Level Page Tables
+
+Skær page table op i page-sized stykker.
+
+Hvis en hel page af PTE (page-table-entries) er invalid, allokeres ikke plads.
+
+Ellers bruges en ny struktur: **page directory**.
+
+![1559393784946](images/4-paged-memory/1559393784946.png)
+
+Page directory (i 2-level) indeholder et antal **page directory entries (PDE)**.
+
+En PDE har som minium en **valid bit** og **page frame number (PFN)**.
+
+* Hvis PDE er valid, er mindst en af pages valid.
+* Hvis PDE ikke er valid, er resten af PDE ikke defineret.
+
+**Fordele:**
+
+* Allokerer kun page table space i proportion til antal adress space brugt.
+* Hvis carefully constructed, passer hver portion i en page, hvilket gøre det nemmere at manage memory.
+* Lader os placere page-table pages hvor vi vil i memory.
+
+**Ulemper**
+
+* Performance cost: ved TLB miss, kræves 2 loads. 1 for page directory og 1 for PTE.
+* **time-space trade-off**
+* *complexity*: Mere complex at implementere.
 

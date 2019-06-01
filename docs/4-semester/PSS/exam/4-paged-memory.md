@@ -371,3 +371,127 @@ For at holde en lille smule memory frit, bruger de fleste OS: HW og LW
 
 Denne baggrundstråd kaldes ofte **swap daemon** eller **page daemon**.
 
+
+
+### Swapping Policies
+
+Vi kan kalde main memory for **cache** for virtual memory.
+
+Vores mål er at minimere **cache misses**.
+
+* Samme som at maximere **cache hits**
+
+
+
+**Average memory access time (AMAT)**
+$$
+\begin{align*}
+AMAT &= T_M+(P_{Miss}*T_D),\\\\
+&\text{hvor } T_M : \text{cost of accessing memory}\\
+&\text{and } T_D : \text{cost of accessing disk}\\
+&\text{and } P_{Miss} :\text{chance of cache miss } (0.0<P_{Miss}<1.0)
+\end{align*}
+$$
+
+
+#### Optimal Replacement Policy
+
+(Impossible to implement)
+
+* Udskifter den page der vil bliver accessed længst ude i fremtiden
+
+Bruges til at sammenligne med.
+
+
+
+#### FIFO (First In First Out)
+
+* Simpelt at implementere
+
+Kan ikke bestemme vigtigheden af en page
+
+![1559404296440](images/4-paged-memory/1559404296440.png)
+
+#### Random
+
+* Simpel at implementere
+
+![1559404261101](images/4-paged-memory/1559404261101.png)
+
+
+
+#### Least-Recently-Used (LRU)
+
+Bruger history. (**frequency** eller **recency**)
+
+Replaces the least-recently-used page.
+
+Som **Least-Frequently-Used (LFU)**
+
+
+
+#### Workload Eksempler
+
+##### Ingen lokalitet:
+
+100 unikke pages, vælger random. 10k gange.
+
+![1559404515560](images/4-paged-memory/1559404515560.png)
+
+* Ingen lokalitet: Ligegyldigt hvilken policy.
+
+
+
+##### 80-20 workload:
+
+80% af referancer er til 20% af pages.
+
+![1559404647918](images/4-paged-memory/1559404647918.png)
+
+* LRU er den bedste.
+
+
+
+##### Looping Sequential Workload
+
+Referencer til 50 pages i sekvens startende fra 0.
+
+![1559404766691](images/4-paged-memory/1559404766691.png)
+
+* Random er den bedste op til når cache bliver 50 eller mere.
+
+Worst-case for både LRU og FIFO.
+
+Random har ingen "wierd" corner cases.
+
+
+
+##### Aproximating LRU
+
+For at undgå at kigge en hel liste igennem for at finde least-recently-used page, kan man aproximere LRU.
+
+* Bruger en **use bit** aka **reference bit**. 1 per page.
+* Når en page bliver referenced sættes use bit til 1 af hardware.
+
+**Clock algorithm**
+
+* Forestil alle pages i en cirkulær liste.
+
+* En **clock hand** peger på en page.
+* Når replacement sker tjekker OS om den pegede på page P har use bit 1 eller 0.
+* Hvis use bit er 1, er det ikke en god replacement kandidat. Use bit sættes til 0 (cleared) og clock hand incrementes.
+* Fortsætter til en page med use bit 0 findes.
+
+![1559405393881](images/4-paged-memory/1559405393881.png)
+
+Tilføjelse: **dirty bit**.
+
+* Man kan tilføje dirty bit, som fortæller om page er **modified** (**dirty**).
+* Dette betyder at der skal skrives til disk hvilket er dyrt.
+
+
+
+#### Thrashing
+
+Hvis memory er oversubscribed, og memory demand er over fysisk memory, vil systemet konstant page, kaldet **thrashing**.
+

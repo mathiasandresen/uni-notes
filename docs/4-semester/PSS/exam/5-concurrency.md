@@ -20,7 +20,7 @@ After this lecture, you
 * :heavy_check_mark: ... can explain how **mutual exclusion** can be used to avoid race conditions
 * :heavy_check_mark: ... can explain strategies for **achieving and implementing** mutual exclusion
 * ... can define the notions of **mutex**, **semaphore**, and **monitor** and explain how they work and where they are useful
-* ... can explain how to **synchronise** two (or more) threads and why it may be necessary
+* :heavy_check_mark: ... can explain how to **synchronise** two (or more) threads and why it may be necessary
 
 ## Noter
 
@@ -297,3 +297,112 @@ Mulig løsning: yield.
 ##### Brug af Queues: Sleeping Instead of Spinning
 
 ![1559469821154](images/5-concurrency/1559469821154.png)
+
+
+
+### Semaphores
+
+**Semaphore:** Et objekt med en integer værdi der kan manipuleres med 2 routiner.
+
+I POSIX er det:
+
+* `sem_wait()`
+* `sem_post()`
+
+Initialiseres med
+
+```c
+#include <semaphore.h>
+sem_t s;
+sem_init(&s, 0, 1); // initilizere den til 1, arg2 (0) betyder at den er delt mellem tråde i den samme process
+```
+
+
+
+```c
+int sem_wait(sem_t *s) {
+	/* decrement the value of semaphore s by one 
+	   wait if value of semaphore s is negative */
+}
+
+int sem_post(sem_t *s) { 
+	/* increment the value of semaphore s by one 
+	   if there are one or more threads waiting, wake one */
+}
+```
+
+
+
+#### Binary Semaphore (Lock)
+
+```c
+sem_t m;
+sem_init(&m, 0, 1); // initialize to 1;
+
+sem_wait(&m);
+// critical section here
+sem_post(&m);
+```
+
+![1559477360044](images/5-concurrency/1559477360044.png)
+
+#### Semaphores For Ordering
+
+```c
+sem_t s;
+
+void *child(void *arg) { 
+	printf("child\n");
+	sem_post(&s); // signal here: child is done
+	return NULL;
+} 
+
+int main(int argc, char *argv[]) {
+	sem_init(&s, 0, X); 
+    printf("parent: begin\n"); 
+    pthread_t c;
+    Pthread_create(&c, NULL, child, NULL); 
+    sem_wait(&s); // wait here for child 
+    printf("parent: end\n");
+    return 0;
+}
+```
+
+![1559477629796](images/5-concurrency/1559477629796.png)
+
+
+
+#### The Producer/Consumer Problem (Bounded Buffer Problem)
+
+* En eller flere **producer** threads
+    * Genererer data items, placerer dem i en buffer
+* En eller flere **consumer** threads
+    * Tager items fra bufferen og consumer dem
+
+![1559478243832](images/5-concurrency/1559478243832.png)
+
+![1559478253924](images/5-concurrency/1559478253924.png)
+
+* Virker hvis MAX er 1
+* Hvis MAX er eks 10, får vi race condition
+
+![1559478493666](images/5-concurrency/1559478493666.png)
+
+
+
+#### Reader/Writer Lock
+
+![1559480005643](images/5-concurrency/1559480005643.png)
+
+
+
+#### The Dining Philosophers
+
+* 5 filosoffer
+* Mellem hver er en enkelt gaffel.
+* En filosof kan enten tænke eller spise
+    * Tænke: ingen gaffel
+    * Spise: gaffel
+
+![1559480046648](images/5-concurrency/1559480046648.png)
+

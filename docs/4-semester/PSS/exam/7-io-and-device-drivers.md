@@ -203,3 +203,8 @@ Basic protocol er som følger:
 
 !!! snippet "xv6"
 	IDE drive i xv6 findes i `ide.c`
+
+
+
+### Hard Disk Drive
+

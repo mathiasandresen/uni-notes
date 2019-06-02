@@ -120,6 +120,10 @@ En process's tilstande bruges af scheduleren til at vide hvilke processer den ka
 xv6 har tilmed: ``EMBROYO`` : den er oprettet, men ikke udfyldt med nødvendig data endnu. 
 ``ZOMBIE``: den er termineret, men endnu ikke opryttet af OS endnu. (Bruges af f.eks. parent processes, til at se return code)
 
+##### 5-State Process Model
+
+![Billedresultat for 5-state process model](images/1-processes-and-threads/KYQdM.png)
+
 ### Thread
 
 En tråd (**thread**) er den mindste eksekverbare del af en process.

@@ -384,6 +384,7 @@ Vores mål er at minimere **cache misses**.
 
 
 **Average memory access time (AMAT)**
+
 $$
 \begin{align*}
 AMAT &= T_M+(P_{Miss}*T_D),\\\\

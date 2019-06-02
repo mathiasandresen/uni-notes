@@ -17,16 +17,16 @@ After lecture 2 you:
 * :heavy_check_mark: Can explain the notion of **limited direct execution** and how it relates to scheduling
 * :heavy_check_mark: Will know the **simplified process model**
 * :heavy_check_mark: Will know and can explain important **metrics** for measuring a scheduling policy:
-  * :heavy_check_mark: Fairness
-  * :heavy_check_mark: Turnaround time
-  * :heavy_check_mark: Response time
+    * :heavy_check_mark: Fairness
+    * :heavy_check_mark: Turnaround time
+    * :heavy_check_mark: Response time
 * :heavy_check_mark: Can explain important **scheduling policies** and their pros and cons:
-  * :heavy_check_mark: FIFO (First In First Out)
-  * :heavy_check_mark: SJF (Shortest Job First)
-  * :heavy_check_mark: STCF (Shortest Time-to-Completion First)
-  * :heavy_check_mark: Round Robin
-  * :heavy_check_mark: MLFQ
-  * :heavy_check_mark: Lottery scheduling
+    * :heavy_check_mark: FIFO (First In First Out)
+    * :heavy_check_mark: SJF (Shortest Job First)
+    * :heavy_check_mark: STCF (Shortest Time-to-Completion First)
+    * :heavy_check_mark: Round Robin
+    * :heavy_check_mark: MLFQ
+    * :heavy_check_mark: Lottery scheduling
 
 ## Noter 
 

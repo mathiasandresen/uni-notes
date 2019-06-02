@@ -17,9 +17,9 @@ Kapitler med parenteser skimmes: (x)
 After Lecture 5 you:
 
 * :heavy_check_mark: ... will know and can discuss the **three goals** of memory management:
-  * :heavy_check_mark: Transparency 
-  * :heavy_check_mark: Efficiency 
-  * :heavy_check_mark: Protection (isolation)
+    * :heavy_check_mark: Transparency 
+    * :heavy_check_mark: Efficiency 
+    * :heavy_check_mark: Protection (isolation)
 * :heavy_check_mark: ... can explain what an **address space** is 
 * :heavy_check_mark: ... define and explain the notion of **virtual memory** 
 * :heavy_check_mark: ... perform simple **address translation** from virtual to physical 

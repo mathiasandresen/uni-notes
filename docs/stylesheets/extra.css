@@ -10,7 +10,7 @@ article p{
     text-transform: uppercase;
 }
 
-img {
+p>img {
     display: block;
     margin-left: auto;
     margin-right: auto;

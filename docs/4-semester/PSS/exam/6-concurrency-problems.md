@@ -196,6 +196,34 @@ Ide: design data strukturer uden locks. (**lock-free** and **wait-free**)
 
 Eksempel vi bruger [compare-and-swap](../exam/5-concurrency.md#compare-and-swap) til at atomically increment en værdi.
 
+```c
+void AtomicIncrement(int *value, int amount) { 
+	do {
+		int old = *value; 
+    } while (CompareAndSwap(value, old, old + amount) == 0); 
+}
+```
+
+Istedet for at aquire en lock, update og release lock, har vi en metode der bliver  ved med at prøve at opdatere value med compare-and-swap.
+
+
+
+##### Deadlock Avoidance via Scheduling
+
+Lad os sige at vi har 2 CPU'er og 4 tråde, samt 2 locks.
+
+Lad os sige at vi ved at de 2 locks aquires af trådene som vist i tabellen: 
+
+![1559568331607](images/6-concurrency-problems/1559568331607.png)
+
+En smart scheduler kan nu vide at så længe at T1 og T2 ikke køre på samme tid kan der ikke ske deadlock.
+
+Eksempel på schedule:
+
+![1559568378481](images/6-concurrency-problems/1559568378481.png)
+
+
+
 
 
 ### The Dining Philosophers

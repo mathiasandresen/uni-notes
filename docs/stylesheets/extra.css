@@ -9,3 +9,10 @@ article p{
 .md-nav__title {
     text-transform: uppercase;
 }
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}

@@ -394,3 +394,17 @@ int main(int argc, char *argv[]) {
 
 ![1559480005643](images/5-concurrency/1559480005643.png)
 
+
+
+#### Thread Throtting with Semaphores
+
+Hvis vi vil kontrollere max antal tråde, kan vi gøre det med semaphores.
+
+* Kaldes **throttling**, en form for **admission control**
+
+Eksempelvis hvis en masse memory heavy arbejde, og der kører en masse tråde på en gang, kan det være at fysisk memory overstiges.
+
+Vi kan initialisere en semaphore med antallet af max tråde.
+
+
+

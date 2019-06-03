@@ -30,13 +30,79 @@ After today’s lecture, you:
 
 ## Noter
 
-#### The Dining Philosophers
+### The Dining Philosophers
 
 * 5 filosoffer
 * Mellem hver er en enkelt gaffel.
 * En filosof kan enten tænke eller spise
     * Tænke: ingen gaffel
-    * Spise: gaffel
+    * Spise: Kræver 2 gafler
 
 ![1559480046648](images/6-concurrency-problems/1559480046648.png)
+
+Her er basic loop for hver philospher, hvor hver filosof har en thread idientifier `p` fra 0 til 4
+
+```
+while (1) { 
+    think();
+    get_forks(p); 
+    eat(); 
+    put_forks(p);
+}
+```
+
+Udfordringen er at skrive routinerne `get_forks()` og `put_forks()` sådan at:
+
+* Der er ingen deadlock
+* Ingen filosof starves
+* Høj concurrency (så mange filosoffer som muligt spiser på samme tid)
+
+Vi bruger følgende helper funktioner:
+
+```c
+int left(int p) 	{ return p; }
+int right(int p)	{ return (p + 1) % 5; }
+```
+
+Når en filisof vil have gaflen til venstre kaldes `left(p)` og samme for højre `right(p)`.
+
+Vi har også nogle semaphores, lad os sige vi har 5, en for hver fork: `sem_t forks[5]`
+
+#### Umiddelbare Løsning (FORKERT)
+
+```c
+void get_forks(int p) {
+	sem_wait(&forks[left(p)]);
+	sem_wait(&forks[right(p)]);
+}
+
+void put_forks(int p) {
+	sem_post(&forks[left(p)]); 
+	sem_post(&forks[right(p)]);
+}
+```
+
+==DETTE ER FORKERT==
+
+Det fører til **deadlock**.
+
+Hvis hver filosof tager deres gaffel til venstre før nogen når at tage deres gaffel til højre, vil de alle sammen være stuck ventende på at deres højre gaffel bliver ledig.
+
+
+
+#### Løsning: Breaking The Dependency
+
+Vi ændre på hvordan gafler bliver taget hos mindst en af filosofferne.
+
+```c
+void get_forks(int p) { 
+	if (p == 4) {
+		sem_wait(&forks[right(p)]); 
+		sem_wait(&forks[left(p)]);
+	} else {
+		sem_wait(&forks[left(p)]); 
+		sem_wait(&forks[right(p)]);
+    } 
+}
+```
 

@@ -7,6 +7,9 @@ repo_url: 'https://gitlab.com/jollycola/uni-notes'
 
 theme:
     name: 'material'
+    font: 
+        text: 'Open Sans'
+        code: 'Roboto Mono'
     logo:
         icon: 'school'
     feature:

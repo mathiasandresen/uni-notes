@@ -222,7 +222,26 @@ Eksempel på schedule:
 
 ![1559568378481](images/6-concurrency-problems/1559568378481.png)
 
+Andet eksempel:
 
+![1559569169185](images/6-concurrency-problems/1559569169185.png)
+
+![1559569174140](images/6-concurrency-problems/1559569174140.png)
+
+* Static scheduling koster i performance
+
+
+
+#### Detect and Recover
+
+Sidste generelle strategi er at lade deadlocks være "tilladet", og så take action hvis en deadlock bliver detected.
+
+* Eksempel, hvis OS fryser, kan det genstartes.
+
+Mange databasesystemer kører deadlock detection.
+
+* Bygger en resource graf, og tjekker for cycles.
+* Hvis det findes skal systemet genstartes.
 
 
 

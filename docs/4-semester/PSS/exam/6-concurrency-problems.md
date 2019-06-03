@@ -27,3 +27,16 @@ After today’s lecture, you:
     * **priority inversion**
 * ... can use the **Dining Philosophers** example to explain concurrency
     issues
+
+## Noter
+
+#### The Dining Philosophers
+
+* 5 filosoffer
+* Mellem hver er en enkelt gaffel.
+* En filosof kan enten tænke eller spise
+    * Tænke: ingen gaffel
+    * Spise: gaffel
+
+![1559480046648](images/6-concurrency-problems/1559480046648.png)
+

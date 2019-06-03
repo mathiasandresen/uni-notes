@@ -394,15 +394,3 @@ int main(int argc, char *argv[]) {
 
 ![1559480005643](images/5-concurrency/1559480005643.png)
 
-
-
-#### The Dining Philosophers
-
-* 5 filosoffer
-* Mellem hver er en enkelt gaffel.
-* En filosof kan enten tænke eller spise
-    * Tænke: ingen gaffel
-    * Spise: gaffel
-
-![1559480046648](images/5-concurrency/1559480046648.png)
-

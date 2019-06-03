@@ -88,6 +88,114 @@ Se [The Dining Philosphers Eksempel](#the-dining-philosophers)
 
 
 
+Sker hvis lad os sige Tråd 1 holder en lock `L1` og venter på `L2`. 
+Og Tråd 2 holder `L2` og venter på `L1`
+
+![1559565017143](images/6-concurrency-problems/1559565017143.png)
+
+![1559565026853](images/6-concurrency-problems/1559565026853.png)
+
+![1559565058179](images/6-concurrency-problems/1559565058179.png)
+
+Sker blandt andet pga store code bases og **encapsulation**
+
+#### Conditions for Deadlock
+
+Fire conditions skal holde før en deadlock kan ske:
+
+* **Mutual exclusion:** Tråde holder eksklusiv kontrol over en resource som de skal bruge. (eks. en lock)
+* **Hold-and-wait:** Tråde holder resourcer allokeret til dem, eks. aquired locks, mens de venter på flere resourcer (eks. locks de gerne vil aquire).
+* **No preemption:** Resourcer (eks. locks) kan ikke blive forcefully removed fra tråde der holder dem.
+* **Circular wait:** Der eksistere en cirkular kæde af tråde, så at hver tråd holder en eller flere resourcer (eks. locks) som bliver requestet af den næste tråd i kæden.
+
+Alle disse conditions skal overholdes før der kan ske en deadlock.
+
+
+
+#### Prevention
+
+##### Circular Wait
+
+Nok den mest praktiske prevention teknik. Undgå circular wait.
+
+Den mest ligetil løsning er **total ordering**.
+
+* Hvis der kun er 2 locks i systemet, så sørg for at eks `L1` altid aquires før `L2`.
+* Kan være svært i et system med mere end 2 locks.
+
+**Partial ordering:**
+
+* En rækkefølge for forskellige locks.
+
+
+
+Kræver careful design. Er kun en convention, og en "doven" programmør kan ignorere dem.
+
+Kræver dyb forståelse for kode basen.
+
+
+
+##### Hold-and-wait
+
+Kan undgås ved at tage alle locks på en gang:
+
+```
+pthread_mutex_lock(prevention); 	// begin aquisition
+pthread_mutex_lock(L1);
+pthread_mutex_lock(L2);
+...
+pthread_mutex_unlock(prevention);	// end
+```
+
+Problematisk:
+
+* Encapsulation arbejder imod os.
+    * Kræver at vi ved hvilke locksder skal holdes, og at de skal aquires før tid.
+* Nedsætter concurrency, da alle locks skal aquires på en gang i stedet for når de rigtigt skal bruges
+
+
+
+##### No Preemption
+
+Flere libraries tilbyder flexibelt sæt interfaces til at hjælpe.
+
+Routinen: `pthread_mutex_trylock()` grabber enten lock'en hvis den er klar og returnerer sucess, eller returnerer error hvis låsen holdes.
+
+Kan bruges til at lave en deadlock-free ordering-robust lock aquisition protocol:
+
+```c
+top:
+pthread_mutex_lock(L1);
+if (pthread_mutex_trylock(L2) != 0) { 
+	pthread_mutex_unlock(L1); 
+	goto top;
+}
+```
+
+Et nyt problem er dog skabt: **livelock**
+
+* Det kan ske (dog usansynligt) at 2 tråde begge prøver og fejler gentagne gange på at aquire begge locks.
+* Begge tråde kører gennem koden om og om igen (altså ingen deadlock), men der sker intet, derfor livelock.
+* En løsning på dette kan være at inføre et random delay.
+
+Dog:
+
+* Problem igen, encapsulation
+* Hvis koden har aquired andre resources, skal den huske at release dem igen.
+* Tilføjer ikke preemption. men bruger trylock til at lade udvilkeren trække sig ud af et lock ownership.
+
+
+
+##### Mutual Exclusion
+
+Undgå behovet for mutual exclusion.
+
+Ide: design data strukturer uden locks. (**lock-free** and **wait-free**)
+
+* Brug hardware instruktioner.
+
+Eksempel vi bruger [compare-and-swap](../exam/5-concurrency.md#compare-and-swap) til at atomically increment en værdi.
+
 
 
 ### The Dining Philosophers

@@ -208,3 +208,195 @@ Basic protocol er som følger:
 
 ### Hard Disk Drive
 
+Består af et stort antal sektorer (512-byte blocks)
+
+* Som hver kan læses eller skrives
+* Numereret fra 0 til $n-1$ på en disk med $n$ sektorer
+* Kan ses som et array af sektorer
+* 0 til $n-1$ er **address space** for drevet
+
+Multi-sektor operationer er mulige.
+
+* Mange fil-systemer læser eller skriver 4KB af gangen.
+* Eneste garanti er at 512-byte writes er **atomic**
+    * Hvis der sker power loss, er det måske kun en del af en skrivning der færdiggøres (**torn write**)
+
+
+
+Assumptions som klienter af disk dreve gør sig (unwritten contract)
+
+* Access af 2 blocks tæt på hinanden er hurtiger end 2 blocks langt fra hinanden
+* Access af blocks i en sammenhængende chunk er hurtigst
+
+
+
+#### Disk Geometri
+
+![1559548217619](images/7-io-and-device-drivers/1559548217619.png)
+
+* Vi har en **platter** en cirkulær plade med en hård overflade
+    * Hver platter har 2 sider (**surface**)
+    * En disk har en eller flere platters
+    * Ofte lavet af aluminium
+    * Coated med tyndt magnetisk lag
+* Platters er bundet sammen omkring **spindle**
+    * Som er connected til en moter
+    * Spinner ofte mellem 7,200 og 15,000 **RPM (rotations per minute)**
+        * 10,000 RPM $\rightarrow$ 1 rotation tager ca 6 ms
+* Data er encoded på hver surface i  koncentriske cirkler af sektorer. (**track**)
+* **Disk head** læser og skriver sektorer ved at læse eller påvirke magnetic patterns 
+    * 1 per surface
+    * Attached til en **disk arm**
+
+
+
+#### Simple Disk Drive
+
+Vi tager udgangspunkt i figur 37.2 ovenfor.
+
+Hvis vi laver request til block 0. Så skal disken bare vente på at 0 roterer under disk head.
+
+* Kaldes **rotational delay** aka **rotation delay**
+
+
+
+Moderne diske har flere millioner tracks. Eksempel med flere tracks:
+
+![1559549667567](images/7-io-and-device-drivers/1559549667567.png)
+
+Request til sektor 11. Først skal disk armen bevæge sig til det korrekte track. Kaldet et **seek**.
+
+Seeks sammen med rotations er de dyreste disk operationer.
+
+Seek har flere faser:
+
+* *acceleration*
+* *coasting*
+* *deceleration*
+* *settling*: **settling time** er signifikant e.g., 0.5 til 2 ms
+    * drev skal være sikker på at finde det rigtige track.
+
+Når sector 11 passerer under disk head kan sidste fase af I/O ske (**transfer**).
+
+
+
+Ofte bruges **track skew**
+
+![1559550226137](images/7-io-and-device-drivers/1559550226137.png)
+
+Så når head repositioner armen, passer det bedre.
+
+Ydre tracks har ofte flere sektorer (pga geometri). Kaldes **multi-zoned** disk drives: Disk er organiseret i mange zoner.
+
+* Hver zone har det samme antal sektorer per track. Ydre zoner har flere sektoerer end indre zoner.
+
+
+
+##### Cache
+
+Også kaldet **track buffer**.
+
+Lille stykke memory, ofte omkring 8- eller 16 MB
+
+Disk skal vælge ved writes, om den vil anerkende et write når den har puttet data i memory, eller først når den har skrevet på disk?
+
+* **Write back: ** når det er skrevet i memory (også kaldet **immediate repporting**)
+    * Kan få drevet til at se hurtigere ud, men kan være farligt hvis filsystemet kræver at data skrives i en bestemt rækkefølge.
+* **Write through**: når der er skrevet til disk.
+
+
+
+#### I/O Time
+
+I/O Time:
+$$
+T_{I/O}=T_{seek}+T_{rotation}+T_{transfer}
+$$
+Rate of I/O:
+$$
+R_{I/O}=\frac{Size_{Transfer}}{T_{I/O}}
+$$
+
+##### Eksempler
+
+![1559551813971](images/7-io-and-device-drivers/1559551813971.png)
+
+**Random** workload laver små reads (eg 4KB) til random lokationer
+
+**Sequential** workload læser et stort antal sammenhængende sektorer
+
+![1559552033555](images/7-io-and-device-drivers/1559552033555.png)
+
+
+
+#### Disk Scheduling
+
+Da I/O er dyrt spiller OS en rolle i scheduling.
+
+* **Disk scheduler**
+
+I/O "job"-tid er nogenlunde kendt i modsætning til job-scheduling.
+
+Prøver at følge **principle of SJF (shortest job first)**
+
+
+
+##### SSTF: Shortest Seek Time First
+
+AKA **shortest-seek-first (SSF)**.
+
+* Rangerer køen af I/O request baseret på track.
+* Vælger den request på det nærmeste track først.
+* Kender dog ikke geometrien af disk, ses som array af blocks.
+
+Kan derfor implementere **nearest-block-first (NBF)** i stedet for SSTF.
+
+Kan føre til **starvation**, hvis der kommer strøm af requests til de indre track eksempelvis.
+
+
+
+##### Elevator (AKA SCAN or C-SCAN)
+
+Algoritmen bevæger sig frem og tilbage over disken, og håndterer request i rækkefølge over tracks.
+
+* Et enkelt pass over disken kaldes et *sweep*.
+
+Varianter:
+
+* **F-SCAN:** fryser køen når den sweeper.
+    * Requests der kommer ind under sweep sættes i en sekundær kø
+    * Undgår at far-away requests bliver starved ved at delay sent-ankomne (men tættere på) requests.
+* **C-SCAN**: **Circular SCAN**
+    * I stedet for frem og til bage, køre den i "cirkel".
+    * Mere fair over for de midterste tracks.
+
+Hverken SCAN eller SSTF er den bedste scheduling technology, de adhere ikke til principle of SJF som de kunne.
+
+* De ignorerer rotation.
+
+
+
+##### SPTF: Shortest Positioning Time First
+
+![1559553469209](images/7-io-and-device-drivers/1559553469209.png)
+
+Hvis det tager længere tid at rotere, giver det mere mening at lave det lange seek, ex 8, så den ikke skal rotere så meget. 
+
+På moderne drives er seek og rotation ca. ens. Derfor er SPTF brugbart og increaser performance.
+
+Svært at implementere i OS, så ofte implementeret inde i drevet.
+
+
+
+##### Andre Scheduling Problemer
+
+**I/O Merging**: Der kommer 3 request til 33, så 8, så 34. Scheduler burde her merge 33 og 34 indtil en two-block request.
+
+Hvor lang tid skal OS vente med at sende request?
+
+Naiv approach: **work-conserving:** send så snart der er en I/O.
+
+* Harddisk arbejder hele tiden.
+
+Research om **anticpatory disk scheduling** viser at det kan betale sige at vente lidt. Kaldet **non-work-conserving**
+

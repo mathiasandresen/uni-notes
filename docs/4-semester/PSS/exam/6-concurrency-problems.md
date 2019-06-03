@@ -30,6 +30,66 @@ After today’s lecture, you:
 
 ## Noter
 
+Concurrency bugs in modern applications
+
+![1559563806683](images/6-concurrency-problems/1559563806683.png)
+
+
+
+### Non-Deadlock Bugs
+
+97 % af non-deadlock bugs er en af følgende:
+
+* **Atomicity Violation**
+* **Order Violation**
+
+#### Atomicity Violation
+
+Eksempel fra MySQL:
+
+```c
+Thread 1::
+if (thd->proc_info) {
+	fputs(thd->proc_info, ... );
+}
+
+Thread 2::
+thd->proc_info = NULL
+```
+
+Koden i thread 1, har en *atomicity assumption*, den tror at kode line 2-3 sker i et hug.
+Men hvis den laver null-check først, og så tråd 2 sætter den til null før linje 3 køres, så er der fejl
+
+**Løsning:** Locks rundt om lines 2-4 + line 7
+
+
+
+#### Order-Violation
+
+```c
+float T;
+```
+
+![1559564496283](images/6-concurrency-problems/1559564496283.png)
+
+Koden i thread 2, tror at `T` er initialiseret.
+
+**Løsning**:
+
+Kan løses med en semaphore
+
+![1559564533044](images/6-concurrency-problems/1559564533044.png)
+
+
+
+### Deadlock
+
+Se [The Dining Philosphers Eksempel](#the-dining-philosophers)
+
+
+
+
+
 ### The Dining Philosophers
 
 * 5 filosoffer
@@ -105,4 +165,6 @@ void get_forks(int p) {
     } 
 }
 ```
+
+
 

@@ -22,7 +22,7 @@ After lecture 1 you can:
 * :heavy_check_mark: Define and explain the concept of a **thread**
 * :heavy_check_mark: Discuss when, where and how (multi-)threads are usefull
 * :heavy_check_mark: Explain what a **thread control block** is, what it is used for and why it is needed
-* :heavy_exclamation_mark: Discuss **implementation strategies** for thread support and explain the associated **trade-offs**
+* Discuss **implementation strategies** for thread support and explain the associated **trade-offs**
 
 
 

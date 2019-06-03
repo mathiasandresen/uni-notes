@@ -62,7 +62,7 @@ Et **system-call number** er assigned til hvert system kald. User programmet pla
 
 OS tjekker dette nummers validitet og kører det tilsvarende kode. Denne indirekthed fungerer som besykttelse.
 
-!!! snippet "xv6"
+!!! example "xv6"
 	System call numbers i xv6 kan ses i ``syscall.h``. De gemmes i %eax. Og kaldes ved at eksekvere trap med ``T_SYSCALL``. 
 
 #### Switching Process (Scheduling)

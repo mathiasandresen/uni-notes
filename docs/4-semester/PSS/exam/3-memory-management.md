@@ -305,3 +305,9 @@ Ligesom first-fit, men algoritmen holder en pointer til der hvor den ledte sidst
 * Spreder søgningen mere uniformt.
 * Høj performance, som first-fit.
 
+
+
+##### Buddy Allocation
+
+![1559651212010](images/3-memory-management/1559651212010.png)
+

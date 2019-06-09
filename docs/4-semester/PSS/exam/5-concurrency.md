@@ -358,7 +358,7 @@ void *child(void *arg) {
 } 
 
 int main(int argc, char *argv[]) {
-	sem_init(&s, 0, X); 
+	sem_init(&s, 0, 0); 
     printf("parent: begin\n"); 
     pthread_t c;
     Pthread_create(&c, NULL, child, NULL); 

@@ -18,13 +18,13 @@ En NFA M accepterer et input w hvis M ved at læse w KAN havne i en accepttilsta
 
 ## Definition
 
-En nonderterministisk endelig automan (NFA) er en 5-tupel.
+En nonderterministisk endelig automat (NFA) er en 5-tupel.
 $$
 (Q,\Sigma,\delta,q_0,F)
 $$
 $Q$:	endelig mængde af tilstande
 
-$\Sigma​$:	input alfabet
+$\Sigma$:	input alfabet
 
 $\delta$: 	overføringsfunktion
 
@@ -40,9 +40,9 @@ Transitioner beskriver mængden af mulige efterfølgertilstande for ethvert tegn
 
 $\delta(q_1,a)=Ø$
 
-$\delta(q_2,a)=\{q_1,q_2\}​$
+$\delta(q_2,a)=\{q_1,q_2\}$
 
-$\delta(q_1,\varepsilon)=\{q_2\}​$
+$\delta(q_1,\varepsilon)=\{q_2\}$
 
 $\delta(q_2, \varepsilon)=Ø$ 
 $$

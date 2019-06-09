@@ -23,3 +23,17 @@ Hvis (2) også skal gælde må $y$ ikke være den tomme streng.
 Men så overtrædes (1), for vi har at $xy^iz \notin L$ hvis $i=$ "...", da "..."
 "
 
+## Semantik
+
+* Husk at numeraler skal gøres til tal ved $\mathcal{N}[\![n]\!]$
+    * Eksempel: $\langle \text{cutoff}(x, n), s \rangle → s[x \mapsto v] \quad \text{hvor } v = \mathcal{N}[\![n]\!] \quad \text{hvis } s(x) > \mathcal{N}[\![n]\!]$
+* Slå op i tilstand s med $s(x)$
+* Husk at stregen over ikke altid bruges
+
+
+
+### Se Fejl
+
+* Tjek at start og sluttilstande er korrekte
+* Tjek efter $s \vdash$
+

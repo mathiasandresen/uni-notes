@@ -37,3 +37,18 @@ Men så overtrædes (1), for vi har at $xy^iz \notin L$ hvis $i=$ "...", da "...
 * Tjek at start og sluttilstande er korrekte
 * Tjek efter $s \vdash$
 
+
+
+### Small-Step Semantik
+
+* Brug de predefinerede kommandoer (s. 7 i formelsamling)
+
+
+
+### Variabelbindinger
+
+Hvis du slår op i $Env_p$ og får variabelenvironment med, er der tale om statisk variabelbinding.
+
+Det samme gælder for procedurebindinger.
+
+> Hvis du slår op, får du en gammel krop - Mads-Bo, 2019

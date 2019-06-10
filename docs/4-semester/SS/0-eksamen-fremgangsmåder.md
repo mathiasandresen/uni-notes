@@ -25,11 +25,11 @@ title: Eksamen - Fremgangsmåder
 "
 Jeg vælger $s=$ "valgte streng" og viser at ingen opsplitninger af $s$ vil kunne overholde alle tre betingelser i pumping lemma for regulære sprog samtidigt. 
 
-Hvis (3) skal gælde så, må $xy$ bestå af "...".
+Hvis (3) skal gælde så, må $xy$ bestå af "..." og dermed $y=x^k$ for $k\geq 0$.
 
 Hvis (2) også skal gælde må $y$ ikke være den tomme streng.
 
-Men så overtrædes (1), for vi har at $xy^iz \notin L$ hvis $i=$ "...", da "..."
+Men så overtrædes (1), for vi har at $xy^iz \notin L$ hvis $i=$ "...", da "...".
 "
 
 ## Semantik

@@ -59,7 +59,7 @@ date: 30-10-2018
 
 **Errors:**
 
-* ​How many errors do users make, how severe are these errors, and how easily can they recover from the errors?
+* How many errors do users make, how severe are these errors, and how easily can they recover from the errors?
 
 **Satisfaction**:
 
@@ -101,13 +101,13 @@ How do we evaluate usability?
 
 ### When to test?
 
-![1547555980195](.\images\1547555980195.png)
+![1547555980195](../DEB/images/1547555980195.png)
 
 
 
 ### Lab vs. Field Test
 
-![1547556171777](.\images\1547556171777.png)
+![1547556171777](../DEB/images/1547556171777.png)
 
 
 
@@ -151,17 +151,17 @@ Produces a **ranked list of usability problems.**
 
 ### Testing Process (Participant perspective)
 
-![1547557016921](.\images\1547557016921.png)
+![1547557016921](../DEB/images/1547557016921.png)
 
 ### Testing Process (Our Perspective)
 
-![1547557044054](.\images\1547557044054.png)
+![1547557044054](../DEB/images/1547557044054.png)
 
  
 
 ### Activities
 
-![1547557088864](.\images\1547557088864.png)
+![1547557088864](../DEB/images/1547557088864.png)
 
 #### Planning
 
@@ -245,7 +245,7 @@ How long does it take to solve the tasks?
 
 
 
-![1547565742840](images/1547565742840.png)
+![1547565742840](../DEB/images/1547565742840.png)
 
 
 

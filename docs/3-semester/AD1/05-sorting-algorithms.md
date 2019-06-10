@@ -24,14 +24,13 @@ Output: A permutation (reordering) of the input sequence
 **Insertion sort**
 
 * *In-place*[^in-place] sorting algorithm
-* Worst case complexity $\Theta(n^2)​$
+* Worst case complexity $\Theta(n^2)$
 
 **Merge sort**
 
-* Uses the [DaC](./AD1 - Divide-and-Conquer.md#divide-and-conquer) technique
+* Uses the [DaC](../AD1/03-divide-and-conquer.md#divide-and-conquer) technique
 * Not *in-place*[^in-place] sorting, which requires additional storage with the size of the input array
 * Worst case complexity $\Theta(n\cdot lg(n))$
-
 
 **Important properties**
 
@@ -73,7 +72,7 @@ Output: A permutation (reordering) of the input sequence
 
 A DaC algorithm.
 
-Does not require additional array like [Merge Sort](./AD1 - Divide-and-Conquer.md#merge-sort) 
+Does not require additional array like [Merge Sort](../AD1/03-divide-and-conquer.md#merge-sort) 
 
 * Sorts in-place [^in-place]
 

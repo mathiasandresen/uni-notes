@@ -83,4 +83,5 @@ Usability problems are present when the system is:
 * **Ineffective to use:** It takes a long time to solve certain tasks with the system.
 * **Unsatisfying to use:** The system does not feel comfortable to use, it is not joyful to work with it.
 
-This is basically an inverted edition of Jacob Nielsen's definition from lecture [07](DEB07 - Evaluation.md#jacob-nielsen-definition).
+This is basically an inverted edition of Jacob Nielsen's definition from lecture [07](../DEB/07-evaluation.md#jacob-nielsen-definition).
+

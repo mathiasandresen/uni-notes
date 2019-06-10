@@ -15,7 +15,7 @@ Have to transcribe what the user does. Catches the user interaction in textual f
 
 Can be done live, by a test logger, and then finished afterwards by looking at videos.
 
-![1547636620402](.\images\1547636620402.png)
+![1547636620402](../DEB/images/1547636620402.png)
 
 Above shows an example of a transcript. First column shows a timestamp, middle shows the transcription, and right column shows the exact problem, interpreted by who ever writes the transcript. No interpretation in the transcript
 
@@ -29,7 +29,7 @@ Main outcome is list of problems, but also want a summary of user performance. I
 
 When talking user-based evaluation, a usability problem is a problem experienced by a specific user while interacting with a specific system. Can be observed if:
 
-![1547635178372](.\images\1547635178372.png)
+![1547635178372](../DEB/images/1547635178372.png)
 
  Not always clear why the problem is. Often clear what the problem is, but not why the user has the problem
 
@@ -46,11 +46,11 @@ When talking user-based evaluation, a usability problem is a problem experienced
 
 The **problem list** is the primary outcome of a evaluation. It is:
 
-![1547636846644](.\images\1547636846644.png)
+![1547636846644](../DEB/images/1547636846644.png)
 
 Produced by looking at the transcript. Example below shows a problem list, a typical layout
 
-![1547636916141](.\images\1547636916141.png)
+![1547636916141](../DEB/images/1547636916141.png)
 
 Might need more detail, if test done for others. Can be done providing extra document with extra details, describing the problems in more detail. Sometimes extra details can be for serious problems
 
@@ -72,7 +72,7 @@ Users may experience different level of severity. When making the problem list, 
 
 #### Cosmetic
 
-![1547637270391](.\images\1547637270391.png)
+![1547637270391](../DEB/images/1547637270391.png)
 
 Image above shows schema a decide on a problem category. Again, pick the most severe/critical category. Not set in stone, but guidelines
 

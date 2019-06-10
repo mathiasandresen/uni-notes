@@ -136,7 +136,7 @@ Based on:
 
 Regular Expressions can be recognized by a finite state machine (FA)
 
-[Finite State Automaton](../SS/1b-endelige-automater.md)
+[Finite State Automaton](../SS/01b-endelige-automater.md)
 
 #### Converting a RE Into an NDFA-epsilon
 

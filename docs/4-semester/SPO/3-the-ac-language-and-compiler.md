@@ -142,7 +142,7 @@ No formal definition of Type Rules or Runtime semantics (in Fisher et. Al.)
   - Terminals - Cannot be rewritten
     - Eg. *id, assign, print*
     - Start symbol: Prog
-    - Empty or null string: $\lambda$ (some references use $\varepsilon​$ for empty string)
+    - Empty or null string: $\lambda$ (some references use $\varepsilon$ for empty string)
     - End of input stream or file: $
   - Nonterminals
     - Eg. *Val*, *Expr*
@@ -179,7 +179,7 @@ Any string of terminals produced in this manner is considered syntactically vali
 
 #### Example Derivation of an 'ac' program
 
-![img](images/Screenshot_2019-02-13-17-35-13-751-1550075866229.jpeg)
+![img](images/Screenshot_2019-02-13-17-35-13-751-1550075868350.jpeg)
 
 
 

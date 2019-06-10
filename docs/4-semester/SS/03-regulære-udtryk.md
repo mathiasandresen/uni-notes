@@ -82,7 +82,7 @@ Kan tegnes som NFA:
 	<text x="318.5" y="373.5" font-family="Times New Roman" font-size="20">&#949;</text>
 </svg>
 
-Og som vi så i [Lektion 2](../SS/2-nondertiminstiske-endelige-automater.md#kvivalens-mellem-dfa-og-nfa), så kan en NFA skrives om til en DFA.
+Og som vi så i [Lektion 2](../SS/02-nondeterministiske-endelige-automater.md#ækvivalens-mellem-dfa-og-nfa), så kan en NFA skrives om til en DFA.
 
 
 
@@ -92,7 +92,7 @@ Og som vi så i [Lektion 2](../SS/2-nondertiminstiske-endelige-automater.md#kviv
 
 En GNFA er en 5-tupel
 
-​	$(Q, \Sigma,q_{start},q_{accept},\delta)​$
+​	$(Q, \Sigma,q_{start},q_{accept},\delta)$
 
 Q:           mængde af tilstande
 
@@ -100,7 +100,7 @@ $\Sigma$:           input alfabet
 
 $q_{start}$:     starttilstand $q_{start} \in Q$
 
-$q_{accept}​$:   accepttilstand $q_{accept} \in Q​$
+$q_{accept}$:   accepttilstand $q_{accept} \in Q$
 
 $\delta$:            Skal over en "**bordskik**"
 
@@ -109,7 +109,7 @@ $\delta$:            Skal over en "**bordskik**"
 **Bordskik**:
 
 * Én transition mellem hvert par af  tilstande, dog
-* Ingen transitioner fra $q_{accept}​$
+* Ingen transitioner fra $q_{accept}$
 * Ingen transition til $q_{start}$
 * Regulære udtryk på transitionerne.
 

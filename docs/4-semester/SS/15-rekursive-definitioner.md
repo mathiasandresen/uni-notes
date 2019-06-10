@@ -18,6 +18,7 @@ Lav en højresidefunktion:
 $$
 f(X)=\{a\}\ X\ \{b\} \cup \{c\} \cup X
 $$
+
 $f$ er en funktion over sprog - Eks:
 
 $$
@@ -28,6 +29,7 @@ f(\{aa,b\}) \\
 &= \{aaab,abb,c,aa,b\}
 \end{align*}
 $$
+
 Vi vil gerne have et $L_s$ så $f(L_s)=L_s$
 
 ​	$L_s$ er et **fikspunkt** for funktionen $f$
@@ -58,6 +60,7 @@ f^4(\varnothing) &= f(f^3(\varnothing)) &&= \{aaacbbb, aacbb, acb,c\} \\
 f^n(\varnothing) &&&= \{a^icb^i\ |\ 0 \leq i < n\} \\
 \end{align*}
 $$
+
 **Grænseværdien** for følgen: $\{a^icb^i\ |\ i \geq 0\}$
 
 
@@ -142,7 +145,7 @@ hvor
 
 ### Fuldstændig Partiel Ordning
 
-Lad $(D,\sqsubseteq)$ være en po. Den kaldes **fuldstændig partial ordning** hvis det gælder at:
+Lad $(D,\sqsubseteq)$ være en po. Den kaldes **fuldstændig partial ordning** (fpo) hvis det gælder at:
 
 1. For enhver kæde i $D,Y$, har vi at $\lim{Y}$ findes
     (enhver voksende følge har en mindste øvre grænse)
@@ -154,4 +157,37 @@ Lad $(D,\sqsubseteq)$ være en po. Den kaldes **fuldstændig partial ordning** h
 ## Monoton
 
 Lad $(D,\sqsubseteq)$ være en po og $f:D\to D$ være en funktion.
+
+$f$ er **monoton** hvis:
+
+​	for alle $x,y \in D : $ hvis $x \sqsubseteq y$ så $f(x) \sqsubseteq f(y)$
+​		(voksende mht. $\sqsubseteq$)
+
+
+
+## Kontinuert Funktion
+
+Lad $(D, \sqsubseteq)$ være en fpo.
+
+$f: D \to D$ er monoton.
+
+$f$ er kontinuert hvis for enhver kæde $Y= \{y_0,y_1,...\}$ har vi at
+
+​	$f(\lim{Y})= \lim{f(y_0)}$ 
+​		($f$ bevarer grænseværdi; $f$ kan flyttes ind under $\lim$)
+
+
+
+## Eksistens af Mindste Fikspunkt for Funktion
+
+Lad $(D, \sqsubseteq)$ være en fpo, og lad $f:D \to D$ være kontinuert.
+
+Så har $f$ et mindste fikspunkt (mht $\sqsubseteq$) som er givet ved:
+
+$$
+\begin{align*}
+x^* &= \lim_{i \geq 0}{\{f^0(\perp), f^1(\perp), f^2(\perp),\ ...\}} \\
+&= \lim{\{f^i(\perp)\ |\ i \geq 0\}}
+\end{align*}
+$$
 

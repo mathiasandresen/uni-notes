@@ -9,7 +9,7 @@ date: 13-03-2019
 
 |                                                     | **Beskrive**                               | **Genkende**                                                 |
 | --------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------ |
-| **[Regulære <br />sprog](../SS/1a-regulære-sprog.md)** | [Regulære udtryk](../SS/3-regulære-udtryk.md) | [Endelige automater](../SS/1b-endelige-automater.md) <br />- [NFA](../SS/2-nondeterministiske-endelige-automater.md) og DFA (ækv.) |
+| **[Regulære <br />sprog](../SS/01a-regulære-sprog.md)** | [Regulære udtryk](../SS/03-regulære-udtryk.md) | [Endelige automater](../SS/01b-endelige-automater.md) <br />- [NFA](../SS/02-nondeterministiske-endelige-automater.md) og DFA (ækv.) |
 | **Kontekstfrie <br />sprog**                        | <u>Kontekstfrie grammatikker</u>           | Pushdown-automater<br />- NDPDA og DPDA (ikke ækv.)          |
 
 <br />
@@ -75,8 +75,8 @@ $$
 
 **Definition:**
 
-Lad G være en CFG hvor $G=(V,\Sigma,R,S)​$ 
-og lad $u,v \in (V\cup\Sigma)^*​$
+Lad G være en CFG hvor $G=(V,\Sigma,R,S)$ 
+og lad $u,v \in (V\cup\Sigma)^*$
 
 Hvis
 
@@ -126,7 +126,7 @@ $$
 
 **Definition:**
 
-Lad $G=(V,\Sigma,R,S)​$  være en CFG
+Lad $G=(V,\Sigma,R,S)$  være en CFG
 
 Sproget defineret af G er
 
@@ -143,7 +143,7 @@ der findes en CFG G så $L=L(G)$
 
 **<u>Sætning</u>**
 
-Hvis M er en DFA, kan vi konstruere en CFG G så $L(G)=L(M)​$
+Hvis M er en DFA, kan vi konstruere en CFG G så $L(G)=L(M)$
 
 **Eksempel:**
 
@@ -250,7 +250,7 @@ Der findes **ikke** nogen algoritme, der altid kan fortælle os om en CFG er tve
 
 En CFG er på Chomsky-Normalform (CNF) hvis reglerne overholder:
 
-* Eneste tilladte $\varepsilon$-regel er $S\longrightarrow\varepsilon​$
+* Eneste tilladte $\varepsilon$-regel er $S\longrightarrow\varepsilon$
 * Alle andre regler er på formerne:
     * $A\longrightarrow BC$
     * $A\longrightarrow a$

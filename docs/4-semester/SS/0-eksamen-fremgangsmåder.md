@@ -8,7 +8,7 @@ title: Eksamen - Fremgangsmåder
 
 ## Pumping Lemma for Regulære Sprog
 
-* Antag at $L$ er et regulært sprog, så ville [Pumping Lemma](../SS/4-pumping-lemma.md#pumping-lemma-for-regulære-sprog) være overholdt. (Se formelsamling s. 5)
+* Antag at $L$ er et regulært sprog, så ville [Pumping Lemma](../SS/04-pumping-lemma.md#pumping-lemma-for-regulære-sprog) være overholdt. (Se formelsamling s. 5)
 
 * Vælg en streng $s\in L$ der er defineret ud fra $p$ og kan "pumpes op" så $s\notin L$
 * Skriv:

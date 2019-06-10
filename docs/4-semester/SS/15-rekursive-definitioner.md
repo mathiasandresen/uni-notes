@@ -160,7 +160,7 @@ Lad $(D,\sqsubseteq)$ være en po og $f:D\to D$ være en funktion.
 
 $f$ er **monoton** hvis:
 
-​	for alle $x,y \in D : $ hvis $x \sqsubseteq y$ så $f(x) \sqsubseteq f(y)$
+​	for alle $x,y \in D$ : hvis $x \sqsubseteq y$ så $f(x) \sqsubseteq f(y)$
 ​		(voksende mht. $\sqsubseteq$)
 
 

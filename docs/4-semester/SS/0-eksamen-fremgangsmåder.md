@@ -6,6 +6,15 @@ title: Eksamen - Fremgangsmåder
 
 
 
+## Konvertering af NFA til DFA
+
+* Husk at $\varepsilon$ transitioner er "gratis"
+    * De må dog ikke tages "alene", de skal læses sammen med et andet symbol. Dette symbol kan godt gå til samme tilstand, og så kan  $\varepsilon$ gå videre.
+
+
+
+
+
 ## Pumping Lemma for Regulære Sprog
 
 * Antag at $L$ er et regulært sprog, så ville [Pumping Lemma](../SS/04-pumping-lemma.md#pumping-lemma-for-regulære-sprog) være overholdt. (Se formelsamling s. 5)

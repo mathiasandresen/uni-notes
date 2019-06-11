@@ -127,12 +127,12 @@ Fjern tilstande i G én efter én og opdater.
 
 Til sidst har vi 2 tilstande med et regulært udtryk mellem.
 
-**Fjerne tilstande:**
+#### Fjerne tilstande
 
 * Må ikke være $q_{start}$ eller $q_{accept}$
 * Kald den tilstand vi fjerne $q_{rip}$
 
-**Opdatere transitioner:**$\label{update_step}$
+#### Opdatere transitioner
 
 Før og efter
 
@@ -184,7 +184,7 @@ $\text{CONVERT}(G)=$
 
 2. Ellers vælg $q_{rip} \notin \{q_{start}, q_{accept}\}$
 
-3. For hvert par $(q_i, q_j)$ opdatér transitioner som vist ovenfor $\ref{update_step}$.
+3. For hvert par $(q_i, q_j)$ opdatér transitioner som vist [ovenfor](#opdatere-transitioner).
 
     Kald ny GNFA for $G'$.
 

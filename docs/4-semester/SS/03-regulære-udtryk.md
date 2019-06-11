@@ -119,3 +119,75 @@ $\delta$:            Skal over en "**bordskik**"
 
 ![1551222564332](images/3-regulære-udtryk/1551222564332.png)
 
+
+
+### Konstruer Regulært Udtryk ud fra GNFA
+
+Fjern tilstande i G én efter én og opdater.
+
+Til sidst har vi 2 tilstande med et regulært udtryk mellem.
+
+**Fjerne tilstande:**
+
+* Må ikke være $q_{start}$ eller $q_{accept}$
+* Kald den tilstand vi fjerne $q_{rip}$
+
+**Opdatere transitioner:**$\label{update_step}$
+
+Før og efter
+
+<svg width="800" height="300" version="1.1" xmlns="http://www.w3.org/2000/svg">
+	<ellipse stroke="black" stroke-width="1" fill="none" cx="119.5" cy="215.5" rx="30" ry="30"/>
+	<text x="106.5" y="221.5" font-family="Times New Roman" font-size="20">q_i</text>
+	<ellipse stroke="black" stroke-width="1" fill="none" cx="357.5" cy="215.5" rx="30" ry="30"/>
+	<text x="344.5" y="221.5" font-family="Times New Roman" font-size="20">q_j</text>
+	<ellipse stroke="black" stroke-width="1" fill="none" cx="238.5" cy="131.5" rx="30" ry="30"/>
+	<text x="217.5" y="137.5" font-family="Times New Roman" font-size="20">q_rip</text>
+	<ellipse stroke="black" stroke-width="1" fill="none" cx="476.5" cy="215.5" rx="30" ry="30"/>
+	<text x="463.5" y="221.5" font-family="Times New Roman" font-size="20">q_i</text>
+	<ellipse stroke="black" stroke-width="1" fill="none" cx="723.5" cy="215.5" rx="30" ry="30"/>
+	<text x="710.5" y="221.5" font-family="Times New Roman" font-size="20">q_j</text>
+	<polygon stroke="black" stroke-width="1" points="50.5,215.5 89.5,215.5"/>
+	<polygon fill="black" stroke-width="1" points="89.5,215.5 81.5,210.5 81.5,220.5"/>
+	<path stroke="black" stroke-width="1" fill="none" d="M 131.123,187.936 A 114.715,114.715 0 0 1 208.635,133.221"/>
+	<polygon fill="black" stroke-width="1" points="208.635,133.221 199.84,129.807 201.712,139.63"/>
+	<text x="139.5" y="143.5" font-family="Times New Roman" font-size="20">R&#8321;</text>
+	<path stroke="black" stroke-width="1" fill="none" d="M 268.39,132.565 A 111.224,111.224 0 0 1 346.487,187.692"/>
+	<polygon fill="black" stroke-width="1" points="346.487,187.692 346.928,178.268 338.21,183.167"/>
+	<text x="318.5" y="142.5" font-family="Times New Roman" font-size="20">R&#8323;</text>
+	<path stroke="black" stroke-width="1" fill="none" d="M 330.646,228.83 A 237.916,237.916 0 0 1 146.354,228.83"/>
+	<polygon fill="black" stroke-width="1" points="330.646,228.83 321.334,227.319 325.207,236.538"/>
+	<text x="228.5" y="268.5" font-family="Times New Roman" font-size="20">R&#8324;</text>
+	<path stroke="black" stroke-width="1" fill="none" d="M 225.275,104.703 A 22.5,22.5 0 1 1 251.725,104.703"/>
+	<text x="228.5" y="55.5" font-family="Times New Roman" font-size="20">R&#8322;</text>
+	<polygon fill="black" stroke-width="1" points="251.725,104.703 260.473,101.17 252.382,95.292"/>
+	<path stroke="black" stroke-width="1" fill="none" d="M 500.177,197.132 A 182.784,182.784 0 0 1 699.823,197.132"/>
+	<polygon fill="black" stroke-width="1" points="699.823,197.132 695.852,188.574 690.391,196.951"/>
+	<text x="544.5" y="158.5" font-family="Times New Roman" font-size="20">R&#8324; U R&#8321;R&#8322;*R&#8323;</text>
+	<polygon stroke="black" stroke-width="1" points="424.5,215.5 446.5,215.5"/>
+	<polygon fill="black" stroke-width="1" points="446.5,215.5 438.5,210.5 438.5,220.5"/>
+</svg>
+
+* For hvert par $q_i,q_j \neq q_{rip}$ lav denne opdatering
+
+#### Algoritme
+
+$\text{CONVERT}(G)=$
+
+1. Lad mængden af tilstande i $G$ være $Q_G$.
+
+    Hvis $Q_G =\{q_{start}, q_{accept}\}$ så stop.
+
+    Returner $R$, hvor:
+
+![1560260269728](images/03-regulære-udtryk/1560260269728.png)
+
+2. Ellers vælg $q_{rip} \notin \{q_{start}, q_{accept}\}$
+
+3. For hvert par $(q_i, q_j)$ opdatér transitioner som vist ovenfor $\ref{update_step}$.
+
+    Kald ny GNFA for $G'$.
+
+    $Q_{G'}=Q_G \smallsetminus \{q_{rip}\}$
+
+4. $\text{CONVERT}(G')$

@@ -143,7 +143,7 @@ hvor
 
 
 
-### Fuldstændig Partiel Ordning
+### Fuldstændig Partiel Ordning (Domæne)
 
 Lad $(D,\sqsubseteq)$ være en po. Den kaldes **fuldstændig partial ordning** (fpo) hvis det gælder at:
 

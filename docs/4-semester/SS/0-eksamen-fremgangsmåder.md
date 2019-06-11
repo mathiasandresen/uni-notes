@@ -13,6 +13,18 @@ title: Eksamen - Fremgangsmåder
 
 
 
+## Pushdown Automater
+
+* Brug epsilon-transitioner til at komme videre ($\varepsilon, \varepsilon \to \varepsilon$)
+
+### Eksempel
+
+$$
+L_1=\{a^ib^jc^k\mid i,j,k \geq 0;\ k=i+j\}
+$$
+
+![1560248934304](images/0-eksamen-fremgangsmåder/1560248934304.png)
+
 
 
 ## Pumping Lemma for Regulære Sprog

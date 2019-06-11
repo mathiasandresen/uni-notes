@@ -27,6 +27,16 @@ $$
 
 
 
+## Fra CFG til Pushdown
+
+![1560249763905](images/0-eksamen-fremgangsmåder/1560249763905.png)
+
+![1560249772578](images/0-eksamen-fremgangsmåder/1560249772578.png)
+
+
+
+
+
 ## Pumping Lemma for Regulære Sprog
 
 * Antag at $L$ er et regulært sprog, så ville [Pumping Lemma](../SS/04-pumping-lemma.md#pumping-lemma-for-regulære-sprog) være overholdt. (Se formelsamling s. 5)

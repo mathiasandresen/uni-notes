@@ -78,9 +78,9 @@ Lad $w\in\Sigma^*$, hvor $w=u_1...u_k$, hvor $u_i\in\Sigma_{\varepsilon} \quad (
 
 **M accepterer w** hvis:
 
-1. Der findes en følge af tilstande $r_0...r_k​$
+1. Der findes en følge af tilstande $r_0...r_k$
 
-2. Der findes en følge af stakindhold $s_0...s_k​$
+2. Der findes en følge af stakindhold $s_0...s_k$
 
     $(s_i\in\Gamma^* \ \text{for} \ 0\leq i \leq k)$
 
@@ -108,3 +108,14 @@ Lad $w\in\Sigma^*$, hvor $w=u_1...u_k$, hvor $u_i\in\Sigma_{\varepsilon} \quad (
 
 !!! warn "Udvid noter"
     indsæt eksempler fra SS6 afsnit 4 [https://www.youtube.com/watch?v=eBgtVhYUf50&list=PLA8H0-CuqhGGH6lTKmcgzzmK7kkwX75rF&index=4]
+
+
+
+## Lav Pushdown Automat ud fra CFG
+
+1. Placer markersymbol $, og startvariablen på stakken.
+2. Gentag forevigt:
+    1. Hvis toppen af stakken er en variabel A, nondeterministisk vælg en af reglerne for A og substituer A med strengen på højre side af reglen.
+    2. Hvis toppen af stakken er en terminal a, læs næste symbol fra input og sammenlign med a. Hvis de matcher, gentag. Hvis de ikke matcher, afvis på denne gren.
+    3. Hvis toppen af stakken er $, gå ind i accept tilstand.
+

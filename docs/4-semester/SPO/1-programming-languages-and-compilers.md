@@ -84,12 +84,11 @@ If the compiler itself is written in *L*, the compiler can compile itself into t
 
 
 
+## Language Criteria
 
+Sebesta's Language Criteria
 
-
-
-
-
+![1560512201980](images/1-programming-languages-and-compilers/1560512201980.png)
 
 
 

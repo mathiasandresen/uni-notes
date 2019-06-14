@@ -76,9 +76,9 @@ void ident(void);
 
 
 
-**Vocabulary** $V=N\cup \Sigma​$
+**Vocabulary** $V=N\cup \Sigma$
 
-* $N \cap \Sigma = \phi​$
+* $N \cap \Sigma = \phi$
 
 
 
@@ -170,7 +170,7 @@ Denoted with $\Rightarrow_{rm}$
 A graphical representation of a derivation
 
 * Root: start symbol S
-* Each node: either grammar symbol or $\lambda$ or $\varepsilon​$ 
+* Each node: either grammar symbol or $\lambda$ or $\varepsilon$ 
 * Interior nodes: nonterminals
   * An interior node and its children: production
 

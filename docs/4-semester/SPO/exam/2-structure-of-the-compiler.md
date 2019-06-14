@@ -114,7 +114,7 @@ Er normalt hand-coded da de er meget specifikke og komplekse.
 ## Example
 
 !!! example
-	As an example see the notes on the [ac language and compiler](../../../4-semester/SPO/03b-the-ac-language-and-compiler)
+	As an example see the notes on the [ac language and compiler](../../../SPO/03b-the-ac-language-and-compiler)
 
 
 

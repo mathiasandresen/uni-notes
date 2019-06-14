@@ -88,7 +88,7 @@ A **meta-character** is any punctuation char or regular expression operator. A m
 
 ## The ac Language
 
-[Remember the ac language](3-the-ac-language-and-compiler.md)
+[Remember the ac language](03b-the-ac-language-and-compiler.md)
 
 
 

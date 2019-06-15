@@ -97,9 +97,9 @@ Language generators, meant to describe syntax of natural languages.
 
 CFG's are written in BNF notation.
 
-A production rule in BNF is written as:
+A **production rule** in BNF is written as:
 
-​	$N::=\alpha​$	
+​	$N::=\alpha$	
 
 where *N* is a non terminal and $\alpha$ a sequence of terminals and non-terminals
 

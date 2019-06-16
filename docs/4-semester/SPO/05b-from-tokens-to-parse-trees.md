@@ -7,7 +7,7 @@ date: 19-02-2019
 
 # From tokens to parse trees
 
-The process of finding the structure in the flat stream of tokens is called **parsing**, and the mudule that performs this task is called **parser**.
+The process of finding the structure in the flat stream of tokens is called **parsing**, and the module that performs this task is called **parser**.
 
 Two well-known ways to parse.
 

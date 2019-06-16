@@ -65,6 +65,8 @@ If G is $\lambda$-free then (1) is sufficient
 
 
 
+* An **LL(1) grammar** is a grammar which can be parsed with a **top-down parser** with a **lookahead** of **one token**.
+
 
 
 ### First Sets
@@ -128,19 +130,21 @@ Follow(E)		= { $, ) }
 
 ## LR Grammars
 
-A Grammar is an LR Grammar if it can be parsed by a LR parsing algorithm.
+A Grammar is an **LR Grammar** if it can be parsed by a LR parsing algorithm.
 
 Harder to implement LR than LL parsers.
 
 * Tools exists though (JavaCUP, Yacc, C#CUP, SableCC)
 
-Can recognize LR(0), LR(1), SLR, LALR grammars.
+
+
+Can recognize **LR(0)**, **LR(1)**, **SLR**, **LALR** grammars.
 
 * Bigger class of grammars than LL
 
-* Can handle left recursion!
+* Can **handle left recursion!**
 
-* Usually more convenient because less need to rewrite grammar
+* Usually more convenient because **less need to rewrite grammar**
 
 Most commonly used for automatic tools today (LALR in particular)
 

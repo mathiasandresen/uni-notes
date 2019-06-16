@@ -13,7 +13,7 @@ title: 4 - Parsing
 To Read:
 
 - [ ] Sebesta Chapter 4.4-
-- [ ] Fischer Chapter 4, 5, 6
+- [ ] Fischer Chapter 5, 6
 
 
 

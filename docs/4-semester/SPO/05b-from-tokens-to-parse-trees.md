@@ -5,7 +5,7 @@ session: 5
 date: 19-02-2019
 ---
 
-# From tokens to parse trees
+# From Tokens to Parse Trees
 
 The process of finding the structure in the flat stream of tokens is called **parsing**, and the module that performs this task is called **parser**.
 
@@ -20,11 +20,11 @@ Two well-known ways to parse.
 
 
 
-## Example parsing of Micro-English:
+## Example Parsing of Micro-English:
 
 ![1550696507679](images/5b-from-tokens-to-parse-trees/1550696507679.png)
 
-### Top-down parsers
+### Top-down Parsers
 
 Tree is grown from the root (top)
 
@@ -58,8 +58,8 @@ Properties of the grammar that determines if it is LL(1) or not:
 
 A grammar G is LL(1) if for each set of productions $M::=X_1|X_2|...|X_n:$
 
-1. $first[X_1], first[x_2],...,first[x_n]$ are all pairwise disjoint
-2. If $X_i\Rightarrow^*\lambda$ then $first[X_j]\cap follow[X]=Ø$, for $1\leq j\leq n. i\neq j$
+1. $\text{first}[X_1], \text{first}[X_2],...,\text{first}[X_n]$ are all [pairwise disjoint](https://en.wikipedia.org/wiki/Disjoint_sets)
+2. If $X_i\Rightarrow^*\lambda$ then $\text{first}[X_j]\cap \text{follow}[X]=Ø$, for $1\leq j\leq n. i\neq j$
 
 If G is $\lambda$-free then (1) is sufficient
 
@@ -85,7 +85,7 @@ First(Prefix) 	= { f }
 First(E)		= { v, f, ( }
 ```
 
-#### Algorithm for Computing First(alpha)
+#### Algorithm for Computing First-Set
 
 ![1550698206310](images/5b-from-tokens-to-parse-trees/1550698206310.png)
 

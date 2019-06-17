@@ -51,7 +51,7 @@ Creates 10 000 objects which becomes garbage just after the print.
 
 #### Dangling Pointer
 
-```c hl_lines=&quot;4 5&quot;
+```c hl_lines="4 5"
 int *p, *q;
 ...
 p = malloc(sizeof(int))

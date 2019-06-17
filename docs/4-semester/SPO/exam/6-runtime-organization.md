@@ -223,3 +223,16 @@ for (int i = 0; i < buffer.length; i++) // can ask for size at run time
 	buffer[i]= '';
 ```
 
+```java
+char[] buffer;
+buffer = new char[7];
+```
+
+Possible representation:
+
+![1560768774724](images/6-runtime-organization/1560768774724.png)
+
+Another possible representation:
+
+![1560768803463](images/6-runtime-organization/1560768803463.png)
+

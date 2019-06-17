@@ -236,7 +236,140 @@ Another possible representation:
 
 
 
+## Where to Put Data
+
+3 methods
+
+* Static allocation
+* Stack allocation
+* Heap allocation
 
 
 
+### Static Allocation
+
+Originally all data were global. All memory allocation was **static**.
+
+Data was placed at a **fixed memory address** during compilation, for the entire execution of a program.
+
+Static allocation can waste memory space.
+
+* Fortran introduced `equivalent` statement that forces 2 variables to share memory location
+
+
+
+In modern languages, static allocation is used for **global variables** and **literals (constants)** that are fixed in size and accessible throughout program execution.
+
+Also used for **static** and **extern** variables in C/C++ and for **static fields** in C# and Java classes.
+
+
+
+### Stack Allocation
+
+Recursive languages require **dynamic** memory allocation. Each time a recursive method is called, a new copy of local variables (frame) is pushed on a runtime stack. The number of allocations is unknown at compile-time.
+
+A **frame** (or activation record) contains space for all of the local variables in the method. When the method returns, its frame is popped and the space reclaimed.
+Thus, only the methods that are actually executing are allocated memory space in the runtime stack. This is called **stack allocation**.
+
+![1560772353946](images/6-runtime-organization/1560772353946.png)
+
+Frame for procedure `p`:
+
+![1560772378211](images/6-runtime-organization/1560772378211.png)
+
+#### Stack Storage Allocation
+
+Allocation of local variables
+
+Example: When do the variables "exist"?:
+
+![1560772476882](images/6-runtime-organization/1560772476882.png)
+
+
+
+![1560772500329](images/6-runtime-organization/1560772500329.png)
+
+
+
+1. Procedure activation behaves like a stack (LIFO)
+2. Local variables "live" as long as the procedure they are declared in.
+3. $1+2\Rightarrow$ Allocation of locals on the "call stack" us a good model
+
+
+
+#### Recursion
+
+```java
+int fact(int n) {
+	if (n > 1) 	return n * fact (n-1);
+	else 		return 1;
+}
+```
+
+![1560772647673](images/6-runtime-organization/1560772647673.png)
+
+#### Dynamic Link
+
+Stack frames may vary in size and because the stack may contain more than just frames (e.g. registers saved across calls), **dynamic link** is used to point to the preceding frame:
+
+![1560772833227](images/6-runtime-organization/1560772833227.png)
+
+
+
+#### Nested Functions/Procedures
+
+```java
+int p(int a) {
+	int q(int b) {
+		if (b < 0) q (-b) else return a + b;
+	}
+	return q(-10);
+}
+```
+
+Functions can nest in languages like Pascal, ML and Python. How to keep track of static block structure as above? 
+
+A static link points to the frame of the method that statically encloses the current method:
+
+![1560773104962](images/6-runtime-organization/1560773104962.png)
+
+An alternative is the use of a display. We maintain a set of registers which comprise the display:
+
+![1560773149042](images/6-runtime-organization/1560773149042.png)
+
+#### Blocks
+
+```java
+void p(int a) {
+	int b;
+	if (a > 0) 	{ float c, d; 	}
+	else		{ int e[10];	}
+}
+```
+
+We can view blocks as parameter-less procedures, and use procedure-level-frames to implement blocks.
+
+* But because the then and else parts of the if statement above are mutually exclusive, variables in block 1 and 2 can overlay.
+* This is called **block-level frame** as contrasted with **procedure level frame**
+
+![1560773432149](images/6-runtime-organization/1560773432149.png)
+
+
+
+#### High-order Functions
+
+Functions as values (first-class)
+
+* Pass as arguments
+* Return as values
+* Stored into data structures
+
+Implementation:
+
+* A code pointer (a code address + an environment pointer)
+    * Called a **closure**
+
+
+
+### Heap Allocation
 

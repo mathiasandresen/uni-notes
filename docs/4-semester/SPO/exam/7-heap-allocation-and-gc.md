@@ -110,7 +110,7 @@ A current trend of modern programming language development is to give only impli
 
 * The "Classic" algorithms
     * [Reference counting](#reference-counting)
-    * [Mark and Sweep]()
+    * [Mark and Sweep](#mark-sweep)
 * [Copying garbage collection](#copying-garbage-collection)
 * [Generational garbage collection](#generational-garbage-collection)
 * [Incremental Tracing garbage collection](#incremental-tracing-collectors)

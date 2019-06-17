@@ -2,12 +2,6 @@
 title: 6 - Runtime Organization
 ---
 
-$$
-\newcommand{\bits}{\text{ bits}}
-\newcommand{\bit}{\text{ bit}}
-\newcommand{\size}[1]{\text{size}[\mathtt{#1}]}
-$$
-
 # Runtime Organization
 
 * Data representation (direct vs. indirect)
@@ -236,3 +230,8 @@ Another possible representation:
 
 ![1560768803463](images/6-runtime-organization/1560768803463.png)
 
+$$
+\newcommand{\bits}{\text{ bits}}
+\newcommand{\bit}{\text{ bit}}
+\newcommand{\size}[1]{\text{size}[\mathtt{#1}]}
+$$

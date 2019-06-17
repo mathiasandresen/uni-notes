@@ -9,7 +9,11 @@ title: 6 - Runtime Organization
 * Activation records (sometimes called frames)
 * Routines and Parameter passing
 
-
+$$
+\newcommand{\bits}{\text{ bits}}
+\newcommand{\bit}{\text{ bit}}
+\newcommand{\size}[1]{\text{size}[\mathtt{#1}]}
+$$
 
 ## Data Representation
 
@@ -230,8 +234,9 @@ Another possible representation:
 
 ![1560768803463](images/6-runtime-organization/1560768803463.png)
 
-$$
-\newcommand{\bits}{\text{ bits}}
-\newcommand{\bit}{\text{ bit}}
-\newcommand{\size}[1]{\text{size}[\mathtt{#1}]}
-$$
+
+
+
+
+
+

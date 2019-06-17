@@ -240,9 +240,9 @@ Another possible representation:
 
 3 methods
 
-* Static allocation
-* Stack allocation
-* Heap allocation
+* [Static allocation](#static-allocation)
+* [Stack allocation](#stack-allocation)
+* [Heap allocation](7-heap-allocation-and-gc.md#heap-allocation)
 
 
 
@@ -368,8 +368,3 @@ Implementation:
 
 * A code pointer (a code address + an environment pointer)
     * Called a **closure**
-
-
-
-### Heap Allocation
-

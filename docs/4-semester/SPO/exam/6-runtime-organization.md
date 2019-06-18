@@ -368,3 +368,71 @@ Implementation:
 
 * A code pointer (a code address + an environment pointer)
     * Called a **closure**
+
+
+
+## Routines
+
+The assembly language equivalent of procedures
+
+Not directly supported by language constructs, but modeled in terms of how to use the low-level machine to emulate procedures.
+
+**Behavior to emulate:**
+
+* Calling a routine and returning to the caller after completion
+* Passing arguments to a called routine
+* Returning a result from a routine
+* Local and non-local variables
+
+
+
+**Transferring control to and from routine:**
+
+* Most low-level processors have `CALL` and `RETURN` for transferring control from caller to callee and back.
+
+**Transmitting arguments and return values:**
+
+* Caller and callee must agree on a method to transfer argument and return values.
+    * Called *routine protocol*
+    * There are many possible ways.
+    * Often dictated by the operating system.
+
+
+
+### Routine Protocol Examples
+
+#### Example 1
+
+Passing arguments:
+
+* First argument in R1, second in R2, etc.
+
+Passing return value:
+
+* Return result (if any) in R0
+
+
+
+This is simplistic
+
+* What if more arguments than registers
+* What if argument is larger than a register
+
+#### Example 2
+
+Passing arguments:
+
+* Pass argument on top of stack
+
+Passing of return value:
+
+* Leave return value on stack top
+
+
+
+Puts no boundary on number of arguments, or size of arguments.
+
+![1560864115067](images/6-runtime-organization/1560864115067.png)
+
+
+

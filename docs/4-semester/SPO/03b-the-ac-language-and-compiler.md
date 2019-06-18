@@ -13,19 +13,23 @@ date: 12-02-2019
 
 Types:
 
-* integer
-* float: 5 fractional digits after the decimal point.
-* Automatic type conversion from int to float
+* `integer`
+* `float`: 5 fractional digits after the decimal point.
+* Automatic type conversion from `int` to `float`
 
 Keywords
 
-* f: float
-* i: integer
-* p: print
+* `f: float`
+* `i: integer`
+* `p: print`
 
 Variables
 
 * 23 names from lowercase Roman alph. except the 3 reserved keywords.
+
+Flat scope
+
+* Names are visible in the program when they are declared
 
 Target of translation: dc (desk calculator)
 
@@ -217,8 +221,89 @@ If 'id' is the next input token, then the parse must proceed with a rule that ge
 
 ![1550077591372](images/1550077591372.png)
 
+![1560883288324](images/03b-the-ac-language-and-compiler/1560883288324.png)
 
 
 
+### Semantic Analysis
 
-<!-- Expand Notes -->
+![1560883559976](images/03b-the-ac-language-and-compiler/1560883559976.png)
+
+![1560883591251](images/03b-the-ac-language-and-compiler/1560883591251.png)
+
+![1560883604077](images/03b-the-ac-language-and-compiler/1560883604077.png)
+
+
+
+### Code Generation
+
+* Assumes that program has been thoroughly checked and is well formed (scope and type rules)
+* Takes semantics of both the source and target language into account
+* Transforms source program into target code
+
+![1560883832193](images/03b-the-ac-language-and-compiler/1560883832193.png)
+
+
+
+### Tree Traversal
+
+* "Traditional" OO approach
+* Visitor Approach
+    * GOF
+    * Using static overloading
+    * Reflective
+* "Functional" approach
+* Active patterns in Scala (or F#)
+
+
+
+#### Traditional
+
+Method for each phase in every node
+
+#### Visitor
+
+##### GOF
+
+```java hl_lines="2"
+@Override
+void visitAssigning(Assigning n) {
+    // TODO Auto-generated method stub
+    n.child1.accept(this);
+    emit(" s");
+    emit(n.id);
+    emit(" 0 k ");
+}
+```
+
+##### Static Overloading
+
+```java hl_lines="2"
+@Override
+void visit(Assigning n) {
+    // TODO Auto-generated method stub
+    n.child1.accept(this);
+    emit(" s");
+    emit(n.id);
+    emit(" 0 k ");
+}
+```
+
+##### Reflective
+
+Using **double dispatch**
+
+Visitor decides the best class / method to use
+
+
+
+#### Functional
+
+If-else chain or switch
+
+
+
+#### Scala Active Patterns
+
+![1560885717273](images/03b-the-ac-language-and-compiler/1560885717273.png)
+

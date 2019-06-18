@@ -11,6 +11,36 @@ title: 2 - Structure of the Compiler
 
 
 
+## Phases of a Compiler
+
+![1560882398819](images/2-structure-of-the-compiler/1560882398819.png)
+
+The different phases can be seen as different transformation steps to transform source code into object code.
+
+The different phases correspond roughly to the different parts of the language specification:
+
+* Syntax analysis $\Leftrightarrow$ Syntax
+
+    * Lexical Analysis $\Leftrightarrow$ Regular Expressions
+
+    * Parsing $\Leftrightarrow$ Context Free Grammar
+
+        
+
+* Contextual Analysis $\Leftrightarrow$ Contextual Constraints
+
+    * Scope Checking $\Leftrightarrow$  Scope rules (static semantics)
+
+    * Type Checking $\Leftrightarrow$ Type rules (static semantics)
+
+        
+
+* Code Generation $\Leftrightarrow$ Semantics (dynamic semantics)
+
+
+
+
+
 ## Organization of the Compiler
 
 ![1560514592305](images/2-structure-of-the-compiler/1560514592305.png)
@@ -20,6 +50,8 @@ Næsten alle moderne compilere er **syntax-directed**.
 * Compileringsprocessen er drevet af den syntaktiske struktur.
 
 De fleste compilere laver et **AST** (abstract syntax tree).
+
+
 
 ### Scanner
 

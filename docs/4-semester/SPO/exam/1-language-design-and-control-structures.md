@@ -13,6 +13,38 @@ title: 1 - Language Design and Control Structures
 
 
 
+## Design Criteria
+
+![1560879939513](images/1-language-design-and-control-structures/1560879939513.png)
+
+
+
+### Orthogonality
+
+> “The number of independent primitive concepts has been minimized in order that the language be easy to describe, to learn, and to implement. On the other hand, these concepts have been applied “orthogonally” in order to maximize the expressive power of the language while trying to avoid deleterious superfluities” 
+>
+> -Adriaan van Wijngaarden et al., Revised Report on the Algorithmic Language ALGOL 68, section 0.1.2, Orthogonal design
+
+
+
+> “A precise definition is difficult to produce, but languages that are called orthogonal tend to have a small number of core concepts and a set of ways of uniformly combining these concepts. The semantics of the combinations are uniform; no special restrictions exist for specific instances of combinations.”
+>
+> -David Schmidt
+
+
+
+#### Lack of Orthogonality
+
+Examples of exceptions from C:
+
+* Structures (but not arrays) may be returned from a function.
+* An array can be returned if it is inside a structure.
+* A member of a structure can be any data type
+    * (except void, or the structure of the same type).
+* An array element can be any data type (except void)
+* Everything is passed by value (except arrays)
+* Void can be used as a type in a structure, but a variable of this type cannot be declared in a function
+
 
 
 ## Sequence Control
@@ -147,9 +179,88 @@ Controlled by loop variable of scalar type with bounds and increment size.
 * Signature
     * Number and types of input arguments, number and types of output results
 * Actions
-    * Direct function relating input values to output
+    * Direct function relating input values to output values
+    * Side effects on global state and subprogram internal state
 
 
+
+### Local Referencing Envirionments
+
+Local variables can be stack-dynamic
+
+* Support for recursion
+* Storage for locals is shared among some subprograms
+
+But
+
+* Allocation/de-allocation, initialization time
+* Indirect addressing
+* Subprograms cannot be history sensitive
+
+Local variables can be static
+
+* Advantages and disadvantages are the opposite of those for stack-dynamic local variables
+
+
+
+### Actual/Formal Parameter Correspondence
+
+* Positional
+
+    * Binding is by position
+    * First actual is bound to first formal, and so forth
+    * Safe and effective
+
+* Keyword
+
+    * Name of the formal to which the actual is to be bound, is specified with actual.
+    * Parameters can appear in any order, avoiding parameter correspondence errors
+    * BUT: User must know the formal parameters's names
+
+    
+
+In some languages, formal parameters can have default values.
+
+Some languages allow variable number of parameters
+
+
+
+Attributes of variables are used to exchange information
+
+* Name - **Call-by-name**
+* Memory location - **Call-by-reference**
+* Value
+    * **Call-by-value** (one way, from **actual** to **formal** parameter)
+    * **Call-by-value-result** (two ways between actual and formal parameter)
+    * **Call-by-result** (one way, from **formal** to **actual** parameter)
+        * `out` in C#
+
+#### Design Considerations
+
+1. Efficiency
+2. One-way or two-way
+
+These are in conflict
+
+* Good programming $\rightarrow$ Limited access to variables, meaning one-way whenever possible
+* Efficiency $\rightarrow$ Pass by reference is fastest way to pass structures of significant size
+* Functions should not allow reference parameters 
+
+
+
+### Subprograms as Parameter
+
+First class functions
+
+Lamdas
+
+* C and C++: functions cannot be passed as parameters but pointers to functions can be passed and their types include the types of the parameters, so parameters can be type checked
+* Ada does not allow subprogram parameters; an alternative is provided via Ada’s generic facility
+* Java until Java 8 did not allow method names to be passed as parameters
+* C# supports functions a parameters through delegates 
+    * Delegates can now be anonymous or lambda expression
+    * We talk about first class functions
+* Functional languages supports functions as first class functions
 
 
 
@@ -185,4 +296,16 @@ Nearly all programming languages designed since 1980 have supported **data abstr
 * Abstract data types
 * Objects
 * Modules
+
+
+
+### Correspondence
+
+![1560879071756](images/1-language-design-and-control-structures/1560879071756.png)
+
+
+
+
+
+
 

@@ -1,4 +1,5 @@
 ---
+
 title: 8 - Code Generation
 ---
 
@@ -236,4 +237,79 @@ We can now match pattern to find the best instruction to use.
 ![1560861789149](images/8-code-generation/1560861789149.png)
 
 ![1560861895214](images/8-code-generation/1560861895214.png)
+
+## Register Allocation
+
+Compiler generating code for register machine needs to pay attention to register allocation, since it is a limited resource.
+
+Routine protocol
+
+* Allocate arg1 in R1, arg2 in R2, ... and result in R0
+* But what if there are more args than regs?
+
+On MIPS all calculations takes place in registers
+
+* Reduces traffic between memory and regs
+
+
+
+### Register Needs
+
+![1560864934933](images/8-code-generation/1560864934933.png)
+
+![1560864914215](images/8-code-generation/1560864914215.png)
+
+![1560865004172](images/8-code-generation/1560865004172.png)
+
+
+
+## Code Scheduling
+
+Modern computers are pipelined
+
+* Instructions are processed in stages
+* Instructions take different time to execute
+* If result from previous instruction is needed but not yet ready, then we have a **stalled pipeline**
+* Delayed load
+    * Load from memory takes 2, 10 or 100 cycles
+* Also FP instructions takes time
+
+![1560866998774](images/8-code-generation/1560866998774.png)
+
+
+
+![1560867074624](images/8-code-generation/1560867074624.png)
+
+![1560867080601](images/8-code-generation/1560867080601.png)
+
+
+
+### Register Allocation and Code Scheduling
+
+Register allocations algorithms try to minimize number of regs used
+
+* May conflict with pipeline architecture
+    * Using more regs than strictly necessary may avoid pipeline stalls
+
+Solution:
+
+* Integrated register allocator and code scheduler
+
+
+
+As long as registers are available, they are used.
+
+When registers grow scarce, the algorithm switches emphasis and begins to schedule code to free registers.
+
+![1560867745542](images/8-code-generation/1560867745542.png)
+
+
+
+## Peephole Optimizations
+
+![1560871412315](images/8-code-generation/1560871412315.png)
+
+
+
+![1560871419139](images/8-code-generation/1560871419139.png)
 

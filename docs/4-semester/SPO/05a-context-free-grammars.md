@@ -98,6 +98,7 @@ A production rule is written:
 ​	$A \rightarrow \alpha$ or $A \rightarrow \mathcal{X_1...X_m}$ depending on the RHS.
 
 A production rule with multiple RHS is written with `|`
+
 $$
 \begin{align*}
 A \rightarrow \alpha \\
@@ -106,6 +107,7 @@ A \rightarrow \alpha \\
 |\space\space \beta
 \end{align*}
 $$
+
 Derivation:
 
 ​	$\alpha A \beta \Rightarrow \alpha \gamma\beta$ is one step of derivation if $A\rightarrow \gamma$ is a production rule.

@@ -83,6 +83,7 @@ See [From Tokens to Parse Trees](../../SPO/05b-from-tokens-to-parse-trees.md)
 * $\alpha$ is a **right sentential form** if $S \Rightarrow^*_{rm} \alpha$ with $\alpha=\beta x$ where $x$ is a string of terminals
 
 * A **handle** of a right sentential form $\gamma \ (=\alpha \beta w)$ is a production $A \rightarrow \beta$ and a position in $\gamma$ where $\beta$ may be found and replaced by $A$ to produce the previous right-sentential form in a rightmost derivation of $\gamma:$
+
     $$
     S \Rightarrow^*_{rm} \alpha A w \Rightarrow_{rm} \alpha \beta w
     $$

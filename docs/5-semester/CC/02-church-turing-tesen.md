@@ -130,10 +130,13 @@ Hvis $L$ kan genkendes af en NTM, kan $L$ genkendes af en TM!
 ## Enumerator
 
 TM'er som sproggenkendere:
+
 $$
 L_{input}(M)=\{ w \in \Sigma^* \mid M\ \text{accepterer}\ w \}0
 $$
+
 TM'er som sproggeneratorer (**enumerator**):
+
 $$
 L_{output}(M)=\{ w \in \Gamma^* \mid M\ \text{udskriver}\ w\ \text{på tomt input} \}
 $$

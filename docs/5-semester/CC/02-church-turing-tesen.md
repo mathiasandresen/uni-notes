@@ -172,5 +172,24 @@ Enhver model for beregnelighed vil være højest lige så stærk som TM-modellen
 * Kan ikke bevises (ikke en matematisk sætning)
     * Kan potentielt modbevises.
 
+#### Konsekvenser
+
+* Alle varianter af TM'er er nyttige, når vi skal vise at et sprog er genkendeligt
+* Pseudokode er nok til at beskrive en TM's adfærd
+
+
+
+## Beslutningsproblemer og Sprog
+
+**Beslutningsproblemer:**
+
+* Ja-nej-spørgsmål
+    * **Eksempler:**
+    * Givet en graf G[^*], er G sammenhængende=
+    * Givet et tal n[^*], er n et primtal?
+    * Givet en TM M[^*] og et input w[^*], vil M acceptere w?
+
+[^*]: Parametre / input
+
 
 

@@ -150,3 +150,27 @@ $L$ er et genkendeligt
 $\exists$ enumerator $E$ så $E$ outputter $L$ ($L_{output}(E)=L$)
 
 [Se bevis i Lektion 2, afsnit 4](https://youtu.be/qxrdOYRx_Zw?t=230)
+
+
+
+## Andre Modeller for Beregnelighed
+
+<img src="images/02-church-turing-tesen/1568560307811.png" alt="1568560307811" style="zoom:67%;" />
+
+<img src="images/02-church-turing-tesen/1568560388343.png" alt="1568560388343" style="zoom:50%;" />
+
+Alle modeller for beregnelighed vi kender i dag, er højest lige så stærke som Turing Maskiner.
+
+* Inklusive programmeringssprog
+
+
+
+### Church-Turing-tesen
+
+Enhver model for beregnelighed vil være højest lige så stærk som TM-modellen, hvis ellers den er rimelig.
+
+* Kan ikke bevises (ikke en matematisk sætning)
+    * Kan potentielt modbevises.
+
+
+

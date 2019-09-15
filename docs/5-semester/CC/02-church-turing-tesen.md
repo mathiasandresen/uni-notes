@@ -185,11 +185,36 @@ Enhver model for beregnelighed vil være højest lige så stærk som TM-modellen
 
 * Ja-nej-spørgsmål
     * **Eksempler:**
-    * Givet en graf G[^*], er G sammenhængende=
-    * Givet et tal n[^*], er n et primtal?
-    * Givet en TM M[^*] og et input w[^*], vil M acceptere w?
+    * Givet en graf <u>G</u>, er G sammenhængende?
+    * Givet et tal <u>n</u>, er n et primtal?
+    * Givet en TM <u>M</u> og et input <u>w</u>, vil M acceptere w?
 
-[^*]: Parametre / input
+De <u>understregede</u> elementer er parametre / input i problemet.
 
 
 
+Sprog $\leftrightarrow$ Beslutningsproblem
+
+Et hvert beslutningsproblem kan formuleres som et sprog. Og til hvert sprog er der et beslutningsproblem: 
+
+* Givet $w$, er $w\in L$?
+
+
+
+### Eksempel
+
+"Givet $G$, er $G$ da en sammenhængende graf?"
+
+![1568561924275](images/02-church-turing-tesen/1568561924275.png)
+
+$<G>$: Strengrepræsentationen af $G$
+
+Problem svarer til:
+$$
+CONN=\{<G>\ \mid G\ \text{er en sammenhængende graf}\}
+$$
+
+
+**Altså**
+
+Et beslutningsproblem kan afgøres med en algoritme hvis, det tilsvarende sprog er afgørbart!

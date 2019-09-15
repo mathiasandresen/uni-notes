@@ -36,6 +36,7 @@ $$
 ![1568549739737](images/02-church-turing-tesen/1568549739737.png)
 
 Prikkerne markerer læsehovedets placering
+
 $$
 \Gamma_{\text{ny}} = \Gamma \cup \{\dot{a} \mid a \in \Gamma\} \cup \{\#\}
 $$
@@ -97,7 +98,6 @@ En NTM $M$ accepterer en streng, hvis der i beregningstræet for strengen foreko
 Sker ved at gennemvandre beregningstræet og lede efter en accepterende konfiguration
 
 <p style="color: red">Problem: NTM'er kan gå i uendelig løkke, så grene i træet KAN være uendeligt lange!</p>
-
 **Løsning:**
 
 Idé: Brug breddesøgning
@@ -125,3 +125,25 @@ Hvis $L$ kan genkendes af en NTM, kan $L$ genkendes af en TM!
     * Nondeterminisme giver **ikke** øget regnekraft
     * Vi må **godt** gøre brug af nondeterminisme!
 
+
+
+## Enumerator
+
+TM'er som sproggenkendere:
+$$
+L_{input}(M)=\{ w \in \Sigma^* \mid M\ \text{accepterer}\ w \}0
+$$
+TM'er som sproggeneratorer (**enumerator**):
+$$
+L_{output}(M)=\{ w \in \Gamma^* \mid M\ \text{udskriver}\ w\ \text{på tomt input} \}
+$$
+
+### Sætning
+
+$L$ er et genkendeligt
+
+​	$\Updownarrow$
+
+$\exists$ enumerator $E$ så $E$ outputter $L$ ($L_{output}(E)=L$)
+
+[Se bevis i Lektion 2, afsnit 4](https://youtu.be/qxrdOYRx_Zw?t=230)

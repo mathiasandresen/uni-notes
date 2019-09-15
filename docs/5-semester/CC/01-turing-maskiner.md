@@ -31,6 +31,7 @@ $q_{accept} \neq q_{reject}$
 $$
 \delta: (Q \setminus \{q_{accept, q_{reject}}\}) \times \Gamma \to Q \times \Gamma \times \{L,R\}
 $$
+
 $L: $ Venstre	 $R: $ Højre
 
 

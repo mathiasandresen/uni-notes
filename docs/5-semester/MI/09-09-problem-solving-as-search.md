@@ -170,7 +170,7 @@ Uses both path cost (as lowest-cost-first), and heuristic information (as greedy
 
 * For each path on the frontier, A* uses an estimate of the total path cost from the start node to a goal node constrained to follow that path initially.
 * Uses $cost(p)$, the cost of the path found
-* As well as $h(p)$
+* As well as $h(p)$, the estimated cost from the end of $p$ to the goal.
 
 
 
@@ -189,6 +189,8 @@ $$
 If $h(n)$ is an admissible heuristic, and so never overestimates the cost from node $n$ to a goal node, then $f(p)$ does not overestimate the path cost of going from the start node to a goal node via $p$
 
 
+
+$A^*$ is implemented using the [Generic search algorithm](https://artint.info/2e/html/ArtInt2e.Ch3.S4.html#Ch3.F4), treating the frontier as a priority queue ordered by $f(p)$
 
 [Example 3.15](https://artint.info/2e/html/ArtInt2e.Ch3.S6.SS1.html#Ch3.Thmciexamplered15)
 

@@ -140,3 +140,67 @@ $$
 
 [Proof](https://artint.info/2e/html/ArtInt2e.Ch8.S1.SS2.html#Ch8.S1.I4)
 
+
+
+## Conditional Probability
+
+The measure of belief in proposition $h$ given proposition $e$ is called the **conditional probability** of $h$ **given** $e$. Written:
+$$
+P(h\mid e)
+$$
+A proposition $e$ representing the conjunction of *all* of the agent’s **observations** of the world is called **evidence**.
+
+Given evidence $e$, the conditional probability $P(h\mid e)$ is the agents **posterior probability** of $h$.
+The probability $P(h)$ is the **prior probability** of $h$ and is the same as $P(h\mid true)$.
+
+### Semantics of Conditional Probability
+
+Evidence e $e$ where $e$ is a proposition, will rule out all possible worlds that are incompatible with $e$.
+
+Evidence $e$ induces a new probability $P(w\mid e)$ of world  $w$ given $e$. Any world where $e$ is false has conditional probability $0$, and remaining worlds are normalized so their probabilities sum to $1$:
+$$
+P(w\mid e)= \left\{{
+\begin{array}{rcl}
+c \cdot P(w) & \text{if} & e \text{ is true in world } w  \\ 
+0 & \text{if} & e \text{ is false in world } w
+\end{array}}\right.
+$$
+where $c$ is a constant (that depends on $e$) that ensures the posterior probability of all worlds sums to $1$.
+
+For $P(w \mid e)$ to be a probability measure over worlds for each $e$:
+
+![1569355079632](images/09-23-reasoning-under-certainty/1569355079632.png)
+
+Therefore, $c=1/P(e)$. Thus, the conditional probability is only defined if $P(e)>0$
+
+
+
+The conditional probability of proposition $h$ given evidence $e$ is the sum of the conditional probabilities of the possible worlds in which $h$ is true:
+
+![1569355202366](images/09-23-reasoning-under-certainty/1569355202366.png)
+
+
+
+A **conditional probability distribution**, written $P(X \mid Y)$, where $X$ and $Y$ are variables or sets of variables, is a function of the variables:
+
+Given a value $x\in domain(X)$ for $X$ and a value $y \in domain(Y)$ for $Y$, it gives the value $P(X=x \mid Y= y)$.
+
+
+
+**Proposition 8.3** (**Chain rule**):
+
+*For any propositions* $a_1,\dots,a_n$:
+$$
+\begin{align*}
+P(a_1 \and a_2 \and \dots \and a_n) &= &&P(a_1)^*\\
+& && P(a_2 \mid a_1)^*\\
+& && P(a_3 \mid a_1 \and a_2)^*\\
+& && \vdots \\
+& && P(a_n \mid a_1 \and \dots \and a_n-1)\\
+&= && \prod^n_{i=1}{P(a_i \mid a_1 \and \dots \and a_i-1),}
+\end{align*}
+$$
+​	*where the right-hand side is assumed to be zero if any of the products are zero (even if some of them are 	undefined*.
+
+!!! note
+    Complete nodes. From []()

@@ -190,6 +190,7 @@ Given a value $x\in domain(X)$ for $X$ and a value $y \in domain(Y)$ for $Y$, it
 **Proposition 8.3** (**Chain rule**):
 
 *For any propositions* $a_1,\dots,a_n$:
+
 $$
 \begin{align*}
 P(a_1 \and a_2 \and \dots \and a_n) &= &&P(a_1)^*\\
@@ -200,7 +201,8 @@ P(a_1 \and a_2 \and \dots \and a_n) &= &&P(a_1)^*\\
 &= && \prod^n_{i=1}{P(a_i \mid a_1 \and \dots \and a_i-1),}
 \end{align*}
 $$
+
 ​	*where the right-hand side is assumed to be zero if any of the products are zero (even if some of them are 	undefined*.
 
 !!! note
-    Complete nodes. From [Bayes' Rule](https://artint.info/2e/html/ArtInt2e.Ch8.S1.SS3.html#SSSx2)
+    Complete notes. From [Bayes' Rule](https://artint.info/2e/html/ArtInt2e.Ch8.S1.SS3.html#SSSx2)

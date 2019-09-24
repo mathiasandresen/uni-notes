@@ -203,4 +203,4 @@ $$
 ​	*where the right-hand side is assumed to be zero if any of the products are zero (even if some of them are 	undefined*.
 
 !!! note
-    Complete nodes. From []()
+    Complete nodes. From [Bayes' Rule](https://artint.info/2e/html/ArtInt2e.Ch8.S1.SS3.html#SSSx2)

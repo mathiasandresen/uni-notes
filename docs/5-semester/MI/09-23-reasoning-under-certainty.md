@@ -158,6 +158,7 @@ The probability $P(h)$ is the **prior probability** of $h$ and is the same as $P
 Evidence e $e$ where $e$ is a proposition, will rule out all possible worlds that are incompatible with $e$.
 
 Evidence $e$ induces a new probability $P(w\mid e)$ of world  $w$ given $e$. Any world where $e$ is false has conditional probability $0$, and remaining worlds are normalized so their probabilities sum to $1$:
+
 $$
 P(w\mid e)= \left\{{
 \begin{array}{rcl}
@@ -165,6 +166,7 @@ c \cdot P(w) & \text{if} & e \text{ is true in world } w  \\
 0 & \text{if} & e \text{ is false in world } w
 \end{array}}\right.
 $$
+
 where $c$ is a constant (that depends on $e$) that ensures the posterior probability of all worlds sums to $1$.
 
 For $P(w \mid e)$ to be a probability measure over worlds for each $e$:

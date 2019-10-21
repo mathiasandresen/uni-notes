@@ -17,6 +17,19 @@ date: 11-10-2019
 
 
 
+## What is a Risk?
+
+It's not a risk if its certain to happen.
+
+* A possible consequence of a choice
+
+
+
+Risiko - Negativt
+Oportunity - Positivt
+
+
+
 ## Reactive vs Proactive Risk Strategies
 
 **Reactive Risk Strategy**

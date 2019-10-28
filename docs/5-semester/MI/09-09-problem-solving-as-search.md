@@ -54,7 +54,7 @@ A **Solution** consists of:
 
 ## Graphs
 
-Se [AD1 - Graph Theory](..\..\3-semester\AD1\10a-graph-theory.md)
+Se [AD1 - Graph Theory](../../3-semester/AD1/10a-graph-theory.md)
 
 Se [PM, 3.3.1: Formalizing Graph Searching](https://artint.info/2e/html/ArtInt2e.Ch3.S3.SS1.html)
 

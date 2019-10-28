@@ -1,5 +1,5 @@
 ---
-title: Learning: Neural Network
+title: "Learning: Neural Network"
 course: MI
 session: 28.10
 date: 28-10-19

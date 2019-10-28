@@ -1,5 +1,5 @@
 ---
-title: Learning: Introduction and Decision Trees
+title: "Learning: Introduction and Decision Trees"
 course: MI
 session: 21.10
 date: 21-10-19

@@ -24,6 +24,7 @@ $$
 &= \sum^n_{i=0}w_i*X_i(e)
 \end{align*}
 $$
+
 where $\overline w=\langle w_0,w_1,\dots,w_n\rangle$ is a tuple of weights.
 
 To make $w_0$ not be a special case, new feature $X_0$ is always 1.

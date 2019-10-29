@@ -46,9 +46,11 @@ Da brikker må bruges 0 eller flere gange er der et <u>uendeligt</u> stort søge
 ### Problemet
 
 Givet en samling Post-brikker $P$, har $P$ en match?
+
 $$
 PCP= \biggl\{ <P>\ \mathrel{\Big|}  \begin{array}{} P \text{ er en samling Post-brikker. }\\ P \text{ har en match} \end{array} \biggr\}
 $$
+
 $PCP$ er uafgørbart.
 
 #### Bevis

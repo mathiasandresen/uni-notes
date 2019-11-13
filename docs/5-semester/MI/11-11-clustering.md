@@ -146,5 +146,10 @@ The *Expectation-maximization algorithm*
 The main idea:
 
 * Use hypothetical completions of the data using the current probability estimates
+
 * Infer the maximum likelihood probabilities for the model based on completed data set.
+
+    
+
+[Example: Session 11.11 Slide 20](https://www.moodle.aau.dk/mod/resource/view.php?id=983171)
 

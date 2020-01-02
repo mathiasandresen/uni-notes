@@ -28,6 +28,7 @@ Problem: re-arange tiles into goal configuration
 ![1568018041687](images/09-09/1568018041687.png)
 
 * 362.880 states ($9!$)
+
 * Actions: *move_* *up/down/left/right*
 
 
@@ -39,7 +40,8 @@ Consists of:
 * A set of states
 * A subset of **start states**
 * A set of actions (not all available at all states)
-* An **action function** that for a given state $s$ and action $a$ returns the state reached when executing $a$ in $s$
+* An **action function** that for a given state $s$ and action $a$ 
+    returns the state reached when executing $a$ in $s$
 * A **goal test** that for any state $s$ returns the boolean value $goal(s)$ (true if $s$ is a goal state)
 * (Optional) A **cost function** on actions
 * (Optional) A **value function** on goal states
@@ -65,17 +67,25 @@ A **directed graph** consists of
 * A set of nodes
 * A set of arcs (ordered in pairs of nodes)
 
-![1568018413468](images/09-09/1568018413468.png)
+Further terminology:
 
-### Example
+* $n_2$ is a **neighbor** of $n_4$ (not the other way round!)
+* $n_3, n_4, n_2, n_5$ is a **path** from $n_3$ to $n_5$
+* $n_2, n_5, n_4, n_2$ is a path that is a **cycle**
+* a graph is **acyclic** if it has no cycles
+
+
+
+### Example 1
 
 * Nodes: states
 * Arcs: possible state-transitions from actions (can be labeled with actions)
 
 ![1568018441775](images/09-09/1568018441775.png)
 
-!!! note
-    Slide 11: Extra example
+### Example 2
+
+![image-20200102132555088](images/09-09-problem-solving-as-search/image-20200102132555088.png)
 
 
 
@@ -99,6 +109,68 @@ A state-space problem can be solved by searching in the state-space graph  for p
 
 
 [Generic Search Algorithm](https://artint.info/2e/html/ArtInt2e.Ch3.S4.html#Ch3.F4)
+
+![image-20200102135512434](images/09-09-problem-solving-as-search/image-20200102135512434.png)
+
+### Depth-first Search
+
+[AD1 - Depth-First Search](../../3-semester/AD1/10b-graph-algorithms.md#depth-first-search-dfs)
+
+![image-20200102140813210](images/09-09-problem-solving-as-search/image-20200102140813210.png)
+
+**Properties**
+
+* Space used is linear in the length of the current path
+* May not terminate if state-space graph has cycles
+* With a forward branching factor bounded by *b* and depth *n*, the worst-case time complexity of a finite tree is $b^n$
+
+
+
+### Breadth-First Search
+
+[AD1 - Breadth-First Search](../../3-semester/AD1/10b-graph-algorithms.md##breadth-first-search-bfs)
+
+![image-20200102141045120](images/09-09-problem-solving-as-search/image-20200102141045120.png)
+
+**Properties**
+
+* Will always find a solution if one exists
+* Size of frontier always increases during search up to order of magnitude of total size of search tree
+
+* Can be adapted to find a minimum cost path
+
+### Problem With Cost Function
+
+* Assume that for each action at each state we have an associated **cost**
+* The cost of a solution is the sum of the costs of all actions on the path from start to goal
+* A **minimum cost solution** is a solution with minimal cost
+
+**Example**
+
+![image-20200102141431852](images/09-09-problem-solving-as-search/image-20200102141431852.png)
+
+Breadth-first finds the *shortests*, but not the *cheapest* solution
+
+Depth-first may find either, depending on order of neighbor enumeration
+
+
+
+### Lowest-Cost-First Search
+
+Simple modification of generic.
+
+* With each path in *frontier* store the cost of path
+* Modify one line of code
+    * select and remove path $<n_0,\dots,n_k>$ $\color{red}\text{with minimal cost} $ from *Frontier*
+
+**Properties**
+
+* If all actions have non-zero cost, and solution exists, a minimal cost solution will be found
+* Space requirement depends on cost structure, but usually similar to breadth-first
+
+
+
+
 
 ### Iterative Deepening Search
 
@@ -130,11 +202,25 @@ Increase $k$, repeat
 * Depth-first, Breadth-first and Iterative deepening are **uninformed** search strategies:
     * They do not assume/use any knowledge of the search space exept the pure graph structure.
 
+
+
 ### Informed Search
+
+**Actual Cost**
+
+Given a cost function on actions, can define for any node n in the search tree:
+
+* opt(n) = cost of optimal path from n to a goal state
+    * Infinite if no path to goal exists
+* opt function can usually not be computed
+* opt(n) only depends on the state at node n
+
+**Heuristic Function**
 
 A **[heuristic function](https://artint.info/2e/html/ArtInt2e.Ch3.S6.html) $h(n)$** takes a node $n$ and returns a non-negative real number.
 
-* This number is an estimate of the cost of the least-cost path from node $n$ to a goal node.
+* This number is an estimate of the cost of the least-cost path from node $n$ to a goal node
+    * $h(n)\leq opt(n)$
 
  $h(n)$ is an **admissible heuristic** if $h(n)$ is always less than or equal to the actual cost.
 
@@ -158,7 +244,7 @@ Another use is **greedy best-first search**
 
 ![Figure 3.9](images/09-09-problem-solving-as-search/x370.png)
 
-"*Consider the graph shown in* [Figure 3.9](https://artint.info/2e/html/ArtInt2e.Ch3.S6.html#Ch3.F9)*, drawn to scale, where the cost of an arc is its length. The aim is to find the shortest path from* ss *to* gg*. Suppose the Euclidean straight line distance to the goal* $g$ *is used as the heuristic function. A heuristic depth-first search will select the node below* ss *and will never terminate. Similarly, because all of the nodes below* ss *look good, a greedy best-first search will cycle between them, never trying an alternate route from* $g$*.*"
+"*Consider the graph shown in* [Figure 3.9](https://artint.info/2e/html/ArtInt2e.Ch3.S6.html#Ch3.F9)*, drawn to scale, where the cost of an arc is its length. The aim is to find the shortest path from* $s$ *to* $g$. Suppose the Euclidean straight line distance to the goal $g$ *is used as the heuristic function. A heuristic depth-first search will select the node below* $s$ *and will never terminate. Similarly, because all of the nodes below* $s$ *look good, a greedy best-first search will cycle between them, never trying an alternate route from* $g$*.*"
 
 
 

@@ -298,9 +298,37 @@ If there is a solution, $A*$ using heuristic function $h$ always returns an opti
 
 See link for proof.
 
+### Dynamic Programming
 
+For statically stored graphs, build a table of dist(n) the actual distance of the shortest path from node n to a goal.
+
+This can be built backwards from the goal:
+$$
+\begin{align*}
+dist(n)=\left\{ \begin{array}
+\ 0  &\text{if } is\_goal(n) \\
+\min_{\langle n,m\rangle\in A}(|\langle n,m\rangle|+dist(m)) & \text{otherwise}
+\end{array}
+\right.
+\end{align*}
+$$
+**Example**
+
+![image-20200102154308519](images/09-09-problem-solving-as-search/image-20200102154308519.png)
+
+![image-20200102154329761](images/09-09-problem-solving-as-search/image-20200102154329761.png)
+
+Two main problems:
+
+* You need enough space to store the graph
+* The *dist* function needs to be recomputed for each goal
 
 ### Pruning the Search Space
 
 [3.7.1 Cycle Pruning](https://artint.info/2e/html/ArtInt2e.Ch3.S7.SS1.html)
 
+* A seacher can prune a path that ends in a node already on the path, without removing an optimal solution
+* Using depth-first methods, with the graph explicitly stored, this can be done in constant time.
+* For other methods, the cost ins linear in path length
+
+![image-20200102154559772](images/09-09-problem-solving-as-search/image-20200102154559772.png)

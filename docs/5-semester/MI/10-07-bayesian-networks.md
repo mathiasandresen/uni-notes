@@ -80,14 +80,66 @@ If there is a link from *A* to *B* we say that *B* is a *child* of *A*, and *A* 
 
 
 
-### Serial Connection
+### Bayesian Network
+
+A **Bayesian Network** for variables $A_1,\dots,A_k$ consists of
+
+* a directed acyclic graph with nodes $A_1,...,A_k$
+* for each node a **conditional probability table** specifying the conditional distribution
+    $P(A_i\mid parents(A_i))$
+    * $parents(A_i)$ denotes the **parents** of $A_i$ in the graph
+
+and through the chain rule provides a compact representation of a joint probability distribution
+
+#### Example
+
+![image-20200103134441708](images/10-07-bayesian-networks/image-20200103134441708.png)
+
+To turn this graph into a Bayesian network, the following conditional probability tables must be specified:
+
+$$
+\begin{align*}
+&P(A)\\&P(B)\\&P(C\mid A,B)\\&P(D\mid A,C)\\&P(E\mid B,D,F)\\&P(F\mid A)
+\end{align*}
+$$
+
+### Constructing a Bayesian Network
+
+#### Via Chain Rule
+
+1. Put the random variables in some order
+2. Write the joint distribution using chain rule
+3. Simplify conditional probability factors by conditional independence assumptions.
+    That determines the *parents* of each node i.e. the graph structure
+4. Specify the conditional probability tables
+
+Note: The structure of the resulting network strongly depends on the chosen order of the variables.
+
+
+
+#### Via Causality
+
+* Draw an edge from variable $A$ to variable $B$ if $A$ has a direct casual influence on $A$
+
+Note: This may not always be possible:
+
+* *Inflation* $\to$ *salaries* or *salaries* $\to$ *inflation*?
+* *Rain* doesn't cause *Sun*, and *Sun* doesn't cause *Rain*, but they are not independent either.
+
+
+
+### Transmission of Evidence
+
+![transmission of evidence](images/10-07-bayesian-networks/05_evidence_flow-1578043891487.png)
+
+#### Serial Connection
 
 Consider fig 2.3:
 
 ![1570365651646](images/10-07-bayesian-networks/1570365651646.png)
 
 Evidence about *A* will influence the certainty of *B*, which influences the certainty of *C*.
-Similarly, evidence about *C* will influence the certainty of *A* through *B*.
+<u>Similarly, evidence about *C* will influence the certainty of *A* through *B*.</u>
 
 If the state of *B* is known, the channel is "blocked" and we say that *A* and *C* are **d-separated** given *B*.
 
@@ -97,7 +149,7 @@ When a state of a variable is known, we say that the variable is *instantiated*.
 
 
 
-### Diverging Connection
+#### Diverging Connection
 
 ![1570561504529](images/10-07-bayesian-networks/1570561504529.png)
 
@@ -107,7 +159,7 @@ Influence can pass between all the children of A unless the state of A is known.
 
 
 
-### Converging Connection
+#### Converging Connection
 
 ![1570561638114](images/10-07-bayesian-networks/1570561638114.png)
 
@@ -115,3 +167,29 @@ Influence can pass between all the children of A unless the state of A is known.
 * However, if anything is known about the consequences, then information on on possible cause may tell us something about the other causes.
 
 ![1570561832362](images/10-07-bayesian-networks/1570561832362.png)
+
+### D-Separation
+
+**Definition**
+
+Two distinct variables $A$ and $B$ in a casual network are **d-separated** if for all paths between $A$ and $B$, there is an intermediate variable $V\neq A \and V\neq B$ such that either:
+
+* the connection is serial or diverging and $V$ is instantiated, or
+* the connection is converging, and neither $V$ nor any of $V$'s descendants have received evidence.
+
+If $A$ and $B$ are not d-separated, we call them **d-connected**
+
+**Theorem**
+
+For all pairwise disjoint sets $A,B,C$ of nodes in a Bayesian network:
+
+* If $C$ d-separates $A$ from $B$ then $P(A\mid B,C)=P(A\mid C)$
+
+
+
+Note:
+
+Når man tjekker efter d-seperation, så tjek hele ruten på en gang!
+
+Tjek efter d-seperated, og <u>IKKE</u> efter d-connection
+

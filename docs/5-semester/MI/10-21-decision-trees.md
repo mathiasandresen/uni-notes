@@ -406,7 +406,7 @@ A **decision tree** or a **classification tree** is a tree in which
 
 ![image-20191027223103173](images/10-21-learning-intro-and-decision-trees/image-20191027223103173.png)
 
-The function $point_estimate(Y,Es)$ returns a value for $Y$ that can be predicted for all examples $E$, ignoring input features.
+The function $point\_estimate(Y,Es)$ returns a value for $Y$ that can be predicted for all examples $E$, ignoring input features.
 
 [Explanation]( https://artint.info/2e/html/ArtInt2e.Ch7.S3.SS1.html#SSSx1 )
 

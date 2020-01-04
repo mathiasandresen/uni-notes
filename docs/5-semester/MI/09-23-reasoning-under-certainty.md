@@ -1,11 +1,11 @@
 ---
-title: Reasoning Under Certainty
+title: Reasoning Under Uncertainty
 course: MI
 Session: 23.9
 date: 23-09-2019
 ---
 
-# Reasoning Under Certainty
+# Reasoning Under Uncertainty
 
 **Epistemological**
 
@@ -42,20 +42,62 @@ Propositions are built from primitive propositions using [logical connectives](h
 
 
 
-A **probability measure** is a function $P$ from worlds into non-negative real numbers such that,
+### Probability Measures
+
+A **probability measure** is a function $P$ from worlds into non-negative real numbers
+
 $$
-\sum_{\omega \in \Omega}{P(\omega)}=1
+P(\Omega')\in[0,1]
 $$
-​	where $\Omega$ is the set of all **possible worlds**.
+
+to subsets $\Omega'\subseteq \Omega$ such that
+
+**Axiom 1:**	$P(\Omega)=1$
+
+**Axiom 2:**	if $\Omega_1 \cap \Omega_2=\empty$, then $P(\Omega_1\cup\Omega_2)=P(\Omega_1)+P(\Omega_2)$
 
 
+
+If all variables have a finite domain, then
+
+* $\Omega$ is finite, and
+* a probability distribution is defined by assigning a probability value $P(\omega)$
+    to each individual possible world $\omega\in\Omega$
+
+
+
+For any $\Omega' \subseteq \Omega$ then
+
+$$
+P(\Omega')=\sum_{\omega\in\Omega'}P(\omega)
+$$
+
+**Example**
+
+![image-20200104125846319](images/09-23-reasoning-under-certainty/image-20200104125846319.png)
+
+$$
+P(\Omega')=0.08+0.13+0.03+0.21=0.45
+$$
+
+#### Probability of Propositions
 
 The definition of $P$ is extended to cover propositions.
 
 The probability of proposition $\alpha$ written $P(\alpha)$, is the sum of the probabilities of possible worlds in which $\alpha$ is true.
+
 $$
 P(a)= \sum_{\omega\ :\ \alpha \text{ is true in } \omega}{P(\omega)}
 $$
+
+**Example**
+
+![image-20200104130122988](images/09-23-reasoning-under-certainty/image-20200104130122988.png)
+
+$$
+P(Color=red)=0.08+0.13+0.03+0.21=0.45
+$$
+
 
 
 ### Probability Distribution
@@ -84,6 +126,36 @@ The distribution over all worlds, $P(X_1, \dots,X_n)$ is called the **joint prob
 
 ## Axioms for Probability
 
+**Axiom**
+
+If $A$ and $B$ are disjoint, then $P(A\cup B)=P(A)+P(B)$
+
+​	**Example**
+
+Consider a deck with 52 cards. If $A=\{2,3,4,5\}$ and $B=\{7,8\}$ then
+
+$$
+P(A\cup B)=P(A)+P(B)=4/13+2/13=\frac{6}{13}
+$$
+
+**More Generally**
+
+If $C$ and $D$ are not disjoint, then $P(C\cup D)=P(C)+P(D)-P(C\cap D)$
+
+​	**Example**
+
+If $C=\{2,3,4,5\}$ and $D=\{\spadesuit\}$ then
+
+$$
+P(C\cup D)=4/13+1/4-4/52= \frac{25}{52}
+$$
+
+![image-20200104131056063](images/09-23-reasoning-under-certainty/image-20200104131056063.png)
+
+
+
+**From The Book**
+
 Suppose $P$ is a function from propositions into real numbers that satisfies the following three **axioms of probability:**
 
 **Axiom 1**
@@ -97,6 +169,7 @@ Suppose $P$ is a function from propositions into real numbers that satisfies the
 **Axiom 3**
 
 ​	$P(\alpha \or \beta)=P(\alpha)+P(\beta)$ if $\alpha$ and $\beta$ are contradictory propositions;
+
 That is, if $\neg(\alpha \or \beta)$ is a tautology.
 In other words, if two propositions cannot both be true (mutually exclusive), the probability of their disjunction, is the sum of their probabilities.
 
@@ -142,16 +215,81 @@ $$
 
 
 
+## Updating Probability
+
+Given new information (**evidence**), degrees of belief change
+
+Evidence can be represented as the set of possible world $\Omega'$ not ruled out by the observation
+
+![image-20200104131323904](images/09-23-reasoning-under-certainty/image-20200104131323904.png)
+
+When we observe $\Omega'$
+
+* Worlds that are not consistent with evidence have probability 0
+* The probabilities of worlds consistent with evidence are proportional to their probability before observation, and must sum to 1
+
+![image-20200104131341779](images/09-23-reasoning-under-certainty/image-20200104131341779.png)
+
+
+
 ## Conditional Probability
 
-The measure of belief in proposition $h$ given proposition $e$ is called the **conditional probability** of $h$ **given** $e$. Written:
+The measure of belief in proposition $p$ given proposition $e$ is called the **conditional probability** of $p$ **given** $e$. Written:
+
 $$
-P(h\mid e)
+P(p\mid e)
 $$
+
 A proposition $e$ representing the conjunction of *all* of the agent’s **observations** of the world is called **evidence**.
 
-Given evidence $e$, the conditional probability $P(h\mid e)$ is the agents **posterior probability** of $h$.
-The probability $P(h)$ is the **prior probability** of $h$ and is the same as $P(h\mid true)$.
+Given evidence $e$, the conditional probability $P(p\mid e)$ is the agents **posterior probability** of $p$.
+The probability $P(p)$ is the **prior probability** of $p$ and is the same as $P(p\mid true)$.
+
+The conditional probability of $p$ given $e$ is:
+
+$$
+P(p\mid e)=\frac{P(p\and e)}{P(e)}
+$$
+
+**Example**
+
+![image-20200104141046328](images/09-23-reasoning-under-certainty/image-20200104141046328.png)
+
+<center>(probability for each world is 0.1)</center>
+$$
+P(S=circle\mid Fill=f)=\frac{P(S=cicle\and Fill=f)}{P(Fill=f)}=0.1/0.4=0.25
+$$
+
+
+
+### Bayes Rule
+
+For propositions $p,e$:
+
+$$
+P(p\mid e)=\frac{P(e\and p)}{P(e)}=\frac{P(e\mid p)\cdot P(p)}{P(e)}=\frac{P(e\mid p)\cdot P(p)}{P(e\and p)+P(e\and \neg p)}
+$$
+
+
+
+**Example**
+
+A doctor observes symptoms and wishes to find the probability of a disease:
+$$
+P(disease\mid symp.)=\frac{P(symp.\mid disease)\cdot P(disease)}{P(sympt.)}
+$$
+
+
+### Chain Rule
+
+For propositions $p_1,...,p_n$:
+$$
+P(p_1\and \dots \and p_n)=P(p_1)P(p_2\mid p_1)\cdots P(p_i\mid p_1\and\dots\and p_{i-1})\cdots P(p_n\mid p_1 \and\dots\and p_{n-1})
+$$
+
+
+
+
 
 ### Semantics of Conditional Probability
 
@@ -208,3 +346,130 @@ $$
 
 !!! note
     Complete notes. From [Bayes' Rule](https://artint.info/2e/html/ArtInt2e.Ch8.S1.SS3.html#SSSx2)
+
+
+
+## Random Variables and Distributions
+
+**Random Variables**
+
+Variables defining possible worlds on which probabilities are defined.
+
+**Distributions**
+
+For a random variable $A$, and $a\in D_A$ we have the probability
+
+$$
+P(A=a)=P(\{ \omega\in\Omega \mid A=a \text{ in } \omega\})
+$$
+
+The **probability distribution of** $A$ is the function on $D_A$ that maps $a$ to $P(A=a)$
+The distribution of $A$ is denoted
+
+$$
+P(A)
+$$
+
+**Joint Distributions**
+
+Extension to several random variables
+
+$$
+P(A_1,\dots,A_k)
+$$
+
+is the **joint distribution of** $A_1,\dots,A_k$
+The joint distribution tuples $(a_1,\dots,a_k)$ with $a_i\in D_{A_i}$ to the probability
+$$
+P(A_1=a_1,\dots,A_k=a_k)
+$$
+
+
+### Chain Rule for Distributions
+
+$$
+P(A_1,\dots,A_n)=P(A_1)P(A_2\mid A_1)\cdots P(A_i\mid A_1,\dots,A_{i-1})\cdots P(A_n\mid A_1,\dots,A_{n-1})
+$$
+
+Note: 
+
+* Each $P(p_i\mid p_1\and\dots\and p_{i-1})$ was a number.
+* Each $P(A_i\mid A_1,\dots,A_{i-1})$ is a function on tuples $(a_1,\dots,a_i)$
+
+
+
+### Bayes rules for Variables
+
+![image-20200104143319333](images/09-23-reasoning-under-certainty/image-20200104143319333.png)
+
+
+
+## Independence
+
+The variables $A_i,\dots,A_k$ and $B_1,\dots,B_m$ are **independent** if:
+
+$$
+P(A_1,\dots,A_k \mid B_1,\dots,B_m)=P(A_1,\dots,A_k)
+$$
+
+Which is equivalent to
+
+$$
+P(B_1,\dots,B_m \mid A_1,\dots,A_k)=P(B_1,\dots,B_m)
+$$
+
+and
+
+$$
+P(A_1,\dots,A_k,B_1,\dots,B_m)=P(A_1,\dots,A_k)\cdot P(B_1,\dots,B_m)
+$$
+
+
+
+### Example
+
+Results for Bayern Munich and SC Freiburg in seasons 2001/02and 2003/04. (Not counting thematches Munich vs. Freiburg):
+
+$$
+D_{Munich}=D_{Freiburg}=\{Win,Draw,Loss\}
+$$
+
+![image-20200104144538567](images/09-23-reasoning-under-certainty/image-20200104144538567.png)
+
+Summary:
+
+![image-20200104144603567](images/09-23-reasoning-under-certainty/image-20200104144603567.png)
+
+Joint distribution
+
+![image-20200104144640968](images/09-23-reasoning-under-certainty/image-20200104144640968.png)
+
+Conditional Distribution $\color{blue}P(Munich\mid Freiburg)$
+
+![image-20200104144741159](images/09-23-reasoning-under-certainty/image-20200104144741159.png)
+
+We have (almost): $P(Munich \mid Freiburg)=P(Munich)$
+
+The variables *Munich* and *Freiburg* are **independant**
+
+
+
+Independance can greatly simplify the specification of a joint distribution:
+
+![image-20200104144931933](images/09-23-reasoning-under-certainty/image-20200104144931933.png)
+
+The probability for each possible world is then defined e.g. 
+
+$$
+P(M=D,F=L)=0.25\cdot 0.4062 = 0.10155
+$$
+
+### Conditionally Independent Variables
+
+The variables $A_1,\dots,A_n$ are **conditionally independent** of the variables $B_1,\dots,B_m$ **given** $C_1,\dots,C_k$ if
+
+$$
+P(A_1,\dots,A_n \mid B_1,\dots,B_m,C_1,\dots,C_k)=P(A_1,\dots,A_n\mid C_1,\dots,C_k)
+$$
+
+

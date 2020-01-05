@@ -402,19 +402,162 @@ A **decision tree** or a **classification tree** is a tree in which
 
 
 
-**Searching for a Good Decision Tree**
+#### Algorithm
 
-![image-20191027223103173](images/10-21-learning-intro-and-decision-trees/image-20191027223103173.png)
+![image-20200105095214175](images/10-21-decision-trees/image-20200105095214175.png)
 
-The function $point\_estimate(Y,Es)$ returns a value for $Y$ that can be predicted for all examples $E$, ignoring input features.
+**Key question**: Which $X_i$ to choose in line 4?
 
-[Explanation]( https://artint.info/2e/html/ArtInt2e.Ch7.S3.SS1.html#SSSx1 )
+**Approach:** Choose the feature that would provide the best classifier if construction would terminate with that feature.
 
-[Example 7.8](https://artint.info/2e/html/ArtInt2e.Ch7.S3.SS1.html#Ch7.Thmciexamplered8)
+![image-20200105095401161](images/10-21-decision-trees/image-20200105095401161.png)
+
+Showing:
+
+* Number of examples with class labels skip, reads, belonging to different sub-trees
+* $\color{green} \text{Green}:$ Predicted class label (possibly a tie between two labels)
+
+#### Class Purity
+
+**Principle:** Prefer features that split the examples into *class pure* subsets
+
+![image-20200105095625238](images/10-21-decision-trees/image-20200105095625238.png)
+
+Normalized to probabilities:
+
+![image-20200105095642919](images/10-21-decision-trees/image-20200105095642919.png)
+
+#### Entropy
+
+##### **Purity Measure**:
+
+For a probability distribution $(p,1-p)$ of a two-valued class label, define:
+
+$$
+h(p,1-p)=-p\cdot\log_2(p)-(1-p)\cdot\log_2(1-p)
+$$
+
+![image-20200105095955402](images/10-21-decision-trees/image-20200105095955402.png)
+
+* High values for impure distributions
+* Maximal for $(0.5,0.5)$
+* Zero for $(1,0)$ and $(0,1)$
+
+**Example**
+
+![image-20200105100458935](images/10-21-decision-trees/image-20200105100458935.png)
 
 
 
+##### Generalization to Larger Domain
+
+For probability distribution on domain with $n$ elements:
+
+$$
+\bold p=(p_1,\dots,p_n)\quad (p_n=1-\sum_{i=1}^{n-1}p_i)
+$$
+
+define entropy:
+
+$$
+h(\bold p)=-\sum_{i=1}^n p_i\cdot\log(p_i)
+$$
+
+Again:
+
+* Maximal for $\bold p=(1/n,\dots,1/n)$
+* Zero for $\bold p = (1,0,\dots,0)$ and so on
 
 
 
+#### Entropy Example
+
+We prefer features that split into subsets with low entropy, but consider example for binary class variable (values $c_1,c_2$ with initial counts $c_1:20,c_2:20$), and two 3-valued features $X_1,X_2$:
+
+![image-20200105101108417](images/10-21-decision-trees/image-20200105101108417.png)
+
+$X_2$ provides a better division of examples than $X_1$. It gives a lower **expected entropy**:
+
+$$
+(1/40)· 0+(1/40)·(38/40)·1>(15/40)·0 + (15/40)·0 + (10/40)·1
+$$
+
+
+
+#### Expected Entropy and Information Gain
+
+For feature $X$ with domain $v_1,\dots,v_n$ let:
+
+* $E_i$ be the set of examples with $X=v_i$
+* $q_i=|E_i|/|E|$
+* $h_i$ the entropy of the class label distribution in $E_i$
+
+The **expected entropy** from splitting on $X$ then is:
+$$
+h(Class\mid X)=\sum_{i=1}^n q_i\cdot h_i
+$$
+Let $h(Class)$: entropy of class label distribution before splitting
+
+The **Information Gain** from splitting on $X$ then is:
+$$
+h(Class)-h(Class \mid X)
+$$
+
+
+**Information Gain in Decision Tree Learning**
+
+In line 4 of the [algorithm](#algorithm) choose feature $X_i$ that gives the highest *information gain*
+
+![image-20200105102035770](images/10-21-decision-trees/image-20200105102035770.png)
+
+![image-20200105102536675](images/10-21-decision-trees/image-20200105102536675.png)
+
+#### Continuous/Many-Valued Attributes
+
+The **information gain** measure favors attributes with many values
+
+* For example, the attribute *Date* will have a very high information gain, but is unable to generalize
+
+One approach for avoiding this, is to select attributes based on GainRation:
+$$
+GainRation(S,A)=\frac{Gain(S,A)}{SplitInformation(S,A)}\\
+SplitInformation(S,A)=-\sum_{i=1}^c\frac{|S_i|}{|S|}\log_2 \frac{|S_i|}{|S|}
+$$
+where $S_i$ is the subset of examples produced by splitting on the $i$'th value of $A$
+
+Note that SplitInformation is the entropy of $S$ with regard to the values of $A$
+
+
+
+We require that the attributes being tested are discrete valued. So in order to test a continuous valued attribute we need to "discretize" it.
+
+Suppose that the training examples are associated with the attribute Temperature:
+
+![image-20200105105148707](images/10-21-decision-trees/image-20200105105148707.png)
+
+Create a new boolean valued attribute by first testing the two candidate thresholds:
+
+* $(48+60)/2$
+* $(80+90)/2$
+
+Next pick the one with the highest information gain (i.e., $Temperature_{\gt 54}$)
+
+
+
+### Overfitting
+
+Noise in data may lead to a bad classifier. In particularly, if the decision tree fits the data perfectly.
+
+This is called **overfitting**.
+
+
+
+**Definition**
+
+A hypothesis $h$ is said to **overfit** the training data if there exists some alternative hypothesis $h'$, such that:
+
+* $h$ has a smaller error than $h'$ over the training data, but
+* $h'$ has a smaller error than $h$ over the entire distribution of instances
+
+![image-20200105105543817](images/10-21-decision-trees/image-20200105105543817.png)
 

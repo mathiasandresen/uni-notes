@@ -386,6 +386,70 @@ See example in the [appendix](./10-28appendix.md#learning-weights-and-threshold-
 
 
 
+
+
+### Sum of Squared Errors
+
+Given
+
+* data (training examples): $(x_i,y_i)\quad (i=1,\dots,N)$ with
+    * $x_i$: value of input features $\bold X$
+    * $y_i$: value of output feature $Y$
+* a neural network that computes outputs $o_i=out(x_i)$
+
+define **sum of squared error**
+
+$$
+SSE=\sum^N_{i=1}(y_i-o_i)^2
+$$
+
+![image-20200105165611418](images/10-28-neural-networks/image-20200105165611418.png)
+
+For a given dataset the SSE is a smooth, convex function of the weights
+
+Example for $n=2$ and a linear activation function:
+
+![image-20200105165715489](images/10-28-neural-networks/image-20200105165715489.png)
+
+Weights $\bold w$ that minimize $E(\bold w)$ can be found by **gradient descent**
+
+
+
+### Gradient Descent Learning
+
+The gradient is the vector of partial derivatives:
+
+$$
+\nabla E[\bold w]=\left(\frac{\partial E}{\partial w_o},\frac{\partial E}{\partial w_1},\dots,\frac{\partial E}{\partial w_n}  \right)
+$$
+
+The partial derivatives are (with linear activation function):
+$$
+\frac{\partial E}{\partial w_k}=\sum_{i=1}^N(t_i-\bold w\cdot x_i)(-x_{i,k})\label{gradiant_descent}
+$$
+Gradient descent rule:
+
+1. Initialize $\bold w$ with random values
+2. **repeat**
+    1. $\bold w := \bold w - \eta \nabla E(\bold w)$
+3. **until** $\nabla E(\bold w) \approx 0$
+
+$\eta$ is a small constant, the **learning rate**
+
+**Properties**
+
+* The procedure converges to the weights $\bold w$ that minimize the SSE (if $\eta$ is small enough)
+
+#### Stochastic Gradient Descent
+
+Variation of gradient descent: Instead of following the gradient computed from the whole dataset ($\ref{gradiant_descent}$)
+
+iterate through the data instances one by one, and in one iteration follow the gradient defined by a single data instance $(x_k,t_k)$
+$$
+\frac{\partial E}{\partial w_i}=(t_k-\bold w\cdot x_k)(-x_k,i)
+$$
+
+
 ### Back-Propagation
 
 **Back-propagation** implements stochastic gradient descent for all weights.

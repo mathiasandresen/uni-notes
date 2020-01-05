@@ -22,7 +22,7 @@ extra_css:
 
 extra_javascript:
   - 'javascripts/extra.js'
-  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.0.0/es5/tex-chtml-full.js'
+  - 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML'
 
 
 markdown_extensions:

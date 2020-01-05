@@ -172,7 +172,7 @@ There are many different types of neural networks. The book considers **feed-for
 
 * Hierarchy consisting of linear functions interleaved with **activation functions**
 
-
+![image-20200105135152598](images/10-28-neural-networks/image-20200105135152598.png)
 
 Neural network can have multiple input and target features (real-valued)
 
@@ -188,6 +188,31 @@ Neural network can have multiple input and target features (real-valued)
  ![img](images/10-28-neural-networks/x398.png) 
 
 <center>Figure 7.16: A deep neural network.</center>
+
+
+### Single Neuron
+
+Two step computation
+
+* Combine inputs as *weighted sum*
+* Compute output by **activation function** of combined inputs
+
+![image-20200105135241037](images/10-28-neural-networks/image-20200105135241037.png)
+
+
+
+
+
+#### Activation Functions
+
+The most common activation functions are:
+
+![image-20200105135524340](images/10-28-neural-networks/image-20200105135524340.png)
+
+If activation function is sigmoid, i.e. $out=\sigma(\sum_j i_j\cdot w_j)$ we also talk of *squashed linear function*
+
+For the output neuron also the **identity function** is used: $af(x)=id(x)=x$
+
 
 
 ### Layers
@@ -220,6 +245,115 @@ For regression, where the prediction can be any real number, its typical for the
 For binary classification, where the output values can be mapped to $\{0,1\}$ it is typical for the output to be a sigmoid function of its input
 
 * We never want to predict a value greater or less than zero.
+
+
+
+
+
+### Discrete Inputs
+
+If the regression should also use discrete predictor attributes, e.g.:
+
+![image-20200105140043172](images/10-28-neural-networks/image-20200105140043172.png)
+
+replace discrete attributes with 0-1-valued **indicator variables** for their possible values:
+
+![image-20200105140118948](images/10-28-neural-networks/image-20200105140118948.png)
+
+#### Indicator Variables
+
+* For each value $x_i$ of $X$ with domain $\{x_1,\dots,x_k\}$ introduce a binary feature $X\_is\_x_i$ with values $0,1$
+* Encode input $X=x_i$ by inputs
+    * $X\_is\_x_0=0,\dots,X\_is\_x_{i-1}=0,X\_is\_x_i=1,X\_is\_x_{i+1},\dots,X\_is\_x_k=0$ 
+
+#### Numerical Encoding
+
+Translate values into numbers:
+
+* $true, false \mapsto 0,1$
+* $low,medium,high\mapsto 0,1,2$
+
+Probably <u>not</u> sensible:
+
+* $red,green,blue \mapsto 0,1,2$
+    * $blue$ is not "two times $green$"
+
+
+
+### Neural Networks for Classification
+
+Use one output node for each class label.
+
+Classify instance by class label associated with output node with highest output value.
+
+![image-20200105141853207](images/10-28-neural-networks/image-20200105141853207.png)
+
+
+
+### Propagation in Neural Networks
+
+![image-20200105143435825](images/10-28-neural-networks/image-20200105143435825.png)
+
+The output of neuron $H$ is:
+
+$$
+o_H=\sigma(1\cdot0.1+0\cdot0.1+1\cdot0.1)=\color{blue} 0.5498
+$$
+The output of neuron $O$ is:
+
+$$
+o_O=\sigma(\textcolor{blue}{0.5498} \cdot 0.1+1\cdot0.1)=\textcolor{red}{0.53867}
+$$
+
+
+### The Perceptron
+
+* No hidden layer
+* One output neuron $o$
+* $sign$ activation function
+
+![image-20200105144132633](images/10-28-neural-networks/image-20200105144132633.png)
+
+Computed:
+
+$$
+O(x_1,\dots,x_n)= \left\{\begin{array}{}\begin{align*}
+	1	\quad &\text{if } w_0x_0+w_1x_1+\dots w_n x_n\\
+	-1	\quad &\text{otherwise}
+\end{align*}\end{array}\right.
+$$
+
+<u>Convention</u> from now on assume that $x_0$ is an input neuron with constant input value 1.
+Then write $\bold w \cdot \bold x$ for $w_0 x_0+w_1x_1+\dots w_n x_n$
+
+#### Expressive Power
+
+The decision surface of a two-input perceptron is given by a straight line, separating positive and negative examples
+
+![image-20200105145251847](images/10-28-neural-networks/image-20200105145251847.png)
+
+Can represent $x_1 \and x_2$
+
+![image-20200105145353936](images/10-28-neural-networks/image-20200105145353936.png)
+
+Can represent $x_1 \or x_2$
+
+![image-20200105145446590](images/10-28-neural-networks/image-20200105145446590.png)
+
+<u>Cannot!</u> represent $x_1 \text{ xor } x_2$
+
+* The examples are not **linear separable**
+
+![image-20200105145530352](images/10-28-neural-networks/image-20200105145530352.png)
+
+
+
+#### Multiple Neurons
+
+![image-20200105145726748](images/10-28-neural-networks/image-20200105145726748.png)
+
+
+
 
 
 

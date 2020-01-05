@@ -431,7 +431,7 @@ Normalized to probabilities:
 
 ##### **Purity Measure**:
 
-For a probability distribution $(p,1-p)$ of a two-valued class label, define:
+For a probability distribution $(p,1-p)$ of a two-valued class label, define[^log2]:
 
 $$
 h(p,1-p)=-p\cdot\log_2(p)-(1-p)\cdot\log_2(1-p)
@@ -457,10 +457,10 @@ $$
 \bold p=(p_1,\dots,p_n)\quad (p_n=1-\sum_{i=1}^{n-1}p_i)
 $$
 
-define entropy:
+define entropy[^log2]:
 
 $$
-h(\bold p)=-\sum_{i=1}^n p_i\cdot\log(p_i)
+h(\bold p)=-\sum_{i=1}^n p_i\cdot\log_2(p_i)
 $$
 
 Again:
@@ -506,7 +506,7 @@ $$
 
 **Information Gain in Decision Tree Learning**
 
-In line 4 of the [algorithm](#algorithm) choose feature $X_i$ that gives the highest *information gain*
+In line 4 of the [algorithm](#algorithm) choose feature $X_i$ that gives the <u>highest</u> *information gain*
 
 ![image-20200105102035770](images/10-21-decision-trees/image-20200105102035770.png)
 
@@ -560,4 +560,8 @@ A hypothesis $h$ is said to **overfit** the training data if there exists some a
 * $h'$ has a smaller error than $h$ over the entire distribution of instances
 
 ![image-20200105105543817](images/10-21-decision-trees/image-20200105105543817.png)
+
+
+
+[^log2]: $\log_2(x)=\log(x)/\log(2)$
 

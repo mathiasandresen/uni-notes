@@ -303,6 +303,7 @@ See link for proof.
 For statically stored graphs, build a table of dist(n) the actual distance of the shortest path from node n to a goal.
 
 This can be built backwards from the goal:
+
 $$
 \begin{align*}
 dist(n)=\left\{ \begin{array}
@@ -312,6 +313,7 @@ dist(n)=\left\{ \begin{array}
 \right.
 \end{align*}
 $$
+
 **Example**
 
 ![image-20200102154308519](images/09-09-problem-solving-as-search/image-20200102154308519.png)

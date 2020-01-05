@@ -492,3 +492,25 @@ Learning consists of two passes through the network for each example:
 * Prediction: given the values on the inputs for each layer, compute a value for the outputs of the layer
 * Back-propagation: go backwards through the layers to update all of the weights of the network.
 
+
+
+Calculate an error term $\delta_h$ for a hidden unit by taking the weighted sum of the error terms, $\delta_k$ for each output units it influences.
+
+![image-20200105190722219](images/10-28-neural-networks/image-20200105190722219.png)
+
+#### Updating Rules
+
+When using a sigmoid activation function we can derive the following update rule:
+
+![image-20200105190857307](images/10-28-neural-networks/image-20200105190857307.png)
+
+where
+$$
+\delta_j=\begin{array}{}\left\{ \begin{align*}
+	&o_j(1-o_j)(t-o_j) &&\quad \text{for output nodes}\\
+	&o_j(1-o_j) \sum_{k=1}^m w_{jk}\delta_k &&\quad \text{for hidden nodes}
+\end{align*}\right. \end{array}
+$$
+
+
+See example in the [appendix](./10-28appendix.md#back-propagation-example) of this page 

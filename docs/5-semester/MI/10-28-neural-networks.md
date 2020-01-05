@@ -14,10 +14,18 @@ $$
 $$
 
 
+
+
+
+test
+$$
+\Sigma
+$$
+sads
+
 ## Linear Regression and Classification
 
 **Linear Regression:** The problem of fitting a linear function to a set of training examples, in which the input and target features are numeric.
-
 $$
 \begin{align*}
 \hat Y^{\overline w}(e) &= w_0+w_1 * X_1(e)+\dots +w_n * X_n(e)\\
@@ -189,7 +197,6 @@ Neural network can have multiple input and target features (real-valued)
  ![img](images/10-28-neural-networks/x398.png) 
 
 <center>Figure 7.16: A deep neural network.</center>
-
 
 
 ### Layers

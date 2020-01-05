@@ -302,6 +302,8 @@ See link for proof.
 
 For statically stored graphs, build a table of dist(n) the actual distance of the shortest path from node n to a goal.
 
+
+
 This can be built backwards from the goal:
 
 $$

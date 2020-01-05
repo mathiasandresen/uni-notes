@@ -188,8 +188,6 @@ Neural network can have multiple input and target features (real-valued)
  ![img](images/10-28-neural-networks/x398.png) 
 
 <center>Figure 7.16: A deep neural network.</center>
-
-
 ### Single Neuron
 
 Two step computation
@@ -354,6 +352,37 @@ Can represent $x_1 \or x_2$
 
 
 
+## Learning
+
+![image-20200105145843831](images/10-28-neural-networks/image-20200105145843831.png)
+
+![image-20200105150022767](images/10-28-neural-networks/image-20200105150022767.png)
+
+**We have**
+
+* $\mathcal{D}=(x_1,x_2,x_3,x_4)$ input vectors (cases)
+* $\bold t=(-1,1,-1,-1)$ vector of target outputs
+* $\bold w=(w_0,w_1,w_2)$ vector of current parameters
+* $\bold o=(o_1,o_2,o_3,o_4)$ vector of current outputs
+
+**We request**
+
+* $\bold w^*$ parameters yielding $\bold o = \bold t$
+
+![image-20200105150238585](images/10-28-neural-networks/image-20200105150238585.png)
+
+**Weight Updating Procedure**
+
+* $E>0 \Rightarrow o$ shall be increased  $\Rightarrow \bold x \cdot \bold w$ up $\Rightarrow \bold w:= \bold w+ \alpha E x$
+* $E<0 \Rightarrow o$ shall be decreased $\Rightarrow \bold x \cdot \bold w$ down $\Rightarrow \bold w:= \bold w+ \alpha E x$
+
+$\alpha$ is called the **learning rate**
+
+With $\mathcal D$ linearly separable and $\alpha$ not too large, this procedure will converge to a correct set of parameters
+
+
+
+See example in the [appendix](./10-28appendix.md#learning-weights-and-threshold-example) of this page
 
 
 

@@ -300,7 +300,7 @@ $$
 The output of neuron $O$ is:
 
 $$
-o_O=\sigma(\textcolor{blue}{0.5498} \cdot 0.1+1\cdot0.1)=\textcolor{red}{0.53867}
+o_O=\sigma(\color{blue}{0.5498} \color{black} \cdot 0.1+1\cdot0.1)=\color{red}{0.53867}
 $$
 
 
@@ -424,6 +424,7 @@ $$
 $$
 
 The partial derivatives are (with linear activation function):
+
 $$
 \frac{\partial E}{\partial w_k}=\sum_{i=1}^N(t_i-\bold w\cdot x_i)(-x_{i,k})\label{gradiant_descent}
 $$
@@ -445,10 +446,26 @@ $\eta$ is a small constant, the **learning rate**
 Variation of gradient descent: Instead of following the gradient computed from the whole dataset ($\ref{gradiant_descent}$)
 
 iterate through the data instances one by one, and in one iteration follow the gradient defined by a single data instance $(x_k,t_k)$
+
 $$
 \frac{\partial E}{\partial w_i}=(t_k-\bold w\cdot x_k)(-x_k,i)
 $$
 
+
+### The Task of Learning
+
+**Given**: structure and activation functions. To be learned: weights.
+
+**Goal:** given the training examples
+
+![image-20200105171555031](images/10-28-neural-networks/image-20200105171555031.png)
+
+Find the weights that minimize the *sum of squared errors (SSE)*
+
+$$
+\sum_{i=1}^N\sum_{j=1}^m(t_{j,i}-o_{j,i})^2,
+$$
+where $o_{j,i}$ is the value of the $j$th output neuron for the $i$th data instance.
 
 ### Back-Propagation
 

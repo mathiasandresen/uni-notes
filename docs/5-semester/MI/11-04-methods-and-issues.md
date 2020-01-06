@@ -43,6 +43,12 @@ where $\bold X=(abacus, \dots ,zytogenic)$ and $\bold x$ is a corresponding set 
 
 
 
+Given an example with inputs $X_1=x_1,\dots, X_k=x_k$, Bayes Rule is used to compute the posterior probability distribution of the example's classification, $Y$
+$$
+P(Y \mid X_1=x_1,\dots, X_k=x_k)= {P(Y)\cdot P(x_1 \mid Y)\cdots P(x_k \mid Y) \over \sum_Y P(Y)\cdot P(x_1 \mid Y)\cdots P(x_k \mid Y)}
+$$
+
+
 #### Example
 
 ![image-20200106101705109](images/11-04-methods-and-issues/image-20200106101705109.png)

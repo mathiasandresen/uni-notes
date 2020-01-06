@@ -48,6 +48,15 @@ $$
 P(Y \mid X_1=x_1,\dots, X_k=x_k)= {P(Y)\cdot P(x_1 \mid Y)\cdots P(x_k \mid Y) \over \sum_Y P(Y)\cdot P(x_1 \mid Y)\cdots P(x_k \mid Y)}
 $$
 
+![image-20200106154327364](images/11-04-methods-and-issues/image-20200106154327364.png)
+
+![image-20200106154334250](images/11-04-methods-and-issues/image-20200106154334250.png)
+
+
+
+
+
+
 
 #### Example
 
@@ -98,8 +107,6 @@ $$
 ![image-20200106104352465](images/11-04-methods-and-issues/image-20200106104352465.png)
 
 <div style="color: red">Attributes not independent given Spam=yes!</div>
-
-
 $\leadsto$ Naive Bayes assumption often not realistic. Nevertheless, Naive Bayes often successful.
 
 #### When Naive Bayes Must Fail

@@ -16,7 +16,7 @@ data: 11-11-2019
 * Based on article data, find groups of articles with the same topics
 * ...
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## K-Means Algorithm
 
@@ -41,7 +41,7 @@ We consider the scenario, where
 
 Result can depend on choice of initial cluster centers!
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### K-means as an Optimization Problem
 
@@ -83,7 +83,7 @@ There is no guarantee of reaching the global optimum:
 
 * Improve by running with multiple random restarts
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### Outliers
 
@@ -102,7 +102,7 @@ Instances defined by attributes
 * All distance functions for continuous attributes dominated by *income* values
     * $\leadsto$ may need to *rescale* or *normalize* continuous attributes
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### Min-Max Normalization
 
@@ -118,7 +118,7 @@ where $\min(A_i),\max(A_i)$ are min/max values of $A_i$ appearing in the data
 * Will always be between 0 and 1
 * Be careful for extreme values (See the lowest green value)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### Z-Score Standardization
 
@@ -140,7 +140,7 @@ where
 * Is not between 0 and 1, we have no min and max value
 * Slightly less sensitive to outliers
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## Soft Clustering
 
@@ -152,7 +152,7 @@ In *soft* clustering, each example is assigned to a cluster with a certain proba
 
 ![image-20191111111917711](images/11-11-clustering/image-20191111111917711.png)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### EM-Algorithm
 
@@ -185,6 +185,8 @@ Example for 4 features and 3 classes:
 
 ![image-20200106184035112](images/11-11-clustering/image-20200106184035112.png)
 
+<div style="page-break-after: always; break-after: page;"></div>
+
 The EM algorithm repeats the two steps:
 
 * **E step**: Update the augmented counts based on the probability distribution.
@@ -199,9 +201,4 @@ The EM algorithm repeats the two steps:
 
     This is a **maximization** step because it computes the maximum likelihood estimate or the [maximum a posteriori probability (MAP)](https://artint.info/2e/html/ArtInt2e.Ch10.S1.html) estimate of the probability.
 
-
-
-
-
 [Example: Session 11.11 Slide 20](./extra/mi-11-11.pdf)
-

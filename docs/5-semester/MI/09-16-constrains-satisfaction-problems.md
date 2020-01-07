@@ -53,7 +53,7 @@ $$
 
 * If teacher for AD and MI is the same, then the time of AD cannot be the same as time of MI.
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### Example: Sudoku
 
@@ -147,7 +147,7 @@ A constraint network is **arc consistent**, if all its arcs are arc consistent
 
 ![1568625351639](images/09-16-constrains-satisfaction-problems/1568625351639.png)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ##### Algorithm Outline
 
@@ -186,7 +186,7 @@ Operates on extensional (table) representations of constraints
 
 Algorithm requires **projection** and **join** operations on tables
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### **Project**
 
@@ -203,6 +203,8 @@ The **join** is the table $r_3=r_1 \bowtie r_2$ for variables $vars_1 \cup vars_
 ##### Example
 
 ![image-20200104103048961](images/09-16-constrains-satisfaction-problems/image-20200104103048961.png)
+
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### **Algorithm Outline**
 
@@ -341,7 +343,7 @@ Select the variable-value pair that gives the highest improvement
 * After selecting a variable, pick the value minimizes the  number of conflicts
 * Update weights of variables that participate in a conflict that is changed
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### Simulated Annealing
 

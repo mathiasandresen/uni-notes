@@ -8,8 +8,6 @@ date: 18-11-2019
 
 # Planning Under Uncertainty
 
-
-
 ## Preferences and Utility
 
 Agent chooses actions based on **outcome**.
@@ -18,8 +16,6 @@ Agent chooses actions based on **outcome**.
 * If it does not prefer any outcome, it doesn't matter what it does.
 
 Assume finite number of outcomes.
-
-
 
 **Weakly Preferred**
 
@@ -37,8 +33,6 @@ Define $o_1 \sim o_2$ if $o_1 \succeq o_2$ and $o_2 \succeq o_1$.
 Define $o_1 \succ o_2$ to mean $o_1 \succeq o_2$ and $o_2 \nsucceq o_1$ 
 
 * We say $o_1$ is **strictly preferred** to outcome $o_2$
-
-
 
 A **lottery** is defined to be a finite distribution over outcomes, written:
 
@@ -143,7 +137,7 @@ Utility of full outcome (state) is sum of utility factors:
 Assumption: The utility contribution from one factor is independent of the values of other factors.
 E.g.: (rhc,swc) should perhaps be worth less than 5 when at the same time (mr, mw), because mail needs to be delivered first (the two utility factors are **substitutes**)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## Single Stage Decision Networks
 
@@ -166,7 +160,7 @@ Graph represents:
 * One utility factor depends on *Attempt* and *Grade*, another only on *Start*
 * Both the *Prepare* and *Start* decision influence the probabilities for *Grade*
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### In General
 
@@ -207,7 +201,7 @@ An SSDN defines:
 
     * $U(\omega)$
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### Solving an SSDN
 
@@ -226,6 +220,8 @@ $$
 
 ![image-20200106201355625](images/11-18-planning-uncertainty/image-20200106201355625.png)
 
+<div style="page-break-after: always; break-after: page;"></div>
+
 ## Sequential Decisions
 
 SSDNs are generalized to sequential decision problems by.
@@ -238,8 +234,6 @@ SSDNs are generalized to sequential decision problems by.
 * Doctor first decides which test to perform, then observes test outcome, then decides which treatment to prescribe
 * Before we decide to take the umbrella with us, we observe the weather forecast
 * A company first decides whether to develop a certain product, then observes the customer reaction in a test market, then decides whether to go into full production.
-
-
 
 ### Example: Fire Scenario
 
@@ -276,7 +270,6 @@ As before: possible worlds $\omega$ are assignments for all decision and chance 
     U(\omega)
     $$
     
-
 * Obtain expected utility of a policy
 
 $$

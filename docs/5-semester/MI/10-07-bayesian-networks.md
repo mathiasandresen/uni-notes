@@ -40,8 +40,7 @@ or
 
 *“if I take a short walk during the break, I will with certainty 0.8 stay awake during the next lecture.”*
 
-
-
+<div style="page-break-after: always; break-after: page;"></div>
 ### Casual Perspective on Car Start Problem
 
 To simplify, we assume that we have
@@ -65,8 +64,7 @@ If we add a direction from $no$ to $yes$ in each variable, we can represent dire
 
 ![1570365274636](images/10-07-bayesian-networks/1570365274636.png)
 
-
-
+<div style="page-break-after: always; break-after: page;"></div>
 ## Casual Networks and d-Separation
 
 A **Casual Network** consists of
@@ -103,6 +101,7 @@ $$
 \end{align*}
 $$
 
+<div style="page-break-after: always; break-after: page;"></div>
 ### Constructing a Bayesian Network
 
 #### Via Chain Rule

@@ -15,8 +15,6 @@ date: 23-09-2019
 
 * How the world is.
 
-
-
 ## Semantics of Probability
 
 Probability theory is built on the foundation of [worlds and variables](https://artint.info/2e/html/ArtInt2e.Ch4.S1.html).
@@ -40,8 +38,6 @@ Examples:
 
 Propositions are built from primitive propositions using [logical connectives](https://artint.info/2e/html/ArtInt2e.Ch5.S1.SS1.html).
 
-
-
 ### Probability Measures
 
 A **probability measure** is a function $P$ from worlds into non-negative real numbers
@@ -63,8 +59,6 @@ If all variables have a finite domain, then
 * $\Omega$ is finite, and
 * a probability distribution is defined by assigning a probability value $P(\omega)$
     to each individual possible world $\omega\in\Omega$
-
-
 
 For any $\Omega' \subseteq \Omega$ then
 
@@ -98,8 +92,7 @@ $$
 P(Color=red)=0.08+0.13+0.03+0.21=0.45
 $$
 
-
-
+<div style="page-break-after: always; break-after: page;"></div>
 ### Probability Distribution
 
 If $X$ is a random variable, a **probability distribution** $P(X)$ over $X$ is a function from the domain of $X$ into the real numbers, such that given a value
@@ -122,8 +115,7 @@ and the probability of the proposition defining a world is equal to the probabil
 
 The distribution over all worlds, $P(X_1, \dots,X_n)$ is called the **joint probability distribution**.
 
-
-
+<div style="page-break-after: always; break-after: page;"></div>
 ## Axioms for Probability
 
 **Axiom**
@@ -213,8 +205,7 @@ $$
 
 [Proof](https://artint.info/2e/html/ArtInt2e.Ch8.S1.SS2.html#Ch8.S1.I4)
 
-
-
+<div style="page-break-after: always; break-after: page;"></div>
 ## Updating Probability
 
 Given new information (**evidence**), degrees of belief change
@@ -230,8 +221,7 @@ When we observe $\Omega'$
 
 ![image-20200104131341779](images/09-23-reasoning-under-certainty/image-20200104131341779.png)
 
-
-
+<div style="page-break-after: always; break-after: page;"></div>
 ## Conditional Probability
 
 The measure of belief in proposition $p$ given proposition $e$ is called the **conditional probability** of $p$ **given** $e$. Written:
@@ -260,8 +250,6 @@ $$
 P(S=circle\mid Fill=f)=\frac{P(S=cicle\and Fill=f)}{P(Fill=f)}=0.1/0.4=0.25
 $$
 
-
-
 ### Bayes Rule
 
 For propositions $p,e$:
@@ -269,7 +257,6 @@ For propositions $p,e$:
 $$
 P(p\mid e)=\frac{P(e\and p)}{P(e)}=\frac{P(e\mid p)\cdot P(p)}{P(e)}=\frac{P(e\mid p)\cdot P(p)}{P(e\and p)+P(e\and \neg p)}
 $$
-
 
 
 **Example**
@@ -286,8 +273,6 @@ For propositions $p_1,...,p_n$:
 $$
 P(p_1\and \dots \and p_n)=P(p_1)P(p_2\mid p_1)\cdots P(p_i\mid p_1\and\dots\and p_{i-1})\cdots P(p_n\mid p_1 \and\dots\and p_{n-1})
 $$
-
-
 
 
 
@@ -325,7 +310,7 @@ A **conditional probability distribution**, written $P(X \mid Y)$, where $X$ and
 
 Given a value $x\in domain(X)$ for $X$ and a value $y \in domain(Y)$ for $Y$, it gives the value $P(X=x \mid Y= y)$.
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 **Proposition 8.3** (**Chain rule**):
 
@@ -346,8 +331,6 @@ $$
 
 !!! note
     Complete notes. From [Bayes' Rule](https://artint.info/2e/html/ArtInt2e.Ch8.S1.SS3.html#SSSx2)
-
-
 
 ## Random Variables and Distributions
 
@@ -396,13 +379,9 @@ Note:
 * Each $P(p_i\mid p_1\and\dots\and p_{i-1})$ was a number.
 * Each $P(A_i\mid A_1,\dots,A_{i-1})$ is a function on tuples $(a_1,\dots,a_i)$
 
-
-
 ### Bayes rules for Variables
 
 ![image-20200104143319333](images/09-23-reasoning-under-certainty/image-20200104143319333.png)
-
-
 
 ## Independence
 
@@ -443,6 +422,8 @@ Summary:
 Joint distribution
 
 ![image-20200104144640968](images/09-23-reasoning-under-certainty/image-20200104144640968.png)
+
+<div style="page-break-after: always; break-after: page;"></div>
 
 Conditional Distribution $\color{blue}P(Munich\mid Freiburg)$
 

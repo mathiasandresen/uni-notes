@@ -127,7 +127,7 @@ $$
 
 But this is false, because both products are actually equal.
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## Case-based Reasoning
 
@@ -191,7 +191,7 @@ For a set of discrete features $\bold X$:
 * Define distance $d_i$ and weight $w_i$ for each $X_i\in \bold X$
 * Define $d(x,x')=\Sigma_i w_i d_i (x_i,x_i')$
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### K-Nearest-Neighbor Classifier
 
@@ -216,7 +216,7 @@ classify $\bold x$ as follows:
 
 ![image-20200106110450175](images/11-04-methods-and-issues/image-20200106110450175.png)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## Overfitting
 

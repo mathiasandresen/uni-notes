@@ -13,7 +13,9 @@ Learning: The ability of an agent to improve its behavior based on experience, e
 *  The accuracy on tasks is improved; the agent can do things better. 
 *  The speed is improved; the agent can do things faster. 
 
-
+$$
+\newcommand{pval}{\widehat Y}\nonumber
+$$
 
 ## Learning Issues
 
@@ -150,8 +152,7 @@ One of the important properties of a learning algorithm is its ability to handle
 
 Extrapolation is usually much less accurate than interpolation.
 
-
-
+<div style="page-break-after: always; break-after: page;"></div>
 ## Supervised Learning
 
 [7.2 Supervised Learning](https://artint.info/2e/html/ArtInt2e.Ch7.S2.html)
@@ -192,10 +193,6 @@ Example $e_9$ is an **extrapolation** problem, because the value of $X$ is outsi
 
 
 ### Evaluating Predictions
-
-$$
-\newcommand{pval}{\widehat Y}
-$$
 
 A **point estimate** for target feature $Y$ on example $e$ is a prediction of the value of $Y(e)$.
 
@@ -300,7 +297,7 @@ For the special case where the domain of $Y$ is $\{0,1\}$, and the prediction is
 
 See [https://artint.info/2e/html/ArtInt2e.Ch7.S2.SS1.html#p5 ](https://artint.info/2e/html/ArtInt2e.Ch7.S2.SS1.html#p5)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### Types of Errors
 
@@ -340,15 +337,13 @@ A **precision-recall space** plots the precision against the recall.
 
 [Example 7.6](https://artint.info/2e/html/ArtInt2e.Ch7.S2.SS2.html#Ch7.Thmciexamplered6)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### Point Estimates with No Input Features
 
 The simplest case for learning is when there are no input features, and where there is a single target feature.
 
 * Best-case for many learning algorithms.
-
-
 
 **Proposition 7.1**
 
@@ -376,7 +371,7 @@ The optimal prediction for $p$:
 
 ![image-20191027212622756](images/10-21-learning-intro-and-decision-trees/image-20191027212622756.png)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### Learning Decision Trees
 
@@ -385,8 +380,6 @@ Decision tree learning is one of the simplest useful techniques for supervised c
 For this section we assume there is a single discrete target feature called the **classification**.
 
 * Each element of the domain of the classification is called a **class**
-
-
 
 A **decision tree** or a **classification tree** is a tree in which
 
@@ -399,8 +392,6 @@ A **decision tree** or a **classification tree** is a tree in which
 ![image-20191027221808839](images/10-21-learning-intro-and-decision-trees/image-20191027221808839.png)
 
 [Example 7.7](https://artint.info/2e/html/ArtInt2e.Ch7.S3.SS1.html#Ch7.Thmciexamplered7)
-
-
 
 #### Algorithm
 

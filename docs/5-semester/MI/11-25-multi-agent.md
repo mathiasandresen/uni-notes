@@ -3,8 +3,6 @@ title: Multi-Agent Systems
 date: 25-11-2019
 ---
 
-
-
 # Multi-Agent Systems
 
 ## Game Trees
@@ -59,7 +57,7 @@ Utility for each agent given a strategy profile:
 
 ![image-20200107094212098](images/11-25/image-20200107094212098.png)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## Solving Perfect Information Gain
 
@@ -79,7 +77,7 @@ Often these game trees can be extremely large.
 
 * Example: Chess
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## Pruning
 
@@ -98,7 +96,7 @@ In bottom-up utility computation, some sub trees can be **pruned**
 
 ![image-20191125110129958](images/11-25/image-20191125110129958.png)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## Imperfect Information
 
@@ -115,6 +113,8 @@ Game Trees can be represented as tables
 ![image-20191125110910915](images/11-25/image-20191125110910915.png)
 
 Difference between perfect and imperfect information not directly visible in normal form representation.
+
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### Nash Equilibrium
 
@@ -138,7 +138,7 @@ Alice and Bob are arrested for burglary. They are separately questioned by polic
 * The only Nash Equilibrium is Alice: *testify*, Bob: *testify*
 * Nash equilibria <u>do not</u> represent cooperative behavior!
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### Mixed Strategies
 

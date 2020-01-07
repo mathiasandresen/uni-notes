@@ -152,7 +152,7 @@ For singly connected network: any elimination order that "peels" variables from 
 
 The complexity of inference is therefore linear in the total size of the network ( = combined size of all conditional probability tables)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## Approximate Inference
 
@@ -177,6 +177,8 @@ To compute an approximation of $P(\bold E = \bold e)$ ($\bold E$ is a subset of 
 ### Hoeffding Bound
 
 ![image-20200106155204115](images/10-14-inference-in-bayesian-networks/image-20200106155204115.png)
+
+
 
 ### Required Sample Size
 

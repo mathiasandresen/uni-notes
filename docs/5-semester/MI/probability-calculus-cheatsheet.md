@@ -40,7 +40,7 @@ $P(A,B)=$
 
 $P(A)=(\overset{a_1}{0.2+0.1},\overset{a_2}{0.3+0.4})=(0.3,0.7)$
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## Conditional Probability
 
@@ -71,6 +71,7 @@ $$
 P(A)=\sum_B P(A,B)
 $$
 
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## The Chain Rule
 

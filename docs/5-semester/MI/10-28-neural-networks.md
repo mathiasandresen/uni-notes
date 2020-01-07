@@ -10,7 +10,7 @@ date: 28-10-19
 [Tensorflow Playground]([https://playground.tensorflow.org](https://playground.tensorflow.org/))
 
 $$
-\newcommand{\derr}[1]{\frac{\part}{\part {#1}}}
+\newcommand{\derr}[1]{\frac{\part}{\part {#1}}}\nonumber
 $$
 
 ## Linear Regression and Classification
@@ -58,7 +58,7 @@ where $\eta$, the gradient descent step size, is called the **learning rate**.
 
 * Given as the input to the learning algorithm
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### Linear Learner
 
@@ -139,7 +139,7 @@ The $Linear\_learner$ algorithm can be modified to carry out logistic regression
 
 [Example 7.11](https://artint.info/2e/html/ArtInt2e.Ch7.S3.SS2.html#Ch7.Thmciexamplered11 )
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### Linearly Separable
 
@@ -164,7 +164,7 @@ Figure 7.11: Linear separators for Boolean functions:
 
 [Example 7.12 + 7.13](https://artint.info/2e/html/ArtInt2e.Ch7.S3.SS2.html#Ch7.Thmciexamplered12)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ## Neural Networks
 
@@ -188,6 +188,8 @@ Neural network can have multiple input and target features (real-valued)
  ![img](images/10-28-neural-networks/x398.png) 
 
 <center>Figure 7.16: A deep neural network.</center>
+<div style="page-break-after: always; break-after: page;"></div>
+
 ### Single Neuron
 
 Two step computation
@@ -211,7 +213,7 @@ If activation function is sigmoid, i.e. $out=\sigma(\sum_j i_j\cdot w_j)$ we als
 
 For the output neuron also the **identity function** is used: $af(x)=id(x)=x$
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### Layers
 
@@ -246,7 +248,7 @@ For binary classification, where the output values can be mapped to $\{0,1\}$ it
 
 
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### Discrete Inputs
 
@@ -276,7 +278,7 @@ Probably <u>not</u> sensible:
 * $red,green,blue \mapsto 0,1,2$
     * $blue$ is not "two times $green$"
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### Neural Networks for Classification
 
@@ -286,7 +288,7 @@ Classify instance by class label associated with output node with highest output
 
 ![image-20200105141853207](images/10-28-neural-networks/image-20200105141853207.png)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### Propagation in Neural Networks
 
@@ -324,6 +326,8 @@ $$
 <u>Convention</u> from now on assume that $x_0$ is an input neuron with constant input value 1.
 Then write $\bold w \cdot \bold x$ for $w_0 x_0+w_1x_1+\dots w_n x_n$
 
+<div style="page-break-after: always; break-after: page;"></div>
+
 #### Expressive Power
 
 The decision surface of a two-input perceptron is given by a straight line, separating positive and negative examples
@@ -344,7 +348,7 @@ Can represent $x_1 \or x_2$
 
 ![image-20200105145530352](images/10-28-neural-networks/image-20200105145530352.png)
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 #### Multiple Neurons
 
@@ -382,7 +386,7 @@ With $\mathcal D$ linearly separable and $\alpha$ not too large, this procedure 
 
 
 
-See example in the [appendix](./10-28appendix.md#learning-weights-and-threshold-example) of this page
+See example in slides 24 ([appendix](./10-28appendix.md#learning-weights-and-threshold-example) of this page)
 
 
 
@@ -413,7 +417,7 @@ Example for $n=2$ and a linear activation function:
 
 Weights $\bold w$ that minimize $E(\bold w)$ can be found by **gradient descent**
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### Gradient Descent Learning
 
@@ -451,6 +455,7 @@ $$
 \frac{\partial E}{\partial w_i}=(t_k-\bold w\cdot x_k)(-x_k,i)
 $$
 
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### The Task of Learning
 
@@ -513,4 +518,4 @@ $$
 $$
 
 
-See example in the [appendix](./10-28appendix.md#	) of this page 
+See example in slides 34 ([appendix](./10-28appendix.md) of this page)

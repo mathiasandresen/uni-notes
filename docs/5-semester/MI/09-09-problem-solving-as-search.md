@@ -112,6 +112,7 @@ A state-space problem can be solved by searching in the state-space graph  for p
 
 ![image-20200102135512434](images/09-09-problem-solving-as-search/image-20200102135512434.png)
 
+<div style="page-break-after: always; break-after: page;"></div>
 ### Depth-first Search
 
 [AD1 - Depth-First Search](../../3-semester/AD1/10b-graph-algorithms.md#depth-first-search-dfs)
@@ -124,7 +125,7 @@ A state-space problem can be solved by searching in the state-space graph  for p
 * May not terminate if state-space graph has cycles
 * With a forward branching factor bounded by *b* and depth *n*, the worst-case time complexity of a finite tree is $b^n$
 
-
+<div style="page-break-after: always; break-after: page;"></div>
 
 ### Breadth-First Search
 
@@ -139,6 +140,7 @@ A state-space problem can be solved by searching in the state-space graph  for p
 
 * Can be adapted to find a minimum cost path
 
+<div style="page-break-after: always; break-after: page;"></div>
 ### Problem With Cost Function
 
 * Assume that for each action at each state we have an associated **cost**

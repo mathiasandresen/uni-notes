@@ -13,13 +13,27 @@ Sharing game. Andy and Barb share two pieces of pie:
 
 ![image-20191125104235683](images/11-25/image-20191125104235683.png)
 
-![image-20191125104301006](images/11-25/image-20191125104301006.png)
+Representation by **game tree:**
+
+* tree whose nodes are labeled with agents
+* outgoing arcs labeled by actions of agent
+* leaves labeled with one utility value for each agent
+* (can also have *nature* nodes that represent uncertainty from random effects, e.g. dealing of cards, rolling of dice)
 
 
 
-**Imperfect Information Games**
+## Imperfect Information Games
 
-![image-20191125104321271](images/11-25/image-20191125104321271.png)
+Representation of game with simultaneous moves:
+
+![image-20200107093907525](images/11-25/image-20200107093907525.png)
+
+Collect in an **information set** the nodes that the agent (Bob) can not distinguish (at all nodes in an information set the same actions must be possible)
+
+Other sources for imperfect information:
+
+* Unobserved, random moves by nature (dealing of cards)
+* Hidden moves by other agent
 
 
 
@@ -37,13 +51,29 @@ A **strategy profile** consists of a strategy for each agent.
 
 ## Utility
 
-![image-20191125105422962](images/11-25/image-20191125105422962.png)
+Utility for each agent given a strategy profile:
+
+* each node has the utilities that will be reached at a leaf by following the strategy profile
+* the utilities at the node represent the outcome of the game (given the strategy profile)
+* (utilities at a *nature* node are computed by taking the *expectation* over the utilities of its successors)
+
+![image-20200107094212098](images/11-25/image-20200107094212098.png)
 
 
 
-### Solving Perfect Information Gain
+## Solving Perfect Information Gain
 
-![image-20191125105502502](images/11-25/image-20191125105502502.png)
+If 
+
+* game is perfect information (no information sets with more than 1 node)
+* both agents play rationally (optimize their own utility)
+
+then the optimal strategies for both players are determined by
+
+* bottom-up propagation of utilities under optimal strategies, where
+* each player selects the action that leads to the child with the highest utility (for that player)
+
+![image-20200107094609792](images/11-25/image-20200107094609792.png)
 
 Often these game trees can be extremely large.
 
@@ -105,14 +135,14 @@ Alice and Bob are arrested for burglary. They are separately questioned by polic
 
 ![image-20191125111254779](images/11-25/image-20191125111254779.png)
 
-* The only Nash Equilibrium is Alice:*testify*, Bob:*testify*
-* Nash equilibria do not represent cooperative behavior!
+* The only Nash Equilibrium is Alice: *testify*, Bob: *testify*
+* Nash equilibria <u>do not</u> represent cooperative behavior!
 
 
 
 #### Mixed Strategies
 
-No pure strategy nash eq. in Rock Paper Scissors
+No pure strategy Nash Equilibrium in Rock Paper Scissors
 
 ![image-20191125111507971](images/11-25/image-20191125111507971.png)
 
@@ -120,18 +150,25 @@ A **mixed strategy** is a probability distribution over actions:
 
 ![image-20191125111538487](images/11-25/image-20191125111538487.png)
 
-Expected utility for Alice = expected u for Bob =
+Expected utility for Alice = expected utility for Bob =
 
 $$
 1/9*(0+1-1-1+0+1+1-1+0)=0
 $$
 
-![image-20191125111716437](images/11-25/image-20191125111716437.png)
+Suppose Alice plays some other strategy: $r:p_r\ p:p_p\ s:p_s$
+Expected utility for Alice then:
+
+![image-20200107095659621](images/11-25/image-20200107095659621.png)
+
+* If Bob plays $r:1/3\ p: 1/3\ s: 1/3$, Alice cannot do better than playing $r:1/3\ p: 1/3\ s: 1/3$ also.
+* Same for Bob
+* Both playing $r:1/3\ p: 1/3\ s: 1/3$ is a (the only) Nash equilibrium.
 
 
 
 #### Key Results
 
-* Every finite game has a Nash equilibrium (using mixed strategies)
+* Every (finite) game has a Nash equilibrium (using mixed strategies)
     * There can be multiple
 * Playing a Nash equilibrium strategy profile does not necessarily lead to optimal utilities for the agents (prisoners dilemma )

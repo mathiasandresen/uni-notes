@@ -192,3 +192,32 @@ Når man tjekker efter d-seperation, så tjek hele ruten på en gang!
 
 Tjek efter d-seperated, og <u>IKKE</u> efter d-connection
 
+
+<div style="page-break-after: always; break-after: page;"></div>
+## Probabilities in Bayesian Network
+
+Define **parents** of random variable $X_i$ written $parents(X_i)$ to be a minimal set of predecessors of $X_i$ in the total ordering such that the other predecessors fo $X_i$ asre conditionally independent of $X_i$ given $parents(X_i)$.
+
+Thus $X_i$ **probabilistically depends on** each of its parents, but is independant of its other predecessors.
+
+$$
+P(X_i\mid X_1,\dots,X_i-1)=P(X_i\mid parents(X_i))
+$$
+Putting the chain rule and the definition of parents together gives.
+
+$$
+P(X_1,X_2,\dots,X_n)=\prod_{i=1}^n P(X_i \mid parents(X_i))
+$$
+
+
+
+If network contains $\{A,B,C\}$ then
+
+$$
+P(A,C)=\sum_{B}P(A,B,C)
+$$
+
+and
+
+![image-20200107132049355](images/10-07-bayesian-networks/image-20200107132049355.png)
+

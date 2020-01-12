@@ -7,12 +7,11 @@ date: 12-11-2019
 
 # Tidskompleksitet
 
-
+**Definition (worst-case)**
 
 Lad $M$ være en TM, der standser for ethvert input.
 
 **Tidskompleksiteten af $M$** er en funktion
-
 $$
 t_M:\N\to\N
 $$
@@ -21,7 +20,7 @@ så
 
 ​	$t_M(n)=k$ 
 
-hvis $M$ på et vilkårligt input af længde n højst bruger k skridt.
+​	hvis $M$ på et vilkårligt input af længde n højst bruger k skridt.
 
 
 
@@ -58,9 +57,63 @@ Hvad betyder antallet af bånd på en TM for tidskompleksiteten?
 
 **Sætning**
 
-Lad M være en k--bånds-TM med tidskompleksiteten $t(n)\geq n$.
+Lad M være en k-bånds-TM med tidskompleksiteten $t(n)\geq n$.
 
-Så kan vi simulere M på en 1-bånds TM med tidskompleksitet $t^2(n)$
+Så kan vi simulere M på en 1-bånds TM med tidskompleksitet $t^2(n)$ (kvadratisk langsommere)
 
 ​	Afhængig ikke af antal bånd!
+
+
+
+## Tidskompleksitet i Nondeterminisme
+
+**Definition**
+
+Lad $M$ være en NTM der altid standser for ethvert input.
+
+$M$ har tidskompleksitet $t: \N\to\N$ hvis det for enhver beregning på et vilkårligt input af længde n gælder at $M$ højst bruger $t(n)$
+
+**Sætning**
+
+Lad $M$ være en NTM med tidskompleksitet $t(n)$.
+
+Så kan $M$ simuleres af en DTM med tidskompleksitet $2^{O(t(n))}$ (eksponentielt meget værre)
+
+
+
+## Tidsklassen P
+
+**Definition**
+
+$$
+P=\bigcup_{k\geq 0} TIME(n^k)\\
+$$
+
+$$
+P=\{L\mid L \text{ kan afgøres af en DTM med tidskompleksitet } O(n^k), k\geq0\}
+$$
+
+---
+
+$PATH \in P$
+
+
+
+### Kontekstfrie Sprog
+
+**Sætning**
+
+Alle kontekstfrie sprog er i $P$
+
+**Bevis**
+
+En snedig algoritme, der givet en CFG G på [Chomsky-normalform](../../4-semester/SS/05-kontekstfrie-grammatikker.md#chomsky-normalform-cnf) kan afgøre om et $w\in L(G)$
+
+Tidskompleksitet er $O(n^3),\quad (n=|w|)$
+
+Kaldes **CYK-algoritmen**
+
+- Eksempel på dynamisk programmering
+
+
 

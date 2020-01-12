@@ -87,7 +87,7 @@ $\Sigma^*$ er en tællelig mængde!
 
 * **Konsekvens**: 
     * Der er kun tælleligt uendeligt mange TM'er
-        * Da hver TM $M$ beskrives med en strengkonstruktion $<M>$
+        * Da hver TM $M$ beskrives med en strengkonstruktion $\langle M\rangle$
 
 
 
@@ -103,7 +103,7 @@ Hvis $A$ ikke er tællelig, kalder vi $A$ for overtællelig.
 
 $\R_+$ er overtællelig.
 
-Bevis: [Diagonalisering](https://youtu.be/elvOZm0d4H0?t=280).
+Bevis: [Numberphile - Diagonalisering](https://youtu.be/elvOZm0d4H0?t=280).
 
 
 
@@ -120,4 +120,27 @@ Observation: Ethvert sprog svarer til en uendelig 0-1-følge (og omvendt)
 ![1570460133317](images/04-more-problems-than-algorithms/1570460133317.png)
 
 ![1570460152110](images/04-more-problems-than-algorithms/1570460152110.png)
+
+
+
+## Uafgørbare Sprog
+
+### HALT
+
+**Theorem 5.1**
+
+$HALT_{TM}$ er uafgørbart.
+
+#### Bevis
+
+Lad os antage af TM $R$ afgør $HALT_{TM}$, så kan vi konstruerer TM $S$ til at afgøre $A_{TM}$:
+
+$S=$ "På input $\langle M, w\rangle$":
+
+1. Kør TM $R$ på input $\langle M, w\rangle$
+2. Hvis $R$ afviser, *afvis*
+3. Hvis $R$ accepterer, simuler $M$ på $w$ indtil den halter
+4. Hvis $M$ har accepteret, *accepter*, ellers *afvis*
+
+Ergo: Hvis $R$ afgør $HALT_{TM}$, så afgør $S$, $A_{TM}$. Men da $A_{TM}$ er uafgørbart, da må $HALT_{TM}$ også være uafgørbart. $\square$
 

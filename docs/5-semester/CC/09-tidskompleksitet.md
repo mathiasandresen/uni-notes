@@ -117,3 +117,13 @@ Kaldes **CYK-algoritmen**
 
 
 
+#### Bevis
+
+$$
+w=w_1,\dots,w_n\quad(|w|=n) \nonumber
+$$
+
+![image-20200112134608738](images/09-tidskompleksitet/image-20200112134608738.png)
+
+![image-20200112135003220](images/09-tidskompleksitet/image-20200112135003220.png)
+

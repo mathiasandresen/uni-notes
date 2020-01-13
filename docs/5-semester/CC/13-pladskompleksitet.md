@@ -97,10 +97,12 @@ NPSPACE &= \bigcup_{k\geq0} NSPACE(n^k)
 $$
 
 Klart at
+
 $$
 PSPACE\subseteq NPSPAC
 $$
 Det vides at
+
 $$
 PSPACE = NPSPAC
 $$

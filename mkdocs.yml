@@ -17,6 +17,8 @@ theme:
 
 
 extra_css:
+  # - 'stylesheets/github.css'
+  # - 'stylesheets/github.user.css'
   - 'stylesheets/extra.css'
 
 

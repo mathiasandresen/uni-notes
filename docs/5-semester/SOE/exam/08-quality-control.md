@@ -6,34 +6,34 @@ title: "8. Quality Control: Verification and Validation"
 
 Kvalitet kan deles ind i 3 kategorier
 
-* Produkt kvalitet
-* Process kvalitet
-* Forventingskvalitet
+* **Produkt** kvalitet
+* **Process** kvalitet
+* **Forventingskvalitet**
 
-Dårlig kvalitet kan koste
+**Dårlig** kvalitet kan koste
 
-* Tab
+* **Tab**
+* **Spildt** arbejde
+* **Vedligeholdelse** er ofte **dyrere** end udvikling
 
-* Spildt arbejde
+![image-20200122204041668](images/08-quality-control/image-20200122204041668.png)
 
-* Vedligeholdelse er ofte dyrere end udvikling
 
-    
 
 ## Quality Management
 
-* Quality Assurance
-    * Planlægge eller designe processer for at <u>undgå</u> dårlig kvalitet
-* Quality Control
+* **Quality Assurance**
+    * **Planlægge** eller designe processer for at <u>undgå</u> dårlig kvalitet
+* **Quality Control**
     * Det at <u>**overvåge**</u> at work products overholder kvalitetsstandarder
 
 ![image-20200122185925351](images/08-quality-control/image-20200122185925351.png)
 
-* Lav quality management er billigt i starten, men bliver dyrerer og dyrerer
+* **Lav** quality management er **billigt** i **starten**, men bliver **dyrerer** og dyrerer
 
-* Høj quality management har initial cost, men bliver billigere senere fordi der sker færre fejl, og koden er mere stabil
+* **Høj** quality management har **initial** cost, men bliver **billigere** **senere** fordi der sker færre fejl, og koden er mere **stabil**
 
-* Det handler om at finde en balance
+* Det handler om at finde en **balance**
 
     
 
@@ -66,11 +66,11 @@ Dårlig kvalitet kan koste
 
 **Verifikation**, tjekker om specifikationerne overholdes, men ikke med kunden.
 
-Tjekker ikke ikke-funktionelle karaktaristika såsom reliability og maintainability.
+**Tjekker** ikke ikke-funktionelle karaktaristika såsom **reliability** og **maintainability**.
 
-Menneske-baseret tjek af dokumenter og filer såsom kode.
+Menneske-baseret tjek af **dokumenter** og **filer** såsom **kode**.
 
-* Ikke eksekvering af kode
+* **Ikke** eksekvering af kode
 
 #### Testing
 
@@ -80,9 +80,9 @@ Eksekvering af kode.
 
 #### Peer Review
 
-Software review, work product undersøges af skaber, samt en eller flere kollegaer.
+Software **review**, work product undersøges af **skaber**, samt **en** eller **flere** kollegaer.
 
-* Evaluerer teknisk indhold og kvalitet.
+* Evaluerer **teknisk** indhold og kvalitet.
 
 
 

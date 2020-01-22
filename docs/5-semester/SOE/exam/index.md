@@ -14,7 +14,7 @@ title: Exam Questions
 8. Quality Control: Verification and Validation
 9. Risk Management
 10. Project Planning and Management
-11. Quality Management: How is qualitydefined-agile versus plan driven approaches
+11. Quality Management: How is quality defined - agile versus plan driven approaches
 12. Configuration Management
 
 

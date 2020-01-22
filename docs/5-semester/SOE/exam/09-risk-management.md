@@ -18,9 +18,9 @@ Noget der er sikker på at ske er ikke en risiko
 
 Overvåger i bedste fald projektet for mulige risici.
 
-* Resourcer sættes til side for at håndtere dem hvis de bliver problemer
+* **Resourcer** sættes til side for at håndtere dem **hvis** de bliver problemer
 
-Oftes sker der ikke noget før noget går galt.
+Oftes sker der ikke noget før noget går **galt**.
 
 * *fire fighting mode*
 
@@ -28,13 +28,13 @@ Oftes sker der ikke noget før noget går galt.
 
 **Proaktiv Risk Strategi**
 
-Mere inteligent end reaktiv
+Mere **inteligent** end reaktiv
 
-Her starter man før det tekniske arbejde går igang.
+Her **starter** man **før** det tekniske arbejde går igang.
 
-* Potentielle risici identificeres
-* Deres sandsynlighed og impact vurdereres
-* De rangeres efter vigtighed
+* Potentielle risici **identificeres**
+* Deres **sandsynlighed** og **impact** vurdereres
+* De **rangeres** efter vigtighed
 
 
 
@@ -42,8 +42,8 @@ Her starter man før det tekniske arbejde går igang.
 
 Risk involverere to faktorer
 
-* Uncertainty
-* Loss
+* **Uncertainty**
+* **Loss**
 
 Deles op i kategorier
 
@@ -55,15 +55,15 @@ Deles op i kategorier
     * Truer kvalitet og aktualitet af softwaren
     * design, implementering, interface, verifikation, og vedligholdelses **problemer**
 * **Business Risks**
-    * Market
+    * **Market**
         * Bygge et produkt som ingen vil have
-    * Strategic
+    * **Strategic**
         * Bygge et produkt der ikke passer in i business strategi
-    * Sales
+    * **Sales**
         * Bygge et produkt som ikke kan sælges af sælgerne
-    * Management
+    * **Management**
         * Miste support fra senior management pga. fokusskifte eller menneske forandringer
-    * Budget
+    * **Budget**
         * Miste budget eller personale engagement
 
 

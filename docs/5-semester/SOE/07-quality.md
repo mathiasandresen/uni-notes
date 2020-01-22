@@ -7,7 +7,7 @@ title: Quality Management
 
 **Definition**
 
-**Quality** is a reflection of one or more peoples' assesment of correspondance between their expectations and experience of a productor a service
+**Quality** is a reflection of one or more peoples' assessment of correspondence between their expectations and experience of a product or a service
 
 Can be divided into three categories
 
@@ -17,17 +17,17 @@ Can be divided into three categories
 
 
 
-**Cost of bad quaility**
+**Cost of bad quality**
 
 Direct cost:
 
 * Loss
 * Wasted work
-* Maintanance usually more expensive than development
+* Maintenance usually more expensive than development
 
 Indirect cost
 
-* Follows from poor quaility
+* Follows from poor quality
 * Has potentially severe consequences
 
 

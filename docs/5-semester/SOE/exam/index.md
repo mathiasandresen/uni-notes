@@ -12,9 +12,9 @@ title: Exam Questions
 6. Key features of RUP
 7. Requirements Elicitation and Managing change to requirements
 8. Quality Control: Verification and Validation
-9. RiskManagement
+9. Risk Management
 10. Project Planning and Management
-11. QualityManagement: How is qualitydefined-agile versus plan driven approaches
+11. Quality Management: How is qualitydefined-agile versus plan driven approaches
 12. Configuration Management
 
 

@@ -263,3 +263,6 @@ Avoidance is always the best strategy.
 
 
 
+
+
+**RMMM** ( Risk - Mititgate - Monitor - Manage)

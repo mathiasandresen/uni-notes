@@ -77,3 +77,55 @@ Scrum er en iterativ agil metode
 * Gør product backlog visuel
 * Opdateres af development team
 * Viser alle items, der skal gøres under sprint
+
+
+
+## Scrum Søjler
+
+**Transparency**
+
+* Vigtige aspekter af processen skal være synlig for dem der er ansvarlige for outcome
+* fælles standard
+    * Eks. fælles forståelse af "done"
+
+**Inspection**
+
+* Scrum bruger skal ofte inspecte Scrum artifacts og progress for at opdate uønsket varians
+    * Skal ikke komme i vejen for arbejde (ikke for tit)
+
+**Adaption**
+
+* Hvis en inspector finder et aspekt uacceptabelt, skal processen ændres
+    * Hurtigst muligt
+
+
+
+## Core Values
+
+* **Commitment**
+    * People personally commit to achieving the goals of the Scrum Team
+* **Courage**
+    * The Scrum Team members have courage to do the right thing and work on tough problems
+* **Focus**
+    * Everyone focuses on the work of the Sprint and the goals of the Scrum Team
+* **Openness**
+    * The Scrum Team and its stakeholders agree to be open about all the work and the challenges with performing the work
+* **Respect**
+    * Scrum Team members respect each other to be capable, independent people
+
+
+
+## Scrum Fejl
+
+<div style="color: red; font-weight: bold;">Scrum Master fungerer som manager</div>
+
+* Agile teams er **self-organizing**, Scrum Master skal ikke styre hvordan development team arbejder 
+* Scrum Master skal **fungere** som **coach**, **ikke leder**
+
+<div style="color: red; font-weight: bold;">Kunder er ikke involveret i hver iteration</div>
+
+* **Product Owner** skal være **involveret** i hver iteration, ellers kan der opstå **forskellige visioner**
+
+<div style="color: red; font-weight: bold;">Nye requirements eller opgaver tilføjes under en iteration</div>
+
+* Kan komme **i vejen** for at den nuværende **inkrement** bliver så **værdifuld som muligt.**

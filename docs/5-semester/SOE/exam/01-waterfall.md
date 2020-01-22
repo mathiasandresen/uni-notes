@@ -12,13 +12,13 @@ Four fundamental software engineering activities
 
     * The functionality of the software and constraints on its operation must be defined
 
-        ![image-20200121103411230](images/e01-waterfall/image-20200121103411230.png)
+        ![image-20200121103411230](../images/e01-waterfall/image-20200121103411230.png)
 
 2. **Software development**
 
     * The software to meet the specification must be produced
 
-    ![image-20200121103437186](images/e01-waterfall/image-20200121103437186.png)
+    ![image-20200121103437186](../images/e01-waterfall/image-20200121103437186.png)
 
 3. **Software Validation**
 
@@ -39,7 +39,7 @@ Four fundamental software engineering activities
 
     * The software must evolve to meet changing customer needs
 
-![image-20200121103709621](images/e01-waterfall/image-20200121103709621.png)
+![image-20200121103709621](../images/e01-waterfall/image-20200121103709621.png)
 
 
 
@@ -51,7 +51,7 @@ Four fundamental software engineering activities
 
     * Seperate and distinct phases of specification, design, implementation, test, and operations
 
-    ![image-20200121104009627](images/e01-waterfall/image-20200121104009627.png)
+    ![image-20200121104009627](../images/e01-waterfall/image-20200121104009627.png)
 
     
 
@@ -60,7 +60,7 @@ Four fundamental software engineering activities
     * Specification, development and validation are interleaved.
     * System is developed as a series of versions (increments), with each version adding functionality to the previous version.
 
-    ![image-20200121104029784](images/e01-waterfall/image-20200121104029784.png)
+    ![image-20200121104029784](../images/e01-waterfall/image-20200121104029784.png)
 
     
 
@@ -70,7 +70,7 @@ Four fundamental software engineering activities
     * Plan-driven or agile
     * 
 
-    ![image-20200121104048044](images/e01-waterfall/image-20200121104048044.png)
+    ![image-20200121104048044](../images/e01-waterfall/image-20200121104048044.png)
 
 
 
@@ -135,7 +135,7 @@ The waterfall model should not be used in developing systems where informal team
 communication is possible and software requirements change quickly. In this case, iterative
 and agile methods are better.
 
-![image-20200121112647240](images/e01-waterfall/image-20200121112647240.png)
+![image-20200121112647240](../images/e01-waterfall/image-20200121112647240.png)
 
-![image-20200121113126422](images/e01-waterfall/image-20200121113126422.png)
+![image-20200121113126422](../images/e01-waterfall/image-20200121113126422.png)
 

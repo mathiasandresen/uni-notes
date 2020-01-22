@@ -34,7 +34,7 @@ title: Test
     * Every code segment that you write has at least one associated test so all code written has at least one test
 * **Regression Testing**
     * A regression test suite is developed incrementally as a program is developed.
-* **Simplified Debuggin**
+* **Simplified Debugging**
     * When a test fails, it should be obvious where the problem lies. The newly written code needs to be checked and modified
 * **System Documentation**
     * The tests themselves are a form of documentation that describe what the code should be doing. 

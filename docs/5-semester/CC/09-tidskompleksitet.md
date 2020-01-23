@@ -24,7 +24,7 @@ så
 
 
 
-Sammelign vækstrater med [O-notation](..\..\3-semester\AD1\extra1-big-o-cheat-sheet.md)
+Sammelign vækstrater med [O-notation](../../3-semester/AD1/extra1-big-o-cheat-sheet.md)
 
 
 

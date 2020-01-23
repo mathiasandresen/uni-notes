@@ -11,7 +11,7 @@ title: Exam Questions
 5. [Key features of Scrum](05-scrum.md)
 6. [Key features of RUP](06-rup.md)
 7. [Requirements Elicitation and Managing change to requirements](07-requirements.md)
-8. [Quality Control: Verification and Validation](08-quility-control.md)
+8. [Quality Control: Verification and Validation](08-quality-control.md)
 9. [Risk Management](09-risk-management.md)
 10. [Project Planning and Management](10-project-planning-management.md)
 11. [Quality Management: How is quality defined - agile versus plan driven approaches](11-quality-management.md)

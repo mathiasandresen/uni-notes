@@ -1,5 +1,5 @@
 ---
-ttitle: "Computational Geometry Algorithms: Sweeping Techniques"
+title: "Computational Geometry Algorithms: Sweeping Techniques"
 ---
 
 # Computational Geometry Algorithms: Sweeping Techniques

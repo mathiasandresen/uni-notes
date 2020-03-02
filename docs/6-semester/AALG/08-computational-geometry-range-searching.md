@@ -10,11 +10,21 @@ Litterature: [https://link.springer.com/chapter/10.1007/978-3-540-77974-2_5](htt
 
 ![image-20200227201113202](images/08-computational-geometry-range-searching/image-20200227201113202.png)
 
+
+
+## Important Factors in Analysis
+
+* Run time for building the data structure
+* Run time for processing range searches
+* Additional space that the data structure takes
+
+
+
 ## 1-Dimensional Range Searching
 
 Let $P:=\{p_1,p_2,\dots,p_n\}$ be the given set of points on the real line.
 
-We can solve the range searching problem with a *balanced binary search tree* $\mathcal{T}$
+We can solve the range searching problem with a *balanced binary search tree* $\mathcal{T}$ 
 
 ![image-20200227201804698](images/08-computational-geometry-range-searching/image-20200227201804698.png)
 

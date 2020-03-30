@@ -596,4 +596,4 @@ Operations to recover from failures
 
 #### Example
 
-Example can be seen in slides: [DBS6 - Transactions - Slide 85](./extra/DBS-transactions.pdf#page=85))
+Example can be seen in slides: [DBS6 - Transactions - Slide 85](./extra/DBS-transactions.pdf#page=202)

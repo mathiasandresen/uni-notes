@@ -396,3 +396,204 @@ Prevent that always the same victim is chosen (starvation)
 * Deadlock detection (wait-for graph) and prevention (conservative 2PL)
 * Serializability vs. concurrency
 
+
+
+## Recovery
+
+"Problems" with transactions
+
+* Atomicity
+    * Transactions may abort (rollback)
+* Durability
+    * What if a DBMS crashes?
+
+The role of the **recovery** component is to ensure atomicity and durability of transactions in the presence of system failures.
+
+
+
+### Durability
+
+Durability is **relative** and depends on the number of copies and the geographical location
+
+Guarantees only possible if
+
+* we first update the copies and
+* notify the user afterwards that a transaction's commit was successful
+
+
+
+We hence assume that the WAL (Write Ahead Logging) rule is satisfied
+
+Variations of applying the WAL rule:
+
+* **Log-based recovery**
+* Full redundancy:  mirroring/shadowing all data on multiple computers (disks, computing centers) that redundantly do the same
+    * Not covered in course
+
+
+
+### Failure Classification
+
+**Transaction failure** (failure of a not yet committed transaction)
+
+* Undo the changes of the transaction
+
+**System crash** (failure with main memory loss)
+
+* Changes of committed transactions must be preserved
+* Changes of all non-committed transactions need to be undone
+
+**Disk failure** (failure with hard disk loss)
+
+* Recovery based on archives/dumps
+
+
+
+### Data Storage
+
+Two-level storage hierarchy
+
+ Data is organized in pages and blocks
+
+![image-20200330091945727](images/06-transactions/image-20200330091945727.png)
+
+* **Volatile storage** (main memory buffer)
+* **Non-volatile storage** (hard disk)
+* Stable storage (RAIDS, remote backups, ... )
+    * not covered in course
+
+
+
+#### Movement of Values
+
+![image-20200330092127877](images/06-transactions/image-20200330092127877.png)
+
+
+
+#### Storage Operations
+
+Transactions access and update the database
+
+* Operations for moving blocks with data items between disk and main memory (system buffer)
+    * **Input(Q)**
+        * Transfer block containing data item Q to main memory
+    * **Output(Q)**
+        * Transfer block containing Q to disk and replace
+* Operations for moving values between data items and application variables
+    * **read(Q,q)**
+        * Assign the value of data item Q to variable q
+    * **write(Q,q)**
+        * Assign the value of variable q to data item Q
+
+
+
+### Logging
+
+WAL (Write Ahead Logging)
+
+* Before a transaction enters the **commit** state, “all its” log entries have to be written to stable storage, including the commit log entry
+* Before a modified page (or block) in main memory can be written to the database (non-volatile storage), “all its” log entries have to be written to stable storage
+
+
+
+During normal operation
+
+* When starting, a transaction $T$ registers itself in the **log**: [T start]
+
+* When modifying data item X by write(X,x)
+
+    1. Add log entry with
+        * [T, X, V-old, V-new]
+        * transaction's ID (i.e T)
+        * data item name (i.e. X)
+        * old value of item
+        * new value of item
+    2. Write the new value of X
+
+    *The buffer manager asynchronously outputs the value to disk later*
+
+* When finishing, a transaction $T$ appends [T commit] to the log, $T$ then commits
+
+    *The transaction commits precisely when the commit entry (after all previous entries for this transaction) is output to the log!*
+
+
+
+#### Log Entries
+
+Structure of a log entry (log record)
+
+<center><code>[TID. DID. old, new]</code></center>
+
+* `TID`
+    * identifier of the transaction that caused the update
+* `DID`
+    * data item identifier
+        location on disk (page, block, offset)
+* `old`
+    * value of the data item before the update
+* `new`
+    * value of the data item after the update
+
+Additional entries
+
+* `start`
+    * `[TID start]`
+    * Transaction TID has started
+* `commit`
+    * `[TID commit]`
+    * Transaction TID has committed
+* `abort`
+    * `[TID abort]`
+    * Transaction TID has aborted
+
+
+
+#### Example
+
+![image-20200330093713367](images/06-transactions/image-20200330093713367.png)
+
+
+
+### Log-based Recovery
+
+Operations to recover from failures
+
+* **Redo**: perform the changes to the database again
+* **Undo**: restore database to state prior to execution
+
+
+
+![image-20200330094014994](images/06-transactions/image-20200330094014994.png)
+
+
+
+#### Phases of Recovery
+
+1. Redo (repeat history)
+    * Forward scan through the log
+    * Repeat **all** updates in the same order as in the log file
+    * Determine "undo" transactions
+        * [$T_i$ start] add $T_i$ to the "undo list"
+        * [$T_i$ abort] or [$T_i$ commit] remove $T_i$ from the "undo list"
+2. Undo (rollback) all transactions in the "undo list"
+    * Backwards scan through the log
+    * Undo all updates of transactions in the "undo list"
+        * create a compensating log record
+    * For a [$T_i$ start] record of a transaction $T_i$ in the "undo list", add a [$T_i$ abort] record to the log file, remove $T_i$ from the "undo list"
+    * Stop when "undo list" is empty
+
+
+
+#### Compensating Log Records
+
+`[TID, DID, value]`
+
+* Created to undo (compensate) the changes of `[TID, DID, value, newValue]`
+* Redo-only log record
+* Can also be used to rollback a transaction during normal o
+
+
+
+#### Example
+
+Example can be seen in slides: [DBS6 - Transactions - Slide 85](./extra/DBS-transactions.pdf#page=85))

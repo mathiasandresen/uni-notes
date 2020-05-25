@@ -130,23 +130,23 @@ Example:
 ### Relational Algebra Operations
 
 
-| Name                          | Symbol   |
-| ----------------------------- | -------- |
-| [**Projection**](#projection) | $\pi$    |
-| [**Selection**](#selection)   | $\sigma$ |
-| **Rename**                    | $\rho$   |
-| **Cartisian product**         | $\times$ |
-| **Union**                     | $\cup$   |
-| **Difference**                | $-$      |
-| Intersection                  | $\cap$   |
-| Join                          | $\Join$  |
-| Left Outer Join               | $⟕$      |
-| Right Outer Join              | $⟖$      |
-| Outer Join                    | $⟗$      |
-| Left Semi Join                | $⋉$      |
-| Right Semi Join               | $⋊$      |
-| Grouping                      | $\gamma$ |
-| Division                      | $\div$   |
+| Name                                        | Symbol     |
+| ------------------------------------------- | ---------- |
+| [**Projection**](#projection)               | $\pi$      |
+| [**Selection**](#selection)                 | $\sigma$   |
+| **[Rename](#rename)**                       | $\rho$     |
+| [**Cartesian product**](#cartesian-product) | $\times$   |
+| [**Union**](#union)                         | **$\cup$** |
+| [**Difference**](#difference)               | $-$        |
+| [Intersection](#intersection)               | $\cap$     |
+| [Join](#join)                               | $\Join$    |
+| [Left Outer Join](#outer-join)              | $⟕$        |
+| [Right Outer Join](#outer-join)             | $⟖$        |
+| [Outer Join](#outer-join)                   | $⟗$        |
+| Left Semi Join                              | $⋉$        |
+| Right Semi Join                             | $⋊$        |
+| Grouping                                    | $\gamma$   |
+| Division                                    | $\div$     |
 
 The operations marked with **bold** is the **fundamental operations**
 
@@ -211,4 +211,167 @@ $$
 ![image-20200524141925003](images/02-relational-model-and-relational-algebra/image-20200524141925003.png)
 
 ![image-20200524141931644](images/02-relational-model-and-relational-algebra/image-20200524141931644.png)
+
+
+
+#### Rename
+
+**Relation**
+
+Renaming a relation $R$ to $S$:
+
+* $\rho_S(R)$
+
+**Attribute**
+
+Renaming attribute $B$ to $A$:
+
+* $\rho_{A\leftarrow B}(R)$
+
+
+
+Some literature uses $\beta$ for the rename operation
+
+
+
+#### Cartesian Product
+
+AKA **Cross Product**
+
+The Cartesian product ($R\times S$) between relations $R$ and $S$ consists of all possible combinations ($|R|*|S|$ pairs) of tuples from both relations
+
+Result schema:
+$$
+sch(R\times S)=sch(R) \cup sch(S) = \mathcal R \cup \mathcal S
+$$
+ Contains many (useless) combinations!
+
+Attributes in the result are referenced as $R.A$ or $S.A$ to resolve ambiguity.
+
+
+
+#### Set Operations
+
+Set operations **union, intersection**, and **difference** can also be applied to relations
+
+**Requirements**
+
+Both involved relations must be **union-compatible:**
+
+* they have the same number of attributes
+* the domain of each attribute in column order is the same in both relations
+
+
+
+#### Union
+
+The result of a union $(R\cup S)$ between two relations $R$ and $S$ contains all tuples from both relations without duplicates
+
+Example:
+
+![image-20200525105420395](images/02-relational-model-and-relational-algebra/image-20200525105420395.png)
+
+
+
+#### Difference
+
+The difference ($R-S$ or $R \setminus S$) of two relations $R$ and $S$ removes all tuples from the first relation that are also contained in the second relation
+
+![image-20200525105749223](images/02-relational-model-and-relational-algebra/image-20200525105749223.png)
+
+
+
+### Overview of Fundamental Operations
+
+![image-20200525105828374](images/02-relational-model-and-relational-algebra/image-20200525105828374.png)
+
+
+
+
+
+
+
+### Non-Fundamental Operations
+
+#### Intersection
+
+The intersection $(R\cap S)$ of two relations $R$ and $S$ consists of a set of tuples that occur in both relations.
+
+![image-20200525110006853](images/02-relational-model-and-relational-algebra/image-20200525110006853.png)
+
+##### With Fundamental Operations
+
+Intersection can be expressed as difference $(R\cap S= R- (R-S))$
+
+
+
+#### Join
+
+The natural join combines two relations via **common attributes** (same name and domains) by combining only tuples with the **same values** for common attributes.
+
+Given two relations (and their schema)
+
+* $R(A_1,\dots,A_m, B_1,\dots,B_k)$
+*  $S(B_1,\dots,B_k,C_1,\dots,C_n)$
+
+![image-20200525110300642](images/02-relational-model-and-relational-algebra/image-20200525110300642.png)
+
+
+
+Example:
+
+![image-20200525110355831](images/02-relational-model-and-relational-algebra/image-20200525110355831.png)
+
+Result:
+
+![image-20200525110405131](images/02-relational-model-and-relational-algebra/image-20200525110405131.png)
+
+Tuples without matching partners (*dangling tuples*) are eliminated
+
+
+
+##### With Fundamental Operations
+
+Natural join can be expressed as a Cartesian product followed by selections and projections
+
+**Example**
+
+![image-20200525110543187](images/02-relational-model-and-relational-algebra/image-20200525110543187.png)
+
+
+
+##### Is Join Commutative
+
+For now, we do not consider joins and Cartesian products to be commutative.
+
+For query optimization later, we usually consider joins as well as Cartesian product and other join variants to be commutative.
+
+If we want to hold on to the mathematical definition of tuples and still consider joins to be commutative, we need to apply a projection operation to reorder the attributes:
+$$
+\pi_L(R\Join S) = \pi_L(S\Join R)
+$$
+
+
+#### Outer Join
+
+
+
+* **⟕ - Left Outer Join** 
+    * Keep dangling tuples in the <u>left</u> operand relation
+* **⟖ - Right Outer Join**
+    * Keep dangling tuples in the <u>right</u> operand relation
+* **⟗ - (Full) Outer Join**
+    * Keep dangling tuples of <u>both</u> operand relations
+
+![image-20200525111625444](images/02-relational-model-and-relational-algebra/image-20200525111625444.png)
+
+**Examples**
+
+![image-20200525111655751](images/02-relational-model-and-relational-algebra/image-20200525111655751.png)
+
+![image-20200525111703194](images/02-relational-model-and-relational-algebra/image-20200525111703194.png)
+
+![image-20200525111710821](images/02-relational-model-and-relational-algebra/image-20200525111710821.png)
+
+![image-20200525111717915](images/02-relational-model-and-relational-algebra/image-20200525111717915.png)
 

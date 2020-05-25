@@ -262,6 +262,7 @@ $$
 **Example**
 
 A doctor observes symptoms and wishes to find the probability of a disease:
+
 $$
 P(disease\mid symp.)=\frac{P(symp.\mid disease)\cdot P(disease)}{P(sympt.)}
 $$
@@ -270,6 +271,7 @@ $$
 ### Chain Rule
 
 For propositions $p_1,...,p_n$:
+
 $$
 P(p_1\and \dots \and p_n)=P(p_1)P(p_2\mid p_1)\cdots P(p_i\mid p_1\and\dots\and p_{i-1})\cdots P(p_n\mid p_1 \and\dots\and p_{n-1})
 $$

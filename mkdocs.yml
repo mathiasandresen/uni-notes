@@ -1,8 +1,8 @@
 site_name: Uni Noter
 site_author: Mathias Andresen
 site_url: http://notes.andresen.xyz/
-repo_name: 'jollycola/uni-notes'
-repo_url: 'https://gitlab.com/jollycola/uni-notes'
+repo_name: 'mathiasandresen/uni-notes'
+repo_url: 'https://github.com/mathiasandresen/uni-notes'
 
 
 theme:
@@ -10,10 +10,12 @@ theme:
     font: 
         text: 'Open Sans'
         code: 'Roboto Mono'
-    logo:
-        icon: 'school'
-    feature:
-        tabs: true
+    icon:
+        logo: material/school
+        repo: fontawesome/brands/github
+    features:
+        - tabs
+        - instant
 
 
 extra_css:

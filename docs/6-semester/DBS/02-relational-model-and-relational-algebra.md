@@ -126,27 +126,36 @@ Example:
 
 ## Relational Algebra
 
+$$
+\newcommand{\leftouterjoin}{⟕}
+\newcommand{\rightouterjoin}{⟖}
+\newcommand{\outerjoin}{⟗}
+\newcommand{\leftsemijoin}{⋉}
+\newcommand{\rightsemijoin}{⋊}
+\nonumber
+$$
+
 
 ### Relational Algebra Operations
 
 
-| Name                                        | Symbol     |
-| ------------------------------------------- | ---------- |
-| [**Projection**](#projection)               | $\pi$      |
-| [**Selection**](#selection)                 | $\sigma$   |
-| **[Rename](#rename)**                       | $\rho$     |
-| [**Cartesian product**](#cartesian-product) | $\times$   |
-| [**Union**](#union)                         | **$\cup$** |
-| [**Difference**](#difference)               | $-$        |
-| [Intersection](#intersection)               | $\cap$     |
-| [Join](#join)                               | $\Join$    |
-| [Left Outer Join](#outer-join)              | $⟕$        |
-| [Right Outer Join](#outer-join)             | $⟖$        |
-| [Outer Join](#outer-join)                   | $⟗$        |
-| Left Semi Join                              | $⋉$        |
-| Right Semi Join                             | $⋊$        |
-| Grouping                                    | $\gamma$   |
-| Division                                    | $\div$     |
+| Name                                        | Symbol            |
+| ------------------------------------------- | ----------------- |
+| [**Projection**](#projection)               | $\pi$             |
+| [**Selection**](#selection)                 | $\sigma$          |
+| **[Rename](#rename)**                       | $\rho$            |
+| [**Cartesian product**](#cartesian-product) | $\times$          |
+| [**Union**](#union)                         | **$\cup$**        |
+| [**Difference**](#difference)               | $-$               |
+| [Intersection](#intersection)               | $\cap$            |
+| [Join](#join)                               | $\Join$           |
+| [Left Outer Join](#outer-join)              | $\leftouterjoin$               |
+| [Right Outer Join](#outer-join)             | $\rightouterjoin$               |
+| [Outer Join](#outer-join)                   | $\outerjoin$               |
+| Left Semi Join                              | $\leftsemijoin$ |
+| Right Semi Join                             | $\rightsemijoin$               |
+| Grouping                                    | $\gamma$          |
+| Division                                    | $\div$            |
 
 The operations marked with **bold** is the **fundamental operations**
 
@@ -374,4 +383,80 @@ $$
 ![image-20200525111710821](images/02-relational-model-and-relational-algebra/image-20200525111710821.png)
 
 ![image-20200525111717915](images/02-relational-model-and-relational-algebra/image-20200525111717915.png)
+
+
+
+#### Semi Join
+
+Find all tuples in a relation for which there are **matching tuples** in the other relation
+
+**Left semi join:**
+$$
+L \leftsemijoin R= \pi_{\mathcal L}(L\Join R)
+$$
+
+where $\mathcal L$ represents the set of $L$'s attributes
+
+**Right semi join**:
+$$
+L\rightsemijoin R = R \leftsemijoin L = \pi_{\mathcal R}(L \Join R)
+$$
+**Examples**
+
+![image-20200525125753502](images/02-relational-model-and-relational-algebra/image-20200525125753502.png)
+
+
+
+#### Grouping
+
+Tuples with the **same attribute values** (for a specified list of attributes) are grouped.
+
+An *aggregate* function is applied to each group (computing **one** value for each group)
+
+Typical aggregate functions:
+
+* **count** - number of tuples in a group
+* **sum** - sum of attribute values in a group
+* **min, max, avg**
+
+**Notation**
+$$
+\gamma_{L;F}(R)
+$$
+
+* $L$: list of attributes for grouping
+* $F$: aggregate function
+
+Alternative symbols $\mathcal G$ or $\beta$
+
+
+
+**Example**:
+
+Determine the number of students per semester:
+
+![image-20200525130909419](images/02-relational-model-and-relational-algebra/image-20200525130909419.png)
+
+More examples in [DBS2 slides p75](https://www.moodle.aau.dk/pluginfile.php/1973718/mod_resource/content/0/DBS-2.pdf#page=75)
+
+
+
+#### Division
+
+**Example**
+
+Find all $studID$s of students that took all 4 ECTS courses
+
+* $takes(studID, courseID)$
+* $course(courseID, title, ects, teacher)$
+
+$$
+takes \div \pi_{courseID}(\sigma_{ects=4}(course))
+$$
+
+Formal definition:
+
+![image-20200525142747090](images/02-relational-model-and-relational-algebra/image-20200525142747090.png)
+
+See examples in [DBS2 slides p81](https://www.moodle.aau.dk/pluginfile.php/1973718/mod_resource/content/0/DBS-2.pdf#page=81)
 

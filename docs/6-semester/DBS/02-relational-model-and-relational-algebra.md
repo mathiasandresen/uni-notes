@@ -4,11 +4,11 @@ title: Relational Model and Relational Algebra
 
 # Relational Model and Relational Algebra
 
-## Learning Goals
+**Learning Goals**
 
 * Explain the relational model
 * Create non-trivial relational algebra queries
-* Use the various join types in relational algebra quieries
+* Use the various join types in relational algebra queries
 * Explain the limitations of relational algebra
 
 

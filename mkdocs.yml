@@ -16,6 +16,9 @@ theme:
     features:
         - tabs
 
+plugins:
+  - search
+  - git-revision-date-localized
 
 extra_css:
   # - 'stylesheets/github.css'
@@ -37,3 +40,5 @@ markdown_extensions:
       permalink: true
   - pymdownx.arithmatex
   - pymdownx.emoji
+  - pymdownx.tasklist:
+      custom_checkbox: true

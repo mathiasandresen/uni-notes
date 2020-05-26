@@ -4,6 +4,17 @@ title: The Entity Relationship Model
 
 # The Entity Relationship Model
 
+$$
+\newenvironment{relation}[2]
+{
+	\newcommand{\pk}{\underline}
+	\mathbf{#1}: \{[ \mathrm{#2}
+} { 
+	]\} 
+}
+\nonumber
+$$
+
 **Learning Goals**
 
 * Create non-trivial ER diagrams
@@ -331,3 +342,157 @@ Lower-level entity types <u>can</u>:
 ### Alternative Notations
 
 For alternative notations see [DBS3 slides p 108](https://www.moodle.aau.dk/pluginfile.php/1976337/mod_resource/content/0/DBS-ER-CSJ-2.pdf#page=108)
+
+
+
+
+
+## Mapping Basic Concepts to Relations
+
+* Entities correspond to nouns, relationships to verbs
+* Each statement in the requirement specification should be reflected somewhere in the ER schema
+* Each ER diagram (ERD) should be located somewhere in the requirement specification
+* Conceptual design often reveals inconsistencies and ambiguities in the requirement specification, which must first be resolved.
+
+
+
+![image-20200526114401174](images/03-entity-relationship-model/image-20200526114401174.png)
+
+![image-20200526114455952](images/03-entity-relationship-model/image-20200526114455952.png)
+
+
+
+**Basic Approach**
+
+* For each entity type $\to$ relation
+* Name of the entity type $\to$ name of the relation
+* Attributes of the entity type $\to$ Attributes of the relation
+* Primary key of the entity type $\to$ Primary key of the relation
+
+We do not care about the order of attributes **in this context!**
+
+
+
+### Mapping of N:M Relationship Types
+
+![image-20200526115143005](images/03-entity-relationship-model/image-20200526115143005.png)
+
+**Basic Approach**
+
+* New relation with all attributes of the relationship type
+* Add the primary key attributes of all involved entity types
+* Primary keys of involved entity types together become the key of the new relation
+
+$$
+\bold{takes}:\{[\underline{\text{studID} \to \text{student}}, \underline{\text{courseID} \to \text{course}}]\}
+$$
+
+Key attributes "imported" from involved entity types (relations) are called **foreign keys**
+
+
+
+#### In General
+
+![image-20200526131557253](images/03-entity-relationship-model/image-20200526131557253.png)
+
+
+
+
+
+### Mapping of 1:N Relationship Types
+
+![image-20200526131801534](images/03-entity-relationship-model/image-20200526131801534.png)
+
+**Basic Approach**
+
+* New relation with all attributes of the relationship type
+* Add the primary key attributes of all involved entity types
+* Primary key of the "N"-side becomes the key in the new relation
+
+**Initial**
+$$
+\begin{align*}
+&\bold{course} &&:\{[\underline{\text{courseID}}, \text{title}, \text{ects}]\}\\
+&\bold{professor} &&:\{[\underline{\text{empID}}, \text{name}, \text{rank},\text{office}]\}\\
+&\bold{teaches} &&: \{[\underline{\text{courseID}\to \text{course}}, \text{empID} \to \text{professor}]\}
+\end{align*}
+$$
+**Improved by Merging**
+$$
+\begin{align*}
+&\bold{course} &&:\{[\underline{\text{courseID}}, \text{title}, \text{ects}, \textcolor{darkred}{\text{taughtBy} \to \text{professor}}]\}\\
+&\bold{professor} &&:\{[\underline{\text{empID}}, \text{name}, \text{rank},\text{office}]\}\\
+\end{align*}
+$$
+
+
+
+Relations with the same key can be combined, **but  only these and no others!**
+
+If the **participation** is **not total**, merging requires null values for the foreign key. In such cases, it might be preferable for some applications to have a separate relation.
+
+
+
+### Mapping of 1:1 Relationship Types
+
+![image-20200526142438194](images/03-entity-relationship-model/image-20200526142438194.png)
+
+* New relation with all attributes of the relationship type
+* Add primary key attributes of all involved entity types
+* Primary key of any of the involved entity types can become the key in the new relation
+
+**Initial**
+$$
+\begin{relation}
+{license}{\underline{licenseID}, amount}
+\end{relation} \\
+\begin{relation}
+{producer}{\underline{vineyard}, address}
+\end{relation} \\
+\begin{relation}
+{owns}{\underline{licenseID \to license}, vineyard \to producer}
+\end{relation}\\
+\text{or}\\
+\begin{relation}
+{owns}{licenseID \to license, \underline{vineyard \to producer}}
+\end{relation}
+$$
+
+**Improvement**
+$$
+\begin{relation}{license}{\underline{licenseID}, amount, ownedBy \to producer}\end{relation}\\
+\begin{relation}{producer}{\pk{vineyard}, address}\end{relation}
+$$
+**Or**
+$$
+\begin{relation}{license}{\underline{licenseID}, amount}\end{relation}\\
+\begin{relation}{producer}{\pk{vineyard}, address, ownsLicense \to license}\end{relation}
+$$
+
+
+It is best to extend a relation of an entity type with **total participation**
+
+
+
+### Summary: Mapping Relationship Types to Relations
+
+**M:N**
+
+* New relation with all attributes of the relationship type
+* Add attributes referencing the primary keys of the involved entity type relations
+* Primary key: set of foreign keys
+
+**1:N**
+
+* Add information to the entity type relation of the “N”-side:
+    * Add foreign key referencing the primary key of the “1”-side entity type relation
+    * Add attributes of the relationship type
+
+**1:1**
+
+* Add information to one of the involved entity type relations:
+    * Add foreign key referencing the primary key of the other entity type relation
+    * Add attributes of the relationship type
+
+
+

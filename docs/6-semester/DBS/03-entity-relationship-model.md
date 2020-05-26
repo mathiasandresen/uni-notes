@@ -5,13 +5,12 @@ title: The Entity Relationship Model
 # The Entity Relationship Model
 
 $$
-\newenvironment{relation}[2]
-{
+\newcommand{\relationRaw}[3]{
 	\newcommand{\pk}{\underline}
-	\mathbf{#1}: \{[ \mathrm{#2}
-} { 
-	]\} 
+	#3\mathbf{#1}#3#3:\{[\mathrm{#2}]\}
 }
+\newcommand{\relation}[2]{\relationRaw{#1}{#2}{}}
+\newcommand{\relational}[2]{\relationRaw{#1}{#2}{&}}
 \nonumber
 $$
 
@@ -443,30 +442,27 @@ If the **participation** is **not total**, merging requires null values for the 
 
 **Initial**
 $$
-\begin{relation}
-{license}{\underline{licenseID}, amount}
-\end{relation} \\
-\begin{relation}
-{producer}{\underline{vineyard}, address}
-\end{relation} \\
-\begin{relation}
-{owns}{\underline{licenseID \to license}, vineyard \to producer}
-\end{relation}\\
-\text{or}\\
-\begin{relation}
-{owns}{licenseID \to license, \underline{vineyard \to producer}}
-\end{relation}
+\begin{align*}
+\relational{license}{\underline{licenseID}, amount}\\
+\relational{producer}{\underline{vineyard}, address}\\
+\relational{owns}{\underline{licenseID \to license}, vineyard \to producer}\text{ or}\\
+\relational{owns}{licenseID \to license, \underline{vineyard \to producer}}
+\end{align*}
 $$
 
 **Improvement**
 $$
-\begin{relation}{license}{\underline{licenseID}, amount, ownedBy \to producer}\end{relation}\\
-\begin{relation}{producer}{\pk{vineyard}, address}\end{relation}
+\begin{align*}
+\relational{license}{\underline{licenseID}, amount, ownedBy \to producer}\\
+\relational{producer}{\pk{vineyard}, address}
+\end{align*}
 $$
 **Or**
 $$
-\begin{relation}{license}{\underline{licenseID}, amount}\end{relation}\\
-\begin{relation}{producer}{\pk{vineyard}, address, ownsLicense \to license}\end{relation}
+\begin{align*}
+\relational{license}{\underline{licenseID}, amount}\\
+\relational{producer}{\pk{vineyard}, address, ownsLicense \to license}
+\end{align*}
 $$
 
 
@@ -496,3 +492,26 @@ It is best to extend a relation of an entity type with **total participation**
 
 
 
+### Foreign Keys
+
+A **foreign key** is an attribute (or a combination of attributes) of a relation that references the primary key (or candidate key) of another relation
+
+**Example**
+
+* $\relation{course}{\pk{courseID}, title, ects, \textcolor{darkred}{taughtBy \to professor}}$
+* $\relation{professor}{\pk{empID}, name, rank, office}$
+
+Here $\mathrm{taughtBy}$ is a foreign key referencing relation professor
+
+**Alternative Notation**
+
+* $\relation{course}{\pk{courseID}, title, ects, \textcolor{darkred}{taughtBy}}$
+* $\relation{professor}{\pk{empID}, name, rank, office}$
+
+Foreign key: $\mathrm{course.taughtBy \to professor.empID}$
+
+Notation for composite keys: $\{R.A_1, R.A_2\} \to \{S.B_1, S.B_2\}$
+
+
+
+## Mapping Additional Concepts to Relations

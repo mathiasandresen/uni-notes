@@ -422,7 +422,7 @@ $$
 
 $$
 \begin{align*}
-&\bold{course} &&:\{[\underline{\text{courseID}}, \text{title}, \text{ects}, \textcolor{darkred}{\text{taughtBy} \to \text{professor}}]\}\\
+&\bold{course} &&:\{[\underline{\text{courseID}}, \text{title}, \text{ects}, \color{darkred}{\text{taughtBy} \to \text{professor}}]\}\\
 &\bold{professor} &&:\{[\underline{\text{empID}}, \text{name}, \text{rank},\text{office}]\}\\
 \end{align*}
 $$
@@ -505,14 +505,14 @@ A **foreign key** is an attribute (or a combination of attributes) of a relation
 
 **Example**
 
-* $\relation{course}{\pk{courseID}, title, ects, \textcolor{darkred}{taughtBy \to professor}}$
+* $\relation{course}{\pk{courseID}, title, ects, \color{darkred}{taughtBy \to professor}}$
 * $\relation{professor}{\pk{empID}, name, rank, office}$
 
 Here $\mathrm{taughtBy}$ is a foreign key referencing relation professor
 
 **Alternative Notation**
 
-* $\relation{course}{\pk{courseID}, title, ects, \textcolor{darkred}{taughtBy}}$
+* $\relation{course}{\pk{courseID}, title, ects, \color{darkred}{taughtBy}}$
 * $\relation{professor}{\pk{empID}, name, rank, office}$
 
 Foreign key: $\mathrm{course.taughtBy \to professor.empID}$

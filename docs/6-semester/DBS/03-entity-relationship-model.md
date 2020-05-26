@@ -409,6 +409,7 @@ Key attributes "imported" from involved entity types (relations) are called **fo
 * Primary key of the "N"-side becomes the key in the new relation
 
 **Initial**
+
 $$
 \begin{align*}
 &\bold{course} &&:\{[\underline{\text{courseID}}, \text{title}, \text{ects}]\}\\
@@ -416,7 +417,9 @@ $$
 &\bold{teaches} &&: \{[\underline{\text{courseID}\to \text{course}}, \text{empID} \to \text{professor}]\}
 \end{align*}
 $$
+
 **Improved by Merging**
+
 $$
 \begin{align*}
 &\bold{course} &&:\{[\underline{\text{courseID}}, \text{title}, \text{ects}, \textcolor{darkred}{\text{taughtBy} \to \text{professor}}]\}\\
@@ -441,6 +444,7 @@ If the **participation** is **not total**, merging requires null values for the 
 * Primary key of any of the involved entity types can become the key in the new relation
 
 **Initial**
+
 $$
 \begin{align*}
 \relational{license}{\underline{licenseID}, amount}\\
@@ -451,13 +455,16 @@ $$
 $$
 
 **Improvement**
+
 $$
 \begin{align*}
 \relational{license}{\underline{licenseID}, amount, ownedBy \to producer}\\
 \relational{producer}{\pk{vineyard}, address}
 \end{align*}
 $$
+
 **Or**
+
 $$
 \begin{align*}
 \relational{license}{\underline{licenseID}, amount}\\

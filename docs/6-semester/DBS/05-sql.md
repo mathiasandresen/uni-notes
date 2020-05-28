@@ -437,3 +437,228 @@ Computes names of professors that teach any courses.
 
 
 There are more quantifiers: `ANY` and `ALL`
+
+
+
+
+
+## Advanced SQL
+
+Extension of the SFW block
+
+* `FROM` clause: additional join variants
+* `WHERE` clause: additional types of constraints and quantifiers
+* `SELECT` clause: application of scalar operations and aggregate functions
+
+
+
+### Joins
+
+Join variants
+
+* `CROSS JOIN`
+* `NATURAL JOIN`
+* `JOIN` or `INNER JOIN`
+* `LEFT`, `RIGHT`, or `FULL OUTER JOIN`
+
+Standard formulation:
+
+```sql
+SELECT *
+FROM R1, R2
+WHERE R1.A = R2.B;
+```
+
+Alternative Formulation
+
+```sql
+SELECT *
+FROM R1
+JOIN R2 ON R1.A = R2.B;
+```
+
+See joins visualized with [this tool](https://joins.spathon.com/)
+
+![File:SQL Joins.svg](images/05-sql/800px-SQL_Joins.svg.png)
+
+
+
+### Aggregate Functions
+
+How can we formulate the following queries in SQL?
+
+* Average price of all articles on sale
+* Total sales volume of all sold products
+
+Aggregate functions compute new values for a column, e.g., the sum or the average of all values in a column.
+
+**Aggregate functions:** 
+
+* `AVG`, `MAX`, `MIN`, `COUNT`, `SUM`
+
+
+
+The argument columns (except in case of `COUNT(∗)`) can optionally be accompanied by the keyword `DISTINCT` and `ALL`.
+
+* `DISTINCT`
+    * before evaluating the aggregate function, duplicates are removed
+* `ALL`
+    *  duplicates are considered for evaluation (**default**!)
+
+
+
+Null values are removed before evaluation (except in case of `COUNT(∗)`).
+
+
+
+#### Examples
+
+Number of wines
+
+```sql
+SELECT COUNT(*) AS number
+FROM wine;
+```
+
+![image-20200528163935882](images/05-sql/image-20200528163935882.png)
+
+The number of different regions that produce wine
+
+```sql
+SELECT COUNT(DISTINCT region)
+FROM producer;
+```
+
+The names and years of wines that are older than the average
+
+```sql
+SELECT name, year
+FROM wine
+WHERE year < ( SELECT AVG(year) FROM wine);
+```
+
+
+
+#### Aggregate Functions in the WHERE Clause
+
+Aggregate functions produce a single value $\leadsto$ usable in comparison with constants in the WHERE clause.
+
+All vineyards producing a single wine
+
+```sql
+SELECT * FROM producer e
+WHERE 1 = (SELECT COUNT(*) FROM wine w
+			WHERE w.vineyard = e.vineyard);
+```
+
+
+
+#### Nesting of Aggregate Functions
+
+Nesting of aggregate functions is **not** allowed!
+
+<div style="color:darkred;">WRONG</div>
+
+```sql
+SELECT f1(f2(A)) AS result FROM R ...;
+```
+
+Instead
+
+```sql
+SELECT f1(temp) AS result
+FROM ( SELECT f2(A) AS temp FROM R ...);
+```
+
+
+
+### Grouping
+
+Computation of the aggregate function per group
+
+Notation
+
+```sql
+SELECT ...
+FROM ...
+[WHERE ... ]
+[GROUP BY columnList ]
+[HAVING condition ];
+```
+
+
+
+**Computation of the aggregate function per group**
+
+```sql
+SELECT taughtBy, SUM(ects)
+FROM course
+GROUP BY taughtBy;
+```
+
+* All tuples with the same value for column `taughtBy` form a group
+* The sum is computed for each group
+
+
+
+
+
+#### Mistakes
+
+* SQL generates **one result tuple per group**
+* All columns referenced in the `SELECT` clause **must** either be listed in the `GROUP BY` clause or involved only in aggregate functions
+
+![image-20200528172921973](images/05-sql/image-20200528172921973.png)
+
+
+
+#### The HAVING Clause
+
+[Example in slides p 122](https://www.moodle.aau.dk/pluginfile.php/1981342/mod_resource/content/2/DBS-5.pdf#page=122)
+
+
+
+
+
+### Null Values
+
+Null values may lead to **unexpected** query results.
+
+**Arithmetic expressions**
+
+* "Propagation" of null values
+* null + 1 $\leadsto$ null
+* null * 0 $\leadsto$ null
+
+**Comparison Operations**
+
+* SQL has a three-valued logic: `true`, `false`, and `unknown`
+* If at least one argument is null, then the result is `unknown`
+* `studid` = 5 $\leadsto$ `unknown` whenever `studid` is null
+
+
+
+Logical expressions are evaluated according to the following tables
+
+![image-20200528173912189](images/05-sql/image-20200528173912189.png)
+
+
+
+#### Null Values in Where Clause and Grouping
+
+`WHERE` clause
+
+* The `WHERE` clause forwards only tuples evaluated to `true`
+* Tuples evaluated to `unknown` will not be part of the result
+
+Grouping
+
+* null is interpreted as an independent value
+* Results in its own group
+
+
+
+
+
+### Recursion
+

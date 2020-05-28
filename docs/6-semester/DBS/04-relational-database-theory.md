@@ -7,6 +7,8 @@ title: Relational Database Design Theory
 $$
 \newcommand{\dep}[2]{\{#1\} \to \{#2\}}
 \newcommand{\schema}{\mathcal{R}}
+\newcommand{\oneton}[1]{\onetonop{#1}{,}}
+\newcommand{\onetonop}[2]{#1_{n} #2 \dots #2  #1_{n}}
 \nonumber
 $$
 
@@ -258,3 +260,229 @@ Characteristics:
 
 
 [Example in DBS4 slides p 69](https://www.moodle.aau.dk/pluginfile.php/1979144/mod_resource/content/0/DBS-norm-csj-2.pdf#page=69)
+
+
+
+## Normalization by Decomposition of Relations
+
+### Normalization by decomposition
+
+Decompose a relation schema $\schema$ into multiple relational schemas $\schema_1,\dots\schema_n$ to eliminate problems in the original design
+
+Normal forms
+
+* **Normal forms** describe the quality of a design
+* 1NF, 2NF, 3NF, BCNF, 4NF, $\dots$
+* Prohibit particular functional dependencies in a relation to avoid **redundancy, null values, and anomalies**
+
+
+
+Good ER modeling typically directly leads to 3NF (or higher NF) relations
+
+Normalization eliminates problems caused by functional dependencies among attributes of any entity type
+
+
+
+### Valid and Lossless Decompositions
+
+A decomposition is **valid** if  $\schema = \schema_1 \cup \schema_2$, i.e. no attributes in $\schema$ get lost
+
+* $R_1 := \pi_{\schema_1}(R)$
+* $R_2 := \pi_{\schema_2}(R)$
+
+A decomposition of $\schema$ into $\schema_1$ and $\schema_2$ is **lossless** if the following holds for all possible instances $R$ of $\schema$ (also referred to as lossless-join decomposition):
+
+$$
+R=R_1 \Join R_2
+$$
+
+All data contained in the original instance $R$ of schema $\schema$ must be reconstructible with a natural join from the instances $R_1,\dots,R_n$ of the new schemas $\schema_1,\dots,\schema_n$
+
+
+
+#### Formal Characterization of a Lossless Decomposition
+
+Given
+
+* A decomposition of $\schema$ into $\schema_1$ and $\schema_2$
+* $F_\schema$ is the set of FDs in $\schema$
+
+A decomposition is **lossless** if we can derive at least **one** of the following FDs:
+
+* $(\schema_1 \cap \schema_2) \to \schema_1 \in F_\schema^+$     i.e., common attributes are super key in $\schema_1$
+    **or**
+* $(\schema_1 \cap \schema_2) \to \schema_2 \in F_\schema^+$     i.e., common attributes are super key in $\schema_2$
+
+If this is not the case, the decomposition is said to be lossy
+
+
+
+#### Example of a LOSSY Decomposition
+
+![image-20200528113300403](images/04-relational-database-theory/image-20200528113300403.png)
+
+![image-20200528113321132](images/04-relational-database-theory/image-20200528113321132.png)
+
+The relationship between guest, pub, and beer got lost.
+
+**Lossy decomposition** sometimes means that the reconstruction leads to **additional tuples.**
+
+
+
+### Dependency Preservation
+
+Second characteristic of a good decomposition
+
+All functional dependencies that hold for $\schema$ must be verifiable in the new schemas $\schema_1,\dots,\schema_n$ 
+
+* We can check all dependencies locally on $\oneton{\schema}$ 
+* We avoid the alternative: computing the join $\onetonop{\schema}{\Join}$ to test if an FD is violated
+
+
+
+A decomposition is dependency preserving if
+$$
+F_{\schema} \equiv (F_{\schema_1} \cup \cdots \cup F_{\schema_n})
+$$
+i.e. $F^+_\schema = (F_{\schema_1} \cup \cdots \cup F_{\schema_n})^+ $ 
+with $F_{\schema_i}$ representing functional dependencies that can be checked efficiently on $R_i$
+
+
+
+![image-20200528114845997](images/04-relational-database-theory/image-20200528114845997.png)
+
+
+
+[Examples in DBS4 slides p 90](https://www.moodle.aau.dk/pluginfile.php/1979144/mod_resource/content/0/DBS-norm-csj-2.pdf#page=90)
+
+
+
+### Summary Functional Dependencies
+
+![image-20200528115635169](images/04-relational-database-theory/image-20200528115635169.png)
+
+
+
+
+
+## Normal Forms
+
+Normal forms
+
+* define characteristics of relational schemas
+* forbid certain combinations of FDs in a relation
+* avoid redundancies and anomalies
+* guideline to obtain good decompositions
+
+
+
+### First Normal Form 1NF
+
+A relation $\schema$ is in 1NF if the domains of all its attributes are atomic (no composite or set-valued domains)
+
+![image-20200528115756463](images/04-relational-database-theory/image-20200528115756463.png)
+
+### Third Normal Form 3NF
+
+A relation schema $\schema$ is in 3NF if at least one of the following conditions holds for each of its FDs $\alpha \to \beta$ with $B \in \schema$
+
+1. $B \in \alpha$, i.e. the FD is **trivial**
+2. $\alpha$ is a **super key** of $R$
+3. $B$ is part of a candidate key for $\schema$
+
+Main characteristics
+
+* 3NF prevents (some) **transitive** dependencies
+* Exception: Condition 3
+
+
+
+#### Non-Example
+
+![image-20200528120100834](images/04-relational-database-theory/image-20200528120100834.png)
+
+The relation is **not** in 3NF
+
+
+
+#### Eliminates Transitive Dependencies
+
+![image-20200528120140991](images/04-relational-database-theory/image-20200528120140991.png)
+
+
+
+### Boyce Codd Normal Form BCNF
+
+A relation schema $\schema$ is in BCNF if at least one of the following conditions holds for each of its FDs $\alpha \to \beta$ with $B \in \schema$
+
+1. $B \in \alpha$, i.e. the FD is **trivial**
+2. $\alpha$ is a **super key** of $R$
+
+Main characteristics
+
+* Difference to 3NF: no third option ($B$ is part of a candidate key for $\schema$)
+* BCNF is more strict than 3NF (“includes” 3NF)
+* BCNF prevents all **transitive** dependencies
+
+
+
+#### Example
+
+3NF vs. BCNF
+
+![image-20200528120459953](images/04-relational-database-theory/image-20200528120459953.png)
+
+**Is the relation in 3NF?**
+
+![image-20200528120513769](images/04-relational-database-theory/image-20200528120513769.png)
+
+<u>YES</u>
+
+**Is the relation in BCNF?**
+
+![image-20200528120552948](images/04-relational-database-theory/image-20200528120552948.png)
+
+<u>NO</u>
+
+
+
+### Decomposition
+
+It is always possible to decompose a relational schema $\schema$ with FDs $F$ into
+
+* 3NF relational schemas $\oneton{\schema}$ so that the decomposition is
+    * lossless
+    * dependency preserving
+* BCNF relational schema $\oneton{\schema}$ so that the decomposition is
+    * lossless
+
+It is not always possible to create a BCNF decomposition $\oneton{\schema}$ of $\schema$ that is dependency preserving
+
+
+
+#### Decomposition Algorithm for BCNF
+
+![image-20200528120925771](images/04-relational-database-theory/image-20200528120925771.png)
+
+Instead of computing $F^+$ to check $\alpha$ for its super key characteristics, we can compute $\alpha^+$ for this purpose
+
+[Example in DBS4 slides p 133-](https://www.moodle.aau.dk/pluginfile.php/1979144/mod_resource/content/0/DBS-norm-csj-2.pdf#page=133)
+
+
+
+### Summary 
+
+| Normal Form | Main Characteristics         |
+| ----------- | ---------------------------- |
+| 1NF         | Only atomic attributes       |
+| 3NF         | Some transitive dependencies |
+| BCNF        | No transitive dependencies   |
+
+In practice, if a BCNF composition is impossible without loosing dependency preservation, we go for the 3NF decomposition (although it allows for some redundancy)
+
+Decomp. algorithms for all normal forms guarantee lossless decompositions.
+
+Dependency preservation can only be guaranteed until 3NF.
+
+![image-20200528121614049](images/04-relational-database-theory/image-20200528121614049.png)
+

@@ -612,7 +612,7 @@ Mapping just like standard 1:N relationship types and merging
 * $\relation{professor}{\pk{empID}, name, rank, office}$
 * $\relation{grades}{\pk{studID\to student, courseID\to course},empID \to professor, grade}$
 
-
+A student + course only exists once in this relation, since the professor is the (1). Therefore, the professor is not part of the primary key.
 
 ### Multi-Valued Attributes
 

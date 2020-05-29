@@ -13,8 +13,16 @@ title: Transactions
 * Understanding the schedule concept
 * Understanding serializability
 * Understanding recoverable and cascadeless schedules
+
+**Concurrency Control**
+
 * Understand and use lock-based concurrency control
 * Understand and use two-phase locking
+
+**Recovery**
+
+* Understanding basic logging algorithms
+* Understanding the importance of atomicity and durability
 
 
 
@@ -177,7 +185,14 @@ Concurrent execution of transactions must be (result) equivalent to some serial 
 
 A schedule is **conflict serializable** if it is **conflict equivalent** to <u>a</u> serial schedule
 
+* It ensures that after execution the database is in a consistent state.
+
 [^1]: Third definition D3 is view serializability, and is not covered in the course
+
+**Alternative Definition from Web**
+
+A schedule is called **conflict serializable** if it can be transformed into a **serial** schedule by **swapping non-conflicting operations.**
+
 
 
 
@@ -304,11 +319,26 @@ It is desirable to restrict the schedules to those that are cascadeless.
 
 ## Concurrency Control
 
+### Scheduler
+
+![image-20200529114519755](images/06-transactions/image-20200529114519755.png)
+
+Task of the scheduler:
+
+* produce serializable schedules of instructions (transactions $T_1, \dots, T_n$) that avoid cascading rollbacks
+
+Realized by **synchronization** strategies
+
+* pessimistic
+    * lock-based synchronization
+    * timestamp-based synchronization
+* optimistic
+
 
 
 ### Lock-based Synchronization
 
-Ensuring (conflict) serializable schedules by delaying transactions that could violate serializability.
+**Ensuring (conflict) serializable schedules** by **delaying** transactions that could violate serializability.
 
 Two types of locks can be held on a data item Q
 
@@ -326,6 +356,51 @@ Operations on locks:
 
 
 
+#### Lock Privileges
+
+A transaction holding
+
+* an exclusive lock may issue a write or read access request on the item
+* a shared lock may issue a read access request on the item
+
+**Compatibility Matrix**
+
+![image-20200529114819205](images/06-transactions/image-20200529114819205.png)
+
+NL - no lock
+
+
+
+* Concurrent transactions can only be granted compatible locks
+* A transaction might have to wait until a requested lock can be granted!
+
+
+
+#### Problems with Early Unlocking
+
+**Early unlocking** can cause **incorrect** results (non-serializable schedules) but allows for a higher degree of concurrency.
+
+![image-20200529115015298](images/06-transactions/image-20200529115015298.png)
+
+* Initially A = 100 and B = 200
+* serial schedule $T_{15};T_{16}$ prints 300
+* serial schedule $T_{16};T_{15}$ prints 300
+* $S_7$ prints 250
+
+
+
+#### Problems with Late Unlocking
+
+Late unlocking avoids non-serializable schedules. But it increases the chances of **deadlocks**.
+
+Learn to live with it!
+
+![image-20200529115221255](images/06-transactions/image-20200529115221255.png)
+
+
+
+
+
 ### Two-Phase Locking (2PL)
 
 Is a protocol
@@ -337,13 +412,17 @@ Is a protocol
     * Transactions **may not** **request** locks
     * Transactions **may release** locks
 
+
+
 ![image-20200330083508346](images/06-transactions/image-20200330083508346.png)
 
 When the first lock is release, the we move from first to second phase.
 
+
+
 #### Examples
 
-Remember that we look at transactions individually
+Remember that we look at transactions **indi**
 
 ![image-20200330083658288](images/06-transactions/image-20200330083658288.png)
 
@@ -372,25 +451,29 @@ Remember that we look at transactions individually
 
 
 
-Advantage
+**Advantage**
 
 * No cascading rollbacks
 
-Disadvantage
+**Disadvantage**
 
 * Loss of potential concurrency
 
 ![image-20200330084351622](images/06-transactions/image-20200330084351622.png)
 
+
+
 ### Lock Conversion
 
-First phase
+**Goal:** apply 2PL but allow for a higher degree of concurrency
+
+**First phase**
 
 * Acquire an S-lock on a data item
 * Acquire an X-lock on a data item
 * Convert (upgrade) an S-lock to an X-lock
 
-Second phase
+**Second phase**
 
 * Release S-, and X-locks
 * Convert (downgrade) an X-lock to an S-lock
@@ -412,24 +495,26 @@ It relies on the application programmer to insert the appropriate locks.
 
 
 
-## Deadlocks
+### Deadlocks
 
 ![image-20200330084946125](images/06-transactions/image-20200330084946125.png)
 
 **Solutions**
 
-* detection an recovery
+* detection and recovery
 * prevention
-* timeout (not covered in presentation)
+* *timeout* (not covered in presentation)
 
 
 
-### Deadlock Detection
+#### Deadlock Detection
 
-Create a "Wait-for graph" and check for cycles
+Create a "**Wait-for graph**" and check for cycles
 
 * One node for each active transaction $T_i$
 * Edge $T_i\to T_j$ if $T_i$ waits for the release of locks by $T_j$
+
+*A deadlock exists if the wait-for graph has a cycle*
 
 
 
@@ -440,13 +525,13 @@ If a deadlock is detected:
 
 
 
-#### Example
+##### Example
 
 ![image-20200330085413521](images/06-transactions/image-20200330085413521.png)
 
 
 
-#### Rollback Candidates
+##### Rollback Candidates
 
 Choosing a good victim transaction
 
@@ -454,19 +539,19 @@ Choosing a good victim transaction
 
 Rollback of one or more transactions that are involved in the cycle
 
-* The latest (minimization of rollback effort)
-* The one holding the most locks (maximization of released resources)
+* **The latest** (minimization of rollback effort)
+* **The one holding the most locks** (maximization of released resources)
 
 
 
 Prevent that always the same victim is chosen (starvation)
 
-* "rollback counter"
+* **"rollback counter"**
     * if above a certain threshold: no more rollbacks to break deadlocks
 
 
 
-### Deadlock Prevention
+#### Deadlock Prevention
 
 **Conservative 2PL**
 
@@ -478,14 +563,16 @@ Prevent that always the same victim is chosen (starvation)
 
 
 
-## Summary: Concurrency Control
+### Summary: Concurrency Control
 
 * Many concurrency control protocols have been developed
     *  Main goal: allowing only serializable, recoverable and cascadeless schedules
     * Two-phase locking (2PL)
-        * Most relational DBMS's use reqorous two-phase locking
+        * Most relational DBMS's use rigorous two-phase locking
 * Deadlock detection (wait-for graph) and prevention (conservative 2PL)
 * Serializability vs. concurrency
+
+
 
 
 
@@ -504,6 +591,8 @@ The role of the **recovery** component is to ensure atomicity and durability of 
 
 ### Durability
 
+[How can durability be guaranteed (DBS6 Slides p. 159)](https://www.moodle.aau.dk/pluginfile.php/1987452/mod_resource/content/1/DBS-transactions.pdf#159)
+
 Durability is **relative** and depends on the number of copies and the geographical location
 
 Guarantees only possible if
@@ -511,11 +600,11 @@ Guarantees only possible if
 * we first update the copies and
 * notify the user afterwards that a transaction's commit was successful
 
+We hence assume that the **WAL (Write Ahead Logging)** rule is satisfied
 
 
-We hence assume that the WAL (Write Ahead Logging) rule is satisfied
 
-Variations of applying the WAL rule:
+**Variations of applying the WAL rule:**
 
 * **Log-based recovery**
 * Full redundancy:  mirroring/shadowing all data on multiple computers (disks, computing centers) that redundantly do the same
@@ -580,7 +669,7 @@ Transactions access and update the database
 
 ### Logging
 
-WAL (Write Ahead Logging)
+**WAL (Write Ahead Logging)**
 
 * Before a transaction enters the **commit** state, “all its” log entries have to be written to stable storage, including the commit log entry
 * Before a modified page (or block) in main memory can be written to the database (non-volatile storage), “all its” log entries have to be written to stable storage
@@ -594,11 +683,11 @@ During normal operation
 * When modifying data item X by write(X,x)
 
     1. Add log entry with
-        * [T, X, V-old, V-new]
-        * transaction's ID (i.e T)
-        * data item name (i.e. X)
-        * old value of item
-        * new value of item
+        * [$T$, X, V-old, V-new]
+            * $T$: transaction's ID
+            * X: data item name
+            * old value of item
+            * new value of item
     2. Write the new value of X
 
     *The buffer manager asynchronously outputs the value to disk later*
@@ -658,6 +747,20 @@ Operations to recover from failures
 
 
 
+#### Recovery Algorithm
+
+To recover from a failure
+
+* Reproduce (**redo**) results for committed transactions
+* **Undo** changes of transactions that did not commit
+
+Remarks
+
+* In a multitasking system, more than one transaction may need to be undone.
+* If a system crashes during the recovery stage, the new recovery must still give correct results (**idempotence**).
+
+
+
 #### Phases of Recovery
 
 1. Redo (repeat history)
@@ -687,4 +790,4 @@ Operations to recover from failures
 
 #### Example
 
-Example can be seen in slides: [DBS6 - Transactions - Slide 85](./extra/DBS-transactions.pdf#page=202)
+Example can be seen in slides: [DBS6 - Transactions - Slide 85 - p. 202](./extra/DBS-transactions.pdf#page=202)

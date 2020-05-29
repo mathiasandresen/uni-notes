@@ -10,13 +10,13 @@ A **transaction** is a collection of operations that forms a **logical unit** of
 
 **ACID Properties**
 
-![image-20200320093722090](images/Untitled/image-20200320093722090.png)
+![image-20200320093722090](images/06-transactions/image-20200320093722090.png)
 
-![image-20200320093731214](images/Untitled/image-20200320093731214.png)
+![image-20200320093731214](images/06-transactions/image-20200320093731214.png)
 
-![image-20200320093741106](images/Untitled/image-20200320093741106.png)
+![image-20200320093741106](images/06-transactions/image-20200320093741106.png)
 
-![image-20200320093751150](images/Untitled/image-20200320093751150.png)
+![image-20200320093751150](images/06-transactions/image-20200320093751150.png)
 
 
 
@@ -39,7 +39,7 @@ A **transaction** is a collection of operations that forms a **logical unit** of
 
 ## Transaction States
 
-![image-20200320094505647](images/Untitled/image-20200320094505647.png)
+![image-20200320094505647](images/06-transactions/image-20200320094505647.png)
 
 
 
@@ -51,17 +51,17 @@ Affects the **I** in **ACID**
 
 * **Lost Updates**
     * Overwriting updates
-    * ![image-20200320095006994](images/Untitled/image-20200320095006994.png)
+    * ![image-20200320095006994](images/06-transactions/image-20200320095006994.png)
 * **Dirty Read**
     * Dependency on non-committed updates
-    * ![image-20200320095036965](images/Untitled/image-20200320095036965.png)
+    * ![image-20200320095036965](images/06-transactions/image-20200320095036965.png)
 * **Non-repeatable Read**
     * Dependency on other updates
     * T2 loses the illusion that it is alone in the database
-    * ![image-20200320095144395](images/Untitled/image-20200320095144395.png)
+    * ![image-20200320095144395](images/06-transactions/image-20200320095144395.png)
 * **Phantom Problem**
     * Dependency on new/deleted tuples
-    * ![image-20200320095310588](images/Untitled/image-20200320095310588.png)
+    * ![image-20200320095310588](images/06-transactions/image-20200320095310588.png)
 
 
 
@@ -91,7 +91,7 @@ A schedule is valid if the result of its executions is "correct"
 
 ### Example Schedules
 
-![image-20200320100146715](images/Untitled/image-20200320100146715.png)
+![image-20200320100146715](images/06-transactions/image-20200320100146715.png)
 
 
 
@@ -126,7 +126,7 @@ A schedule is **conflict serializable** if it is **conflict equivalent** to a se
 
 There is a conflict if there is a read and a write on the same data unit. Also if there is a write on the same data unit.
 
-![image-20200320101311773](images/Untitled/image-20200320101311773.png)
+![image-20200320101311773](images/06-transactions/image-20200320101311773.png)
 
 
 
@@ -140,11 +140,11 @@ Let I and J be consecutive instructions of a schedule S of multiple transactions
 
 #### Examples
 
-![image-20200320101628433](images/Untitled/image-20200320101628433.png)
+![image-20200320101628433](images/06-transactions/image-20200320101628433.png)
 
 
 
-![image-20200320101942077](images/Untitled/image-20200320101942077.png)
+![image-20200320101942077](images/06-transactions/image-20200320101942077.png)
 
 ### Conflict Graph
 
@@ -177,13 +177,13 @@ Given a schedule S and a conflict graph
 
 #### Example
 
-![image-20200320102532105](images/Untitled/image-20200320102532105.png)
+![image-20200320102532105](images/06-transactions/image-20200320102532105.png)
 
 
 
 ### Relationship Among Schedules
 
-![image-20200320102749551](images/Untitled/image-20200320102749551.png)
+![image-20200320102749551](images/06-transactions/image-20200320102749551.png)
 
 
 
@@ -191,7 +191,7 @@ Given a schedule S and a conflict graph
 
 **Transactions can fail!**
 
-![image-20200320102931170](images/Untitled/image-20200320102931170.png)
+![image-20200320102931170](images/06-transactions/image-20200320102931170.png)
 
 
 
@@ -199,7 +199,7 @@ Given a schedule S and a conflict graph
 
 A schedule is **recoverable** if for each pair of transactions $T_i$ and $T_j$ where $T_j$ reads data items written by  $T_i$, then $T_i$ must commit before $T_j$ commits.
 
-![image-20200320103122260](images/Untitled/image-20200320103122260.png)
+![image-20200320103122260](images/06-transactions/image-20200320103122260.png)
 
 
 

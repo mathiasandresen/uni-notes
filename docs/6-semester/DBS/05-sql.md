@@ -4,6 +4,16 @@ title: SQL
 
 # SQL
 
+$$
+\newcommand{\relationRaw}[3]{
+	\newcommand{\pk}{\underline}
+	#3\mathbf{#1}#3#3:\{[\mathrm{#2}]\}
+}
+\newcommand{\relation}[2]{\relationRaw{#1}{#2}{}}
+\newcommand{\relational}[2]{\relationRaw{#1}{#2}{&}}
+\nonumber
+$$
+
 **Learning Goals**
 
 * Explain and use the SQL data model 
@@ -624,6 +634,21 @@ GROUP BY taughtBy;
 
 Null values may lead to **unexpected** query results.
 
+```sql
+SELECT COUNT(semester) 
+FROM student WHERE semester < 13 OR semester >= 13;
+```
+
+And
+
+```sql
+SELECT COUNT(semester) FROM student;
+```
+
+Produces the same result, because **tuples with null values in column semester are not counted**
+
+
+
 **Arithmetic expressions**
 
 * "Propagation" of null values
@@ -662,3 +687,304 @@ Grouping
 
 ### Recursion
 
+[Information in slides p. 146](https://www.moodle.aau.dk/pluginfile.php/1981342/mod_resource/content/2/DBS-5.pdf#page=146) 
+
+Which courses need to be taken before taking course “Theory of Science”?
+
+​	$\relation{requires}{predecessor, successor}$
+
+​	$\relation{course}{courseid, title, ects, taughtBy}$
+
+
+
+**Non-Recursive**
+
+This query only finds direct predecessors: 
+
+```sql
+SELECT predecessor
+FROM requires, course
+WHERE successor = courseid AND
+	title = ’Theory of Science’;
+```
+
+**Recursive**
+
+```sql
+WITH RECURSIVE transitiveCourse (pred, succ) AS (
+	SELECT predecessor, successor
+    FROM requires
+    UNION 
+    	SELECT DISTINCT t.pred, r.succ
+    	FROM transitiveCourse t, requires r
+    	WHERE t.succ = r.succ
+)
+SELECT *
+FROM transitiveCourse
+ORDER BY (pred, succ) ASC;
+```
+
+![image-20200529100200387](images/05-sql/image-20200529100200387.png)
+
+
+
+#### General Recursive SQL
+
+```sql
+WITH RECURSIVE mytable(number) AS (		
+	VALUES(1)							| non-recursive part			
+	UNION								| UNION
+		SELECT number + 1				| recursive part
+		FROM mytable					| 	only this part may reference
+		WHERE number < 100				| 	mytable
+)
+SELECT sum(number)						| main query
+FROM mytable;
+```
+
+Result: 5050
+
+
+
+#### Avoid Infinite Recursion
+
+* Most DBMS have a parameter that limits maximum recursion depth
+* Encode it directly in the query
+
+```sql
+WITH RECURSIVE transitiveCourse (pred, succ, depth)
+AS (
+	SELECT predecessor, successor, 0
+	FROM requires
+UNION
+	SELECT DISTINCT t.pred, r.successor, t.depth+1
+	FROM transitiveCourse t, requires r
+	WHERE t.succ = r.predecessor AND t.depth < 1
+)
+SELECT *
+FROM transitiveCourse
+ORDER BY (pred, succ) ASC;
+```
+
+
+
+### Limiting Size of Results
+
+Using `LIMIT` is accepted in exam solutions
+
+```sql
+SELECT * FROM student LIMIT 5;
+```
+
+Other possible solutions can be seen in [DBS5 Slides p. 169](https://www.moodle.aau.dk/pluginfile.php/1981342/mod_resource/content/2/DBS-5.pdf#page=169)
+
+
+
+## Views
+
+Examples of views
+
+```sql
+CREATE VIEW profsAndtheirCourses AS
+    SELECT c.title, p.name
+    FROM professor p, course c
+    WHERE p.empid = c.taughtBy;
+```
+
+```sql
+SELECT * FROM profsAndtheirCourses;
+```
+
+
+
+```sql
+CREATE VIEW ectsPerStud AS
+    SELECT s.name, t.studid, SUM(c.ects) AS sum
+    FROM student s, takes t, course c
+    WHERE t.courseid = c.courseid AND s.studid = t.studid
+    GROUP BY s.name, t.studid;
+```
+
+```sql
+SELECT sum FROM ectsPerStud;
+```
+
+
+
+Views can be used to represent derived attributes (ER diagram).
+
+
+
+### Altering Views
+
+`REPLACE VIEW` expects the same columns in the same order with the same types.
+
+```sql
+CREATE OR REPLACE VIEW profsAndtheirCourses AS
+    SELECT c.title, p.name
+    FROM professor p, course c
+    WHERE p.empid = c.taughtBy;
+```
+
+Alternative: Delete the view and recreate it afterwards, or non-standard SQL extensions, e.g., PostgresSQL’s `ALTER VIEW`
+
+```sql
+DROP VIEW ectsPerStud;
+CREATE VIEW ectsPerStud AS
+    SELECT s.name, t.studid, SUM(c.ects) AS sum
+    FROM student s, takes t, course c
+    WHERE t.courseid = c.courseid
+    	AND s.studid = t.studid
+    GROUP BY s.name, t.studid;
+```
+
+
+
+### Views vs Materialized Views
+
+**(Dynamic) view**
+
+* Represents a macro of a query
+* The query result is not pre-computed but computed when used
+
+**Materialized View**
+
+* The query result is pre-computed
+* Computation load before any queries are executed
+
+
+
+[More on views in DBS5 slides p. 184](https://www.moodle.aau.dk/pluginfile.php/1981342/mod_resource/content/2/DBS-5.pdf#page=184)
+
+
+
+## Integrity Constraints
+
+* Additional instrument to avoid inconsistency.
+
+* Try to avoid insertion of inconsistent data
+
+
+
+### Static Integrity Constraints
+
+Each instance of a database must fulfill all static integrity constraints.
+
+```sql
+CREATE TABLE professor ...
+... empid integer NOT NULL ...
+```
+
+Restricting the domain of valid values
+
+```sql
+CREATE TABLE student ...
+... CHECK semester BETWEEN 1 AND 20 ...
+```
+
+Enumeration of valid values
+
+```sql
+CREATE TABLE professor ...
+... CHECK rank IN ('C2', 'C3', 'C4') ...
+```
+
+Definition of user-defined domains
+
+```sql
+CREATE DOMAIN wineColor varchar(5)
+    DEFAULT ’red’
+    CHECK (VALUE IN (’red’, ’white’, ’rose’));
+```
+
+```sql hl_lines="4"
+CREATE TABLE wine (
+	wineID int PRIMARY KEY,
+    name varchar(20) NOT NULL,
+    color wineColor,
+	...);
+```
+
+
+
+### Dynamic Integrity Constraints
+
+Referential integrity requires that foreign keys must always reference existing tuples or be null.
+
+What happens if there is no professor with `empid` 007?
+
+```sql
+insert into course
+	values (5100, ’Spying for Dummies’, 4, 007)
+```
+
+And how can we prevent the insertion?
+
+#### Definition of Keys
+
+**Candidate keys**
+
+* `UNIQUE`
+* A table can have multiple `UNIQUE` constraints
+* Allows null values!
+
+**Primary Keys**
+
+* `PRIMARY KEY`
+* At most one per table
+* Implies `UNIQUE NOT NULL`
+
+**Foreign Keys**
+
+* `FOREIGN KEY`
+* Allows null values
+
+
+
+#### Handling Updates
+
+Dynamic integrity constraints need to be fulfilled by each change of a database.
+
+In response to changes of referenced data:
+
+* Rejection of updates (default behavior)
+* Propagation of updates (CASCADE)
+* Set references to “unknown” (SET null)
+
+In addition available in PostgreSQL
+
+* Set to a default value (SET DEFAULT)
+
+
+
+[Examples in DBS5 slides p. 204](https://www.moodle.aau.dk/pluginfile.php/1981342/mod_resource/content/2/DBS-5.pdf#page=204)
+
+
+
+### Complex Constraints
+
+```sql
+CREATE TABLE grades (
+    studid integer REFERENCES student ON DELETE CASCADE,
+    courseid integer REFERENCES course,
+    grade numeric(2,1) CHECK (grade BETWEEN 0.7 AND 5.0),
+    PRIMARY KEY(studid, courseid)
+    CONSTRAINT hasTaken
+		CHECK (EXISTS (SELECT *
+        	FROM takes h
+			WHERE h.courseid = grades.courseid AND
+				h.studid = grades.studid))
+);
+```
+
+* The CHECK clause is evaluated for each update or insert
+* Operation is rejected if the check is evaluated to false! True and unknown do not violate the constraint!
+* Not (yet) supported by PostgreSQL:
+    * ERROR: cannot use subquery in check constraint
+    * Workaround by using **triggers**
+
+
+
+## Appendix
+
+[See Appendix in DBS5 slides p. 222](https://www.moodle.aau.dk/pluginfile.php/1981342/mod_resource/content/2/DBS-5.pdf#page=222)

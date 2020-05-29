@@ -6,21 +6,51 @@ title: Transactions
 
 # Transactions
 
-A **transaction** is a collection of operations that forms a **logical unit** of work, during which various data items are accessed and possibly updated 
+**Learning Goals**
 
-**ACID Properties**
-
-![image-20200320093722090](images/06-transactions/image-20200320093722090.png)
-
-![image-20200320093731214](images/06-transactions/image-20200320093731214.png)
-
-![image-20200320093741106](images/06-transactions/image-20200320093741106.png)
-
-![image-20200320093751150](images/06-transactions/image-20200320093751150.png)
+* Understanding the transaction concept
+* Understanding the ACID properties
+* Understanding the schedule concept
+* Understanding serializability
+* Understanding recoverable and cascadeless schedules
+* Understand and use lock-based concurrency control
+* Understand and use two-phase locking
 
 
 
-## Operations on Transactions
+## Transactions
+
+A **transaction** is a collection of operations that forms a **logical unit** of work, during which various data items are accessed and possibly updated.
+
+Transaction boundaries are user-defined!
+
+### ACID Properties
+
+**Atomicity**
+
+* Either all operations of the transaction are properly reflected in the database or none are.
+* Often implemented via logs
+
+**Consistency**
+
+* Execution of a transaction in isolation preserves the consistency of the database.
+* According to constraints, checks, assertions
+* In addition, consistency is defined by the application, e.g., fund transfers should not generate or destroy money – the overall sum is the same before and afterwards
+
+**Isolation**
+
+* Each transaction appears to have the DB exclusively on its own.
+* Intermediate results must be hidden for other transactions.
+* Often implemented via locks
+
+**Durability**
+
+* Updates of successfully completed transactions must not get lost despite system failures
+* Often implemented via logs
+
+
+
+### Operations on Transactions
 
 * `BEGIN` 
     * Starts a transaction
@@ -33,17 +63,40 @@ A **transaction** is a collection of operations that forms a **logical unit** of
 
 * `SAVEPOINT <savepoint_name>;`
     * Defines a point/state within a transaction
-    * A transaction can be rolled back partially back up to the savepoint
+    * A transaction can be **rolled back partially** back up to the savepoint
 * `ROLLBACK TO <savepoint_name>`
     * Rolls the active transaction back to the savepoint `<savepoint_name>`
 
-## Transaction States
+### Transaction States
 
 ![image-20200320094505647](images/06-transactions/image-20200320094505647.png)
 
 
 
-## Concurrency
+### How do DBMSs Support Transactions?
+
+The two most important components of transaction management are:
+
+**Multi-user Synchronization (isolation)**
+
+* Semantic correctness despite concurrency 
+    Concurrency allows for high throughput
+* Serializability
+* Weaker isolation levels
+
+**Recovery (atomicity and durability)**
+
+* Roll back partially executed transactions
+* Re-executing transactions after failures
+* Guaranteeing persistence of transactional updates
+
+
+
+
+
+## Schedules and Serializability
+
+### Concurrency
 
 Affects the **I** in **ACID**
 
@@ -65,7 +118,7 @@ Affects the **I** in **ACID**
 
 
 
-## Schedules
+### Schedules
 
 A **schedule** is a **sequence of operations** from one ore more transactions.
 For concurrent transactions, the operations are interleaved.
@@ -73,7 +126,9 @@ For concurrent transactions, the operations are interleaved.
 **Operations**
 
 * `read(Q,q)`
+    * Read the value of database item Q and store it in the local variable q.
 * `write(Q,q)`
+    * Store the value of the local variable q in the database item Q
 * Arithmetic operations
 * `commit`
 * `abort`
@@ -89,15 +144,17 @@ The operations of the transactions are executed with overlap in time
 **Valid Schedule**
 A schedule is valid if the result of its executions is "correct"
 
-### Example Schedules
+
+
+#### Example Schedules
 
 ![image-20200320100146715](images/06-transactions/image-20200320100146715.png)
 
 
 
-### Correctness
+#### Correctness
 
-**Definition 1**
+**Definition 1 (D1)**
 A concurrent execution of transactions must leave the database in a consistent state
 
 **Definition 2 (D2)**
@@ -114,11 +171,11 @@ Concurrent execution of transactions must be (result) equivalent to some serial 
 
 
 
-### Conflicts
+#### Conflicts
 
 **Definition 4 (D4)**[^1]
 
-A schedule is **conflict serializable** if it is **conflict equivalent** to a serial schedule
+A schedule is **conflict serializable** if it is **conflict equivalent** to <u>a</u> serial schedule
 
 [^1]: Third definition D3 is view serializability, and is not covered in the course
 
@@ -138,6 +195,8 @@ Let I and J be consecutive instructions of a schedule S of multiple transactions
 
 * S and S' are termed **conflict equivalent schedules**
 
+
+
 #### Examples
 
 ![image-20200320101628433](images/06-transactions/image-20200320101628433.png)
@@ -146,13 +205,17 @@ Let I and J be consecutive instructions of a schedule S of multiple transactions
 
 ![image-20200320101942077](images/06-transactions/image-20200320101942077.png)
 
-### Conflict Graph
+
+
+#### Conflict Graph
 
 AKA **Precedence graph**
 
+
+
 Directed graph
 
-Assumption:
+**Assumption**:
 
 * A transaction will always read an item before it writes that item
 
@@ -175,39 +238,67 @@ Given a schedule S and a conflict graph
 
 
 
-#### Example
+##### Example
 
 ![image-20200320102532105](images/06-transactions/image-20200320102532105.png)
 
 
 
-### Relationship Among Schedules
+Which of the following are conflict serial schedules?
+
+![image-20200529113653558](images/06-transactions/image-20200529113653558.png)
+
+
+
+
+
+
+
+#### Relationship Among Schedules
 
 ![image-20200320102749551](images/06-transactions/image-20200320102749551.png)
 
 
 
-## Recoverable and Cascadeless Schedules
+### Recoverable and Cascadeless Schedules
 
 **Transactions can fail!**
 
-![image-20200320102931170](images/06-transactions/image-20200320102931170.png)
+* If $T_i$ fails, it must be rolled back to retain the **atomicity** property of transactions
+
+* If another transaction $T_j$ has read a data item written by $T_i$, then $T_j$ must also be rolled back
+
+    $\Rightarrow$ database systems must ensure that schedules are recoverable
+
+This schedule is not recoverable:
+
+![image-20200529113950922](images/06-transactions/image-20200529113950922.png)
 
 
 
-### Recoverable
 
-A schedule is **recoverable** if for each pair of transactions $T_i$ and $T_j$ where $T_j$ reads data items written by  $T_i$, then $T_i$ must commit before $T_j$ commits.
+
+#### Recoverable
+
+A schedule is **recoverable** if for each pair of transactions $T_i$ and $T_j$ where $T_j$ reads data items written by  $T_i$, 
+then $T_i$ must commit before $T_j$ commits.
 
 ![image-20200320103122260](images/06-transactions/image-20200320103122260.png)
 
 
 
-### Cascading Rollbacks
+#### Cascading Rollbacks
 
 A schedule is **cascadeless** if for each pair of transactions $T_i$ and $T_j$, where $T_j$ reads data items written by $T_i$, the commit operation of $T_i$ must appear before the read by $T_j$ 
 
 * In other words, if you only read committed data
+* Every cascadeless schedule is also recoverable.
+
+
+
+Cascading rollbacks can easily become expensive.
+
+It is desirable to restrict the schedules to those that are cascadeless.
 
 
 
@@ -291,7 +382,7 @@ Disadvantage
 
 ![image-20200330084351622](images/06-transactions/image-20200330084351622.png)
 
-#### Lock Conversion
+### Lock Conversion
 
 First phase
 
@@ -311,17 +402,17 @@ It relies on the application programmer to insert the appropriate locks.
 
 
 
-#### More Examples
+### More Examples
 
 ![image-20200330084821089](images/06-transactions/image-20200330084821089.png)
 
-#### Overview
+### Overview
 
 ![image-20200330084840603](images/06-transactions/image-20200330084840603.png)
 
 
 
-### Deadlocks
+## Deadlocks
 
 ![image-20200330084946125](images/06-transactions/image-20200330084946125.png)
 
@@ -333,7 +424,7 @@ It relies on the application programmer to insert the appropriate locks.
 
 
 
-#### Deadlock Detection
+### Deadlock Detection
 
 Create a "Wait-for graph" and check for cycles
 
@@ -349,13 +440,13 @@ If a deadlock is detected:
 
 
 
-##### Example
+#### Example
 
 ![image-20200330085413521](images/06-transactions/image-20200330085413521.png)
 
 
 
-##### Rollback Candidates
+#### Rollback Candidates
 
 Choosing a good victim transaction
 
@@ -375,7 +466,7 @@ Prevent that always the same victim is chosen (starvation)
 
 
 
-#### Deadlock Prevention
+### Deadlock Prevention
 
 **Conservative 2PL**
 
@@ -387,7 +478,7 @@ Prevent that always the same victim is chosen (starvation)
 
 
 
-### Summary: Concurrency Control
+## Summary: Concurrency Control
 
 * Many concurrency control protocols have been developed
     *  Main goal: allowing only serializable, recoverable and cascadeless schedules

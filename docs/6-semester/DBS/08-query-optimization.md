@@ -637,14 +637,183 @@ Hash join
 
 
 
+## Cost-based (Physical) Query Optimization
+
+**Objective**
+
+For a given query, find the most efficient query execution plan
+
+![image-20200530174957864](images/08-query-optimization/image-20200530174957864.png)
+
+### Physical query optimization
+
+* Generate alternative query execution plans
+* Choose algorithms and access paths
+* Compute costs
+* Choose cheapest query execution plan
+
+**Prerequisite**
+
+* Cost model
+* Statistics on the input to each operation
+    * Statistics on leaf relations: stored in system catalog
+    * Statistics on intermediate relations must be estimated (cardinalities)
 
 
 
 
 
+### Selectivity and Cardinality
+
+**Statistics per Relation**
+
+For relation $r$
+
+* Number of tuples (records): $n_r$
+
+* Tuple size in relation $r$: $l_r$
+
+* Load factor (fill factor), percentage of space used in each block
+
+* Blocking factor (number of records per block)
+
+* Relation size in blocks: $b_r$
+
+* Relation organization
+
+    Heap, hash, indexes, clustered
+
+* Number of overflow blocks
+
+
+
+**Statistics per Attribute**
+
+For attribute $A$ in relation $r$
+
+* Size and type
+
+* Number of distinct values for attribute A:$V(A,r)$
+
+    The same as the size of $\pi_A(r)$
+
+* Selection cardinality $S(A,r)$
+
+    The same as the size of $\sigma_{A=a}(r)$ for an arbitrary value $a$
+
+* Probability distribution over the values
+
+    Alternative: assume uniform distribution
+
+
+
+<u>Statistics need to be updated when the table is updated!</u>
+
+
+
+**Statistics per Index**
+
+* Base relation
+* Indexed attribute(s)
+* Organization, eg. B+-tree, hash
+* Clustering index?
+* On key attribute(s)?
+* Sparse or dense?
+* Number of levels (if appropriate)
+* Number of leaf-level index blocks
+
+
+
+### Cost Estimation Example
+
+[See example in DBS8 slide 53 p. 160](extra/DBS8.pdf#page=160)
+
+[PDF on Moodle](https://www.moodle.aau.dk/pluginfile.php/1999153/mod_resource/content/0/DBS-9.pdf#page=160)
+
+
+
+### Cost Model
+
+Cost models consider more aspects than only disk access
+
+* CPU time
+* Communication time
+* Main memory usage
+* ...
+
+For this purpose, we need to estimate input/output sizes of each operator
+
+* Statistics on leaf relations: stored in system catalog
+* Statistics on intermediate relations must be estimated (cardinalities)
+
+
+
+Additional aspects
+
+* Spanning search space (dynamic programming, exhaustive search, ... )
+* Bushy vs. left-deep join trees (parallelism vs. pipelining)
+* Multiquery optimization (shared scans, ... )
+* ...
+
+
+
+### Heuristic vs Cost-Based Query Optimization
+
+![image-20200530181152377](images/08-query-optimization/image-20200530181152377.png)
 
 
 
 
 
+### PostgreSQL
+
+`EXPLAIN`
+
+* Display the execution plan that the PostgreSQL planner generates for the supplied statement
+
+```sql hl_lines="1"
+EXPLAIN SELECT DISTINCT s.semester
+FROM student s, takes h,
+	course v, professor p
+WHERE p.name=‘Socrates‘ AND
+    v.taughtBy = p.empID AND
+    v.courseID = h.courseID AND
+    h.studID = s.studID;
+```
+
+![image-20200530181330346](images/08-query-optimization/image-20200530181330346.png)
+
+
+
+`EXPLAIN ANALYZE`
+
+* The additional ANALYZE option causes the statement to be actually executed, not only planned
+
+`ANALYZE`
+
+* ANALYZE collects statistics about the contents of tables in the database
+
+![image-20200530181415576](images/08-query-optimization/image-20200530181415576.png)
+
+
+
+![image-20200530181427515](images/08-query-optimization/image-20200530181427515.png)
+
+
+
+
+
+#### Sequential Scans vs Indexes
+
+If an index is “useful” or not depends on
+
+* How much data is relevant to the query
+* Size of the relation
+* Properties of the index (clustered, multiple columns, ... )
+* What algorithm needs the data as input
+* ...
+
+
+
+<u>Until query optimization is perfected, the main task of database administrators will remain query tuning (creating indexes, etc.).</u>
 

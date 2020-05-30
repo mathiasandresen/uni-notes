@@ -238,3 +238,73 @@ $$
 \sigma_\theta(R \times S) \equiv R \Join_\theta S
 $$
 
+
+
+**Remember the equivalent expressions for operators in relational algebra!**
+
+
+
+
+
+### Phases of Logical Query Optimization
+
+1. Break up conjunctive selection predicates
+2. Push selections down
+3. Introduce joins by combining selections and cross products
+4. Determine join order
+    **Heuristic**: execute joins with input from selections before executing other joins
+5. Introduce and push down projections
+    Not always useful
+
+
+
+[Example in DBS8 slide 18 p. 35](extra/DBS8.pdf#page=35)
+
+
+
+### Be Careful!
+
+**Find the titles of reserved films**
+
+```sql
+SELECT DISTINCT title
+FROM film F, reserved R
+WHERE F.filmID = R.filmID
+```
+
+![image-20200530134859142](images/08-query-optimization/image-20200530134859142.png)
+
+
+
+**Find the titles of expensive reserved films**
+
+```sql
+SELECT DISTINCT title
+FROM film F, reserved R
+WHERE F.filmID = R.filmID AND F.rentalPrice > 4
+```
+
+![image-20200530134925092](images/08-query-optimization/image-20200530134925092.png)
+
+
+
+### Summary: Heuristic Query Optimization
+
+**Rules of thumb**
+
+* Perform selections as early as possible
+* Perform projections as early as possible
+
+
+
+**The optimization process**
+
+* Generate initial query plan from SQL statement
+* Transform query plan into more efficient query plan via a series of modifications, each of which hopefully reducing execution time
+
+
+
+**Note**
+
+* A single query plan provides all the results
+* Sometimes also called rule-based query optimization

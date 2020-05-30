@@ -11,7 +11,15 @@ title: Query Processing and Optimization
 * Understand the basics of heuristic (logical) query optimization
 * Understand the basics of physical query optimization
 
-
+$$
+\newcommand{\relationRaw}[3]{
+	\newcommand{\pk}{\underline}
+	#3\mathbf{#1}#3#3:\{[\mathrm{#2}]\}
+}
+\newcommand{\relation}[2]{\relationRaw{#1}{#2}{}}
+\newcommand{\relational}[2]{\relationRaw{#1}{#2}{&}}
+\nonumber
+$$
 
 ## Query Processing
 
@@ -308,3 +316,335 @@ WHERE F.filmID = R.filmID AND F.rentalPrice > 4
 
 * A single query plan provides all the results
 * Sometimes also called rule-based query optimization
+
+
+
+
+
+## Operator Implementations
+
+**Sample Database**
+
+$$
+\begin{align*}
+\relational{customer}{customerID, name, street, city, state}\\
+\relational{reserved}{customerID, filmID, resDate}\\
+\relational{film}{filmID, title, kind, rentalPrice}
+\end{align*}
+$$
+
+### Selection
+
+#### Taxonomy
+
+* Primary key, point
+    * $\sigma_{filmID=2}(film)$
+* Point
+    * $\sigma_{title='Terminator'}(film)$
+* Range
+    * $\sigma_{1<rentalPrice<4}(film)$
+* Conjunction (logical and)
+    * $\sigma_{kind='F' \and rentalPrice=4}(film)$
+* Disjunction (logical or)
+    * $\sigma_{rentalPrice<4 \or kind='D'}(film)$
+
+
+
+
+
+#### Selection Strategies - Point/Range
+
+**Linear search**
+
+* Expensive but always applicable
+
+**Binary search**
+
+* Applicable only when the file is appropriately ordered
+
+**Primary hash index/table search**
+
+* Single record retrieval; does not work for range queries
+* Retrieval of multiple records
+
+**Primary/clustering index search**
+
+* Multiple records for each index item
+* Implemented with single pointer to block with first associated record
+
+**Secondary index search**
+
+* Implemented with multiple pointers, each to a single record
+* Might become expensive
+
+
+
+#### Strategies for Conjunctive Queries
+
+```sql
+SELECT *
+FROM customer
+WHERE name = ’Jensen ’ AND street = ’Elm ’
+	AND state = ’Arizona ’
+```
+
+* Can indexes on (name) and (street) be used? Yes
+* Can an index on (name, street, state) be used? Yes
+* Can an index on (name, street) be used? Yes
+* Can an index on (name, street, city) be used? Yes
+* Can an index on (city, name, street) be used? No
+
+
+
+**<u>Optimization of conjunctive queries</u>**
+
+Indexing provides good opportunities for improving performance
+
+
+
+Use available indexes
+
+* Ideal: composite index is applicable
+
+* If multiple are available
+
+    $\to$ use the most selective index, then check remaining conditions
+
+
+
+Use intersection of record pointers (if multiple indexes applicable)
+
+* Index lookups to fetch sets of record pointers
+* Intersect record pointers to perform conjunction
+* Retrieve (and check) the qualifying records
+
+
+
+Disjunctive queries provide little opportunity for improving performance.
+
+Database tuning and the creation of indexes is important!
+
+
+
+### Join
+
+Join strategies
+
+* Nested loop join
+* Index-based join
+* Sort-merge join
+* Hash join
+
+Strategies work on a per block (not per record) basis
+
+* Estimate I/Os (block retrievals)
+* Use of main memory buffer
+
+Table sizes and join selectivities influence join costs
+
+* Query selectivity: $sel = \mathrm{\# tuples\ in\ result \over \# candidates}$
+* For join, #candidates is the size of the Cartesian product
+
+
+
+#### Nested Loop Join
+
+![image-20200530152848174](images/08-query-optimization/image-20200530152848174.png)
+
+[See example in DBS8 slide 36 p. 68](extra/DBS8.pdf#page=68)
+
+[PDF on moodle](https://www.moodle.aau.dk/pluginfile.php/1999153/mod_resource/content/0/DBS-9.pdf#page=68)
+
+
+
+#### Block Nested Loop Join
+
+Not all blocks fit into main memory
+
+
+
+**Parameters**
+
+* $b_{inner}, b_{outer}:$ number of blocks
+* $n_B:$ size of main memory buffer
+
+![image-20200530152944800](images/08-query-optimization/image-20200530152944800.png)
+
+Cost estimation (block transfers):
+
+$$
+b_{outer}+(\lceil b_{outer} / (n_B-2)\rceil) \cdot b_{inner}
+$$
+
+If we know more system parameters (block transfer, disk seeks, CPU speed,. . . ) and the size of input relations, we can estimate the time to compute the join.
+
+
+
+**Example**
+
+$reserved \Join customer$
+
+* number of blocks
+    * $b_{reserved}=2.000, b_{customer}=10$
+* Size of main memory buffer
+    * $n_B=6$
+
+
+
+Cost:
+
+* $reserved$ as outer
+    * $2.000+\lceil (2.000/4)\rceil \cdot 10 = 7.000$
+* $customer$ as outer
+    * $10+\lceil (10/4)\rceil \cdot 2000 = 6.010$
+
+
+
+
+
+#### Index-based Block Nested Loop Join
+
+Same principle as standard nested loop join
+
+* Outer relation
+* Inner relation
+* Index lookups can replace file scans on the inner relation
+
+
+
+#### Merge Join
+
+Exploit sorted relations
+
+![image-20200530153748660](images/08-query-optimization/image-20200530153748660.png)
+
+Assumption: Both input relations are sorted
+
+
+
+[Example in DBS8 slide 42 p. 126](extra/DBS8.pdf#page=126)
+
+[PDF on Moodle](https://www.moodle.aau.dk/pluginfile.php/1999153/mod_resource/content/0/DBS-9.pdf#page=126)
+
+
+
+##### Cost
+
+Parameters
+
+* $b_1, b_2:$ number of blocks
+
+Cost estimation (block transfer)
+
+$$
+b_1 + b_2
+$$
+
+<u>Extensions</u>
+
+* Combination with sorting if input relations are not sorted
+* Not enough main memory
+
+
+
+#### Hash Join
+
+Apply hash functions to the join attributes
+
+$\to$ partition tuples into buckets
+
+
+
+* Hash each relation on the join attributes
+* Each bucket must be small enough to fit into memory
+* Join corresponding buckets from each relation
+
+![image-20200530154239374](images/08-query-optimization/image-20200530154239374.png)
+
+
+
+**Example**
+
+![image-20200530154125982](images/08-query-optimization/image-20200530154125982.png)
+
+![image-20200530154158185](images/08-query-optimization/image-20200530154158185.png)
+
+
+
+##### Algorithm
+
+Parameters
+
+* $b_1, b_2$: number of blocks for tables $R_1$ and $R_2$
+
+Steps
+
+* Partitioning table $R_1$ with $h_1$ into buckets $r_{1_i}$ (read all / write all)
+
+    $2\times b_1$
+
+* Partitioning table $R_2$ with $h_1$ into buckets $r_{2_i}$ (read all / write all)
+
+    $2\times b_2$
+
+* Build phase: 
+
+    use $h_2$ to create an in-memory hash index on bucket $r_{1_i}$ (read all)
+
+    $b_1$
+
+* Probe phase
+
+    for corresponding $r_{2_i}$, use $h_2$ to test in-memory index for matches (read all)
+
+    $b2$
+
+Cost estimation (block transfer)
+
+$$
+3 \times b_1 + 3 \times b_2 + \epsilon
+$$
+
+$\epsilon$: partially filled blocks
+
+
+
+
+
+#### Cost and Applicability of Join Strategies
+
+Nested loop join
+
+* Can be used for all join types
+* Can be quite expensive
+
+Merge join
+
+* Files need to be sorted on the join attributes
+
+    Sorting can be done for the purpose of the join
+
+* Can use indexes
+
+Hash join
+
+* Good hash functions are essential
+* Performance best if smallest relation fits into main memory
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -339,8 +339,10 @@ $$
 
 * Primary key, point
     * $\sigma_{filmID=2}(film)$
+    * Here we could use an index
 * Point
     * $\sigma_{title='Terminator'}(film)$
+    * We may or may not have an index here
 * Range
     * $\sigma_{1<rentalPrice<4}(film)$
 * Conjunction (logical and)

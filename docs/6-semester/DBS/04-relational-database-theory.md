@@ -349,6 +349,24 @@ with $F_{\schema_i}$ representing functional dependencies that can be checked ef
 
 
 
+**Example**
+
+The following **is** dependency preserving, since we can check all FDs locally ($A\to B$ on $R_1$ and $B\to C$ on $R_2$)
+
+![image-20200531114250689](images/04-relational-database-theory/image-20200531114250689.png)
+
+The next one **is not** dependency preserving, since we cannot check $B\to C$ on any of the new relations!
+
+![image-20200531114432163](images/04-relational-database-theory/image-20200531114432163.png)
+
+
+
+
+
+
+
+
+
 ![image-20200528114845997](images/04-relational-database-theory/image-20200528114845997.png)
 
 
@@ -384,7 +402,7 @@ A relation $\schema$ is in 1NF if the domains of all its attributes are atomic (
 
 ### Third Normal Form 3NF
 
-A relation schema $\schema$ is in 3NF if at least one of the following conditions holds for each of its FDs $\alpha \to \beta$ with $B \in \schema$
+A relation schema $\schema$ is in 3NF if at least one of the following conditions holds for each of its FDs $\alpha \to B$ with $B \in \schema$
 
 1. $B \in \alpha$, i.e. the FD is **trivial**
 2. $\alpha$ is a **super key** of $R$
@@ -413,7 +431,7 @@ The relation is **not** in 3NF
 
 ### Boyce Codd Normal Form BCNF
 
-A relation schema $\schema$ is in BCNF if at least one of the following conditions holds for each of its FDs $\alpha \to \beta$ with $B \in \schema$
+A relation schema $\schema$ is in BCNF if at least one of the following conditions holds for each of its FDs $\alpha \to B$ with $B \in \schema$
 
 1. $B \in \alpha$, i.e. the FD is **trivial**
 2. $\alpha$ is a **super key** of $R$

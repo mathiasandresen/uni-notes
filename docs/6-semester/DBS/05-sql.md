@@ -584,7 +584,12 @@ FROM ( SELECT f2(A) AS temp FROM R ...);
 
 ### Grouping
 
+[Stackoverflow Answer](https://stackoverflow.com/a/2421441)
+
 Computation of the aggregate function per group
+
+* `Group By X` means **put all those with the same value for X in the one group**.
+* `Group By X, Y` means **put all those with the same values for both X and Y in the one group**.
 
 Notation
 

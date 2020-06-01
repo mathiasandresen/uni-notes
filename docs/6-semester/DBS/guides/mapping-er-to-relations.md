@@ -93,6 +93,7 @@ $$
 $$
 
 **Improved by Merging**
+
 $$
 \begin{align*}
 &\bold{course} &&:\{[\underline{\text{courseID}}, \text{title}, \text{ects}, \color{darkred}{\text{taughtBy} \to \text{professor}}]\}\\

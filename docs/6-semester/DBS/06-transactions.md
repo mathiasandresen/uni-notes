@@ -244,11 +244,22 @@ Given a schedule for a set of transactions $T_1,T_2,\dots,T_n$
 
 
 
-**Determining Serializability**
+
+
+#### Draw a Conflict Graph
+
+1. For each transaction $T_x$ participating in schedule $S$, create a node labeled $T_i$ in the precedence graph. 
+2. For each case in $S$ where $T_j$ executes a `read(X)` **after** $T_i$ executes a `write(X)`, create an edge ($T_i \to T_j$) in the precedence graph. 
+3. For each case in $S$ where $T_j$ executes a `write(X)` **after** $T_i$ executes a `read(X)`, create an edge ($T_i \to T_j$) in the precedence graph.
+4. For each case in S where $T_j$ executes a `write(X)` **after** $T_i$ executes a `write(X)`, create an edge ($T_i \to T_j$) in the precedence graph.
+
+
+
+#### Determining Serializability
 
 Given a schedule S and a conflict graph
 
-* A schedule is **conflict serializable** if its conflict graph is **acyclic**
+* A schedule is **conflict serializable** if its conflict graph is **acyclic** (**no cycles**)
 * Intuitively, a conflict between two transactions forces an execution order between them (topological sorting)
 
 
@@ -295,16 +306,21 @@ This schedule is not recoverable:
 
 #### Recoverable
 
-A schedule is **recoverable** if for each pair of transactions $T_i$ and $T_j$ where $T_j$ reads data items written by  $T_i$, 
-then $T_i$ must commit before $T_j$ commits.
+A schedule is **recoverable** if for each pair of transactions $T_i$ and $T_j$ 
+	where $T_j$ reads data items written by  $T_i$, 
+	then $T_i$ must **commit** before $T_j$ **commits**.
+
+
 
 ![image-20200320103122260](images/06-transactions/image-20200320103122260.png)
 
 
 
-#### Cascading Rollbacks
+#### Cascadeless
 
-A schedule is **cascadeless** if for each pair of transactions $T_i$ and $T_j$, where $T_j$ reads data items written by $T_i$, the commit operation of $T_i$ must appear before the read by $T_j$ 
+A schedule is **cascadeless** if for each pair of transactions $T_i$ and $T_j$, 
+	where $T_j$ reads data items written by $T_i$, 
+	the **commit** operation of $T_i$ must appear before the **read** by $T_j$ 
 
 * In other words, if you only read committed data
 * Every cascadeless schedule is also recoverable.

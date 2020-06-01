@@ -54,7 +54,7 @@ $R\subseteq D_1\times \dots \times D_n$
 
 #### Foreign Key
 
-* A relation may incluyde the primary key attributes of another table
+* A relation may include the primary key attributes of another table
 * Valid values for foreign key attributes must appear in the primary key of the referenced table
 
 #### Example
@@ -77,7 +77,7 @@ These relations have <u>the same</u> information content:
 
 #### Attribute Ordering
 
-In accordance with the **mathematical defintion** of tuples, attributes in a tuple/relation are **ordered**
+In accordance with the **mathematical definition of tuples, attributes in a tuple/relation are **ordered**
 
 These relations have <u>different</u> information content:
 

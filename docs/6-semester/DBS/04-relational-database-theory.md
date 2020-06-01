@@ -226,6 +226,8 @@ Goal:
 
 
 
+
+
 A **minimal cover** $F_c$ is a canonical representation of a set $F$ of functional dependencies
 
 Characteristics:
@@ -243,6 +245,8 @@ Characteristics:
 
 
 
+
+
 **Check if Attribute is extraneous**
 
 * Check if A ∈ α is an extraneous attribute in α → β by computing the attribute closure:
@@ -253,13 +257,20 @@ Characteristics:
 
 
 
-#### Minimal Cover Algorithm
+### Minimal Cover Algorithm
 
 ![image-20200528110326881](images/04-relational-database-theory/image-20200528110326881.png)
 
 
 
-[Example in DBS4 slides p 69](https://www.moodle.aau.dk/pluginfile.php/1979144/mod_resource/content/0/DBS-norm-csj-2.pdf#page=69)
+- Page 325 in book (PDF page 354)
+
+* [Example in DBS4 slides p 69](https://www.moodle.aau.dk/pluginfile.php/1979144/mod_resource/content/0/DBS-norm-csj-2.pdf#page=69)
+* [See guide in guides/minimal-cover](guides/minimal-cover.md)
+
+
+
+
 
 
 

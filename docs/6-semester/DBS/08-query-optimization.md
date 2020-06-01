@@ -260,8 +260,10 @@ $$
 2. Push selections down
 3. Introduce joins by combining selections and cross products
 4. Determine join order
+    
     **Heuristic**: execute joins with input from selections before executing other joins
 5. Introduce and push down projections
+    
     Not always useful
 
 

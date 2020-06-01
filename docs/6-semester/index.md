@@ -6,8 +6,8 @@ title: Index
 
 Kurser:
 
-* [VIT - Theory of Science](VIT/index.md)
-* 
+* [DBS - Database Systems](DBS/index.md))
+* [AALG - Advanced Algorithms](AALG/index.md)
 
 Moodle side:
 

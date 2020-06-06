@@ -21,4 +21,3 @@ title: Others
 
 - To encode a letter with the created coding, navigate through the tree until you find the specified letter
 - Remember to read the exercise because it might specify some order of clashing frequencies
-

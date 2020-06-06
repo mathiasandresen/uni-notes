@@ -21,7 +21,8 @@ Then
 | KD-tree        | $\Theta(\sqrt{n}+k)$  |
 | 2 x 1D BSTs    | $\Theta(lg(n) + k)$   |
 
-
+* $log^2(n) = log(n)^2$
+  - The log base is unimportant in asymptotic notation eg.  $O(lg(n)) = O(log(n))$
 
 ### Big-O Cheat Sheet
 
@@ -49,8 +50,8 @@ From good to bad:
 1. Do until no entries/tuples are left:
     1. Split on the current attribute (order specified by the exercise)
         - Splitting means sorting the attribute and taking the lower half based on their value
-            - Example: {1, 2, 3, 4} => {1, 2} and {3, 4} 
-            - Example: {1, 2, 3} => {1, 2} and {3}
+            - Example: $\{1, 2, 3, 4\} \Rightarrow \{1, 2\}$ and $\{3, 4\}$ 
+            - Example: $\{1, 2, 3\} \Rightarrow \{1, 2\}$ and $\{3\}$
             - The lower half should contain values less than or equal to the split value
     2. Put the group of elements with the lower values in a new left node and the group of elements with the higher values in a right node
     3. Go to 1.1 and split on the next attribute specified by the exercise

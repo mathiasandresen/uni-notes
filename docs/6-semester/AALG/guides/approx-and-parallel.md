@@ -8,7 +8,7 @@ title: Approximation and Parallelism
 
 [**Based on the 2017 exam set**](../extra/exam-sets/2017-aalg-exam.pdf)
 
-
+[More about approximation algorithms in lecture 11 notes](../11-approximation.md)
 
 - Consider a 1.2-approximation algorithm with optimal cost $C^* = 100$
 - For a **minimization** problem, the algorithm returns a value that is no larger than $C*1.2 = 100 * 1.2 = 120$
@@ -57,7 +57,7 @@ We have the optimal solution $C^*$ and the approximate solution $C$.
 
 [**Based on the 2016 exam set**](../extra/exam-sets/2016-aalg-exam.pdf)
 
-
+[See more about multithreaded algorithms in lecture 10 notes](../10-multithreaded-algorithms.md)
 
 - Slackness = parallelism/number_of_processors
 - Number of processor start at one and increase by one 
@@ -67,3 +67,12 @@ We have the optimal solution $C^*$ and the approximate solution $C$.
 - If slackness < 1 the possibility of perfect linear speedup is very decreased
 
 ![image-20200604111653042](images/approx-and-parallel/image-20200604111653042.png)
+
+
+
+### Check for Perfect Linear Speedup
+
+1. If $slackness \geq 1$  then it is possible to achieve perfect linear speedup
+2. $slackness= {parallelism \over P}$
+3. $parallelism = {T_1 \over T_{\infty}}$
+

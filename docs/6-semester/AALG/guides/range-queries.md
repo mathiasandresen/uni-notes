@@ -118,7 +118,7 @@ From good to bad:
 
         - The exercise will specify whether the point being split is in the left or right subtree, for example based on if it is smaller or equal
 
-![image-20200603161831940](C:\Users\lasse\AppData\Roaming\Typora\typora-user-images\image-20200603161831940.png)
+![img](images/range-queries/FF5AACB6DC7216D40503B368213A71B20AE0BAAD)
 
 - The image above shows the order to add the lines splitting the boxes
 

@@ -42,7 +42,9 @@ title: Sweeping
 - All points are/should be sorted by their angle to $P_0$
     - The angle is calculated from a horizontal line going out from $P_0$ in both directions
 
-![image-20200603141142406](C:\Users\lasse\AppData\Roaming\Typora\typora-user-images\image-20200603141142406.png)
+![img](images/sweeping/936F8F63BD86E178F5C83614FAB2BD3790110915)
+
+
 
 1. Push the first 3 points onto the stack
 

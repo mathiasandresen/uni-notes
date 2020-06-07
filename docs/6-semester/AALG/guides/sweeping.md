@@ -42,7 +42,7 @@ title: Sweeping
 - All points are/should be sorted by their angle to $P_0$
     - The angle is calculated from a horizontal line going out from $P_0$ in both directions
 
-![img](images/sweeping/936F8F63BD86E178F5C83614FAB2BD3790110915)
+![img](images/sweeping/image1.png)
 
 
 

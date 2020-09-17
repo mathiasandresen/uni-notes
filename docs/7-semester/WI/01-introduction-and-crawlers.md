@@ -221,3 +221,124 @@ In practice: use multiple crawlers
 * Each crawler has its own URL frontier
 * URLs are distributed over crawlers according to host: each crawler is responsible for a certain set of hosts (e.g. defined by a hash function, or geographically)
 * The `frontier.add(extract_urls(doc))` operation must add URLs to the frontier of the relevant crawler
+
+
+
+
+
+## Duplicate Identification
+
+
+
+### Jaccard Coefficient
+
+For any two finite sets A, B, define
+
+$$
+J(A,B):=\frac {|A\cap B|} {|A \cup B|}
+$$
+
+$J(A,B)$ measures the overlap relative to the total size of the sets
+
+![image-20200914144406892](images/01-introduction-and-crawlers/image-20200914144406892.png)
+
+We measure the similarity of text documents $d_1, d_2$ by the Jaccard Coefficient of their shingle sets $S(d_1), S(d_2)$
+
+
+
+### Sketches
+
+Estimating $J(S(d_1), S(d_2)):$
+
+* Let $\pi$ be a random permutation of the integers $0,\dots,N^4 -1$
+* For $j=1,2$: let $x_j^\pi:=\min \{\pi(x):x\in S(d_j\}$
+    * Then:
+
+$$
+J(S(d:_1), S(d_2)) = P(x_1^\pi = x_2^\pi)
+$$
+
+where $P$ is the probability over the selection of a random permutation $\pi$
+
+![image-20200914143806119](images/01-introduction-and-crawlers/image-20200914143806119.png)
+
+$P(x_1^\pi = x_2^\pi)$ = probability that the minimum value $\min \pi(S(d_1)\cup S(d_2))$ falls inside $S(d_1)\cap S(d_2)= J(S(d_1), S(d_2))$
+
+
+
+One random permutation does not tell us much, so we take many, e.g. $\pi_1,\pi_2,\dots,\pi_{200}$
+
+Then characterize every document $d_h$ by its feature vector
+
+$$
+\psi(d_h):=(x_h^{\pi_1},\dots,x_h^{\pi_{200}}),
+$$
+
+called the **sketch** of $d_h$:
+
+![image-20200914144807603](images/01-introduction-and-crawlers/image-20200914144807603.png)
+
+Now we can approximately estimate the Jaccard Coefficient:
+
+![image-20200914144828911](images/01-introduction-and-crawlers/image-20200914144828911.png)
+
+
+
+### Clustering Documents
+
+Given a collection of documents
+
+![image-20200914144931403](images/01-introduction-and-crawlers/image-20200914144931403.png)
+
+Group documents into **clusters**, so that near-duplicates are in one cluster
+
+Supports: 
+
+(from google)
+
+![image-20200914145008290](images/01-introduction-and-crawlers/image-20200914145008290.png)
+
+* Caution: this does not mean that all documents in a cluster are near-duplicates!
+* Will give useful results only if there are no long near-duplicate paths leading from one document to a totally different one
+
+
+
+#### Naïve Algorithm
+
+Naïve **agglomerative single-link clustering** using a **union-find** data structure:
+
+![image-20200914145244805](../../../../../image-20200914145244805.png)
+
+* line 3: can be approximated using sketches
+* line 4: two *find* and (at most) one *union* operation
+
+Complexity is $\Theta(N^2)$ which is already infeasible!
+
+Basic strategy: filter out pairs $d_i,d_j$ for which $J(S(d_i), S(d_j)) >t$ surely will not hold
+
+
+
+#### Filtering with Sketches
+
+Generate pairs of documents whose sketches have at least one component in common:
+
+![image-20200914145822369](images/01-introduction-and-crawlers/image-20200914145822369.png)
+
+* Not counting line 5, the complexity is $O(N \log N)$
+* Line 5 can stile generate a large number of pairs (think of rather common shingles, e.g. "this is not a")
+* The same pair ($d_h,d_{h'}$) may be returned for different values of $k$
+
+
+
+From sketches to super-shingles (shingling shingles):
+
+![image-20200914150024787](images/01-introduction-and-crawlers/image-20200914150024787.png)
+
+Documents with large sketch overlap are likely to have super-shingles in common
+
+Filtering based on super-shingles:
+
+* Generate list of $\langle \textit{super-shingle, document} \rangle$
+* Sort on first component, return pairs of second components
+
+This is quite heuristic!

@@ -59,15 +59,15 @@ Without hardware we have to send 3 messages
 
 With hardware the router takes care of the message sending
 
-![image-20201001123953447](images/Untitled/image-20201001123953447.png)
+![image-20201001123953447](images/04-multicast/image-20201001123953447.png)
 
 #### With Hardware Support Example
 
-![image-20201001124038045](images/Untitled/image-20201001124038045.png)
+![image-20201001124038045](images/04-multicast/image-20201001124038045.png)
 
 #### Without Hardware Support Example
 
-![image-20201001124056689](images/Untitled/image-20201001124056689.png)
+![image-20201001124056689](images/04-multicast/image-20201001124056689.png)
 
 
 
@@ -85,13 +85,13 @@ UDP has no guarantees
 
 
 
-![image-20201001124224397](images/Untitled/image-20201001124224397.png)
+![image-20201001124224397](images/04-multicast/image-20201001124224397.png)
 
 
 
 UDP can drop packages:
 
-![image-20201001124301558](images/Untitled/image-20201001124301558.png)
+![image-20201001124301558](images/04-multicast/image-20201001124301558.png)
 
 
 
@@ -118,7 +118,7 @@ Guarantee
 
 ### Delivery
 
-![image-20201001124450264](images/Untitled/image-20201001124450264.png)
+![image-20201001124450264](images/04-multicast/image-20201001124450264.png)
 
 
 
@@ -128,9 +128,9 @@ Guarantee
 
 
 
-![image-20201001124523471](images/Untitled/image-20201001124523471.png)
+![image-20201001124523471](images/04-multicast/image-20201001124523471.png)
 
-![image-20201001124530257](images/Untitled/image-20201001124530257.png)
+![image-20201001124530257](images/04-multicast/image-20201001124530257.png)
 
 `:send`
 
@@ -166,9 +166,9 @@ Satisfy these 3 properties
 
 
 
-![image-20201001125033998](images/Untitled/image-20201001125033998.png)
+![image-20201001125033998](images/04-multicast/image-20201001125033998.png)
 
-![image-20201001125048413](images/Untitled/image-20201001125048413.png)
+![image-20201001125048413](images/04-multicast/image-20201001125048413.png)
 
 `b_multicast` is the basic multipart algorithm from above
 
@@ -203,7 +203,7 @@ Agreement: Yes!
 
 ### Hold--back Queue
 
-![image-20201001125842814](images/Untitled/image-20201001125842814.png)
+![image-20201001125842814](images/04-multicast/image-20201001125842814.png)
 
 The delivery queue is handled by Elixir in the code
 
@@ -213,9 +213,9 @@ The delivery queue is handled by Elixir in the code
 
 
 
-![image-20201001130724536](images/Untitled/image-20201001130724536.png)
+![image-20201001130724536](images/04-multicast/image-20201001130724536.png)
 
-![image-20201001130733929](images/Untitled/image-20201001130733929.png)
+![image-20201001130733929](images/04-multicast/image-20201001130733929.png)
 
 
 
@@ -254,25 +254,25 @@ Imagine a bank.
 
 Can lead to wrong states
 
-![image-20201001132310064](images/Untitled/image-20201001132310064.png)
+![image-20201001132310064](images/04-multicast/image-20201001132310064.png)
 
 Use FIFO to fix this problem
 
-![image-20201001132350368](images/Untitled/image-20201001132350368.png)
+![image-20201001132350368](images/04-multicast/image-20201001132350368.png)
 
 If we introduce another process, it can fail again
 
-![image-20201001132425590](images/Untitled/image-20201001132425590.png)
+![image-20201001132425590](images/04-multicast/image-20201001132425590.png)
 
 Introduces total order
 
-![image-20201001132514231](images/Untitled/image-20201001132514231.png)
+![image-20201001132514231](images/04-multicast/image-20201001132514231.png)
 
 
 
 Total order can also go wrong
 
-![image-20201001132636501](images/Untitled/image-20201001132636501.png)
+![image-20201001132636501](images/04-multicast/image-20201001132636501.png)
 
 
 
@@ -294,7 +294,7 @@ Idea
 
 #### Sequencer
 
-![image-20201001133912883](images/Untitled/image-20201001133912883.png)
+![image-20201001133912883](images/04-multicast/image-20201001133912883.png)
 
 * Sequencer is bottlenek
 * Single point of failure
@@ -320,7 +320,7 @@ The trick:
 
 
 
-![image-20201001135255850](images/Untitled/image-20201001135255850.png)
+![image-20201001135255850](images/04-multicast/image-20201001135255850.png)
 
 
 
@@ -349,7 +349,7 @@ Idea
 
 #### Vector Clocks
 
-![image-20201001140136601](images/Untitled/image-20201001140136601.png)
+![image-20201001140136601](images/04-multicast/image-20201001140136601.png)
 
 
 
@@ -360,7 +360,7 @@ Not-quite-Lamport clocks, and they are vectors
 
 
 
-![image-20201001140237396](images/Untitled/image-20201001140237396.png)
+![image-20201001140237396](images/04-multicast/image-20201001140237396.png)
 
 
 

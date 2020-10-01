@@ -14,7 +14,7 @@ theme:
         logo: material/school
         repo: fontawesome/brands/github
     features:
-        - tabs
+        - navigation.tabs
 
 plugins:
   - search

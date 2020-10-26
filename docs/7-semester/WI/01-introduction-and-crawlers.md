@@ -307,7 +307,7 @@ Supports:
 
 Naïve **agglomerative single-link clustering** using a **union-find** data structure:
 
-![image-20200914145244805](../../../../../image-20200914145244805.png)
+![image-20200914145244805](images/01-introduction-and-crawlers/image-20200914145244805.png)
 
 * line 3: can be approximated using sketches
 * line 4: two *find* and (at most) one *union* operation

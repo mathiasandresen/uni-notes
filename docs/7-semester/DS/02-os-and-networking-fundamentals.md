@@ -41,7 +41,7 @@ Protocol Layers
 
 
 
-![image-20200917133756235](images/Untitled/image-20200917133756235.png)
+![image-20200917133756235](images/04-multicast/image-20200917133756235.png)
 
 
 
@@ -60,7 +60,7 @@ Protocol Layers
 
 A principled, international standard, seven layer model to connect different systems
 
-![image-20200917134017556](images/Untitled/image-20200917134017556.png)
+![image-20200917134017556](images/04-multicast/image-20200917134017556.png)
 
 <center>CN5E by Tanenbaum & Wetherall, © Pearson EducationPrentice Hall and D. Wetherall, 2011</center>
 
@@ -72,7 +72,7 @@ What we are using today (?)
 
 A four layer model derived from experimentation; omits some OSI layers and uses the IP as the network layer
 
-![image-20200917134107601](images/Untitled/image-20200917134107601.png)
+![image-20200917134107601](images/04-multicast/image-20200917134107601.png)
 
 
 
@@ -100,7 +100,7 @@ TCP/IP
 
 
 
-![image-20200917134356361](images/Untitled/image-20200917134356361.png)
+![image-20200917134356361](images/04-multicast/image-20200917134356361.png)
 
 
 
@@ -114,7 +114,7 @@ TCP/IP
     * **server:** Web server sends (using HTTP protocol) objects in response to requests
 * client initiates TCP connection (creates socket) to server, port 80
 
-![image-20200917134634075](images/Untitled/image-20200917134634075.png)
+![image-20200917134634075](images/04-multicast/image-20200917134634075.png)
 
 
 
@@ -122,13 +122,13 @@ TCP/IP
 
 **Client Message**
 
-![image-20200917134747099](images/Untitled/image-20200917134747099.png)
+![image-20200917134747099](images/04-multicast/image-20200917134747099.png)
 
 **Server Response**
 
 
 
-![image-20200917134706755](images/Untitled/image-20200917134706755.png)
+![image-20200917134706755](images/04-multicast/image-20200917134706755.png)
 
 
 
@@ -191,9 +191,9 @@ services not available:
     * sending process shoves message out door
     * sending process relies on transport infrastructure on other side of door to deliver message to socket at receiving process
 
-![image-20200917135704247](images/Untitled/image-20200917135704247.png)
+![image-20200917135704247](images/04-multicast/image-20200917135704247.png)
 
 
 
-![image-20200917135733774](images/Untitled/image-20200917135733774.png)
+![image-20200917135733774](images/04-multicast/image-20200917135733774.png)
 

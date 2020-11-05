@@ -1,4 +1,4 @@
-# Cluster Data Storage - Googles Infrastructure
+# Cluster Data Storage
 
 ## Google Application
 
@@ -252,3 +252,300 @@ Chunk Recovery
 * “Hölzle calls Colossus "similar to GFS – but done better after ten years of experience.“
 * <https://www.wired.com/2012/07/google-colossus/>
 * <https://cloud.google.com/files/storage_architecture_and_challenges.pdf>
+
+
+
+
+
+## Chubby - A Distributed Lock Service
+
+* **A coarse-grained lock service and file-system**
+* Lock service: allows clients to synchronize their activities
+* Coarse = for hours or days, and
+* Reliable (but low-volume) storage
+
+Example: Master Election
+
+* Nodes try to get a lock
+* The nodes who wins writes result into a small file
+
+Filesystem: Is a well-known mechanism and interface for the programmers
+
+
+
+**Chubby**
+
+* Intended for “loosely-coupled distributed systems”
+    * Nodes run independently - at unpredictable speed
+    * Nodes may crash – difficult to detect, and recover
+    * Messages may be lost, delayed, reordered, but not corrupted
+* A *coarse-grained lock service*
+    * *Highly fault tolerant (consistent)*
+    * *Availability*
+    * *Scalability*
+    * *Throughput and performance less important (coarse!)*
+
+
+
+### Examples of Use
+
+* GFS: Elect a master
+* BigTable: master election, client discovery, table service locking
+* Well-known location to bootstrap larger systems
+* Name Service
+* Partition workloads
+* Synchronization, but not fine grained locking
+
+
+
+### Architecture
+
+Typically
+
+* 1 cell per data center
+* Serves 90000+ processors
+* N=5
+
+![image-20201105134939271](images/09-cluster-storage/image-20201105134939271.png)
+
+
+
+### Locks and Files
+
+* Filesystem like interface:
+
+```pseudocode
+fh=Open(“/ls/exampleCell/gfs/master”)
+success=tryAcquire(fh)
+if(success)
+	write(fh,myID)
+```
+
+* Either Exclusive-Write lock or Shared-Read lock
+* Subdirectories and (non-inherited) ACLs supported, but not links
+* Locks are advisory (you can ignore the lock)
+* “Whole-file” R/W
+
+
+
+### Client to Master Communication
+
+* All read/write requests go through the master
+* Communication via RPC (through the library)
+* The other replicas only get updates from the master
+* How the client finds the master:
+    * Send master location request to all replicas in DNS
+    * Non-masters redirect to master
+* Client sends all requests to master until negative answer
+* Master notifies clients if files modified, created, deleted, lock status changes (push
+* Master notifies clients if files modified, created, deleted, lock status changes (push; saves bandwidth compared to constant polling)
+    * Master is stateful
+
+
+
+### Read and Write
+
+* Reads are handled by the master
+* Write: Successful if majority of replicas acknowledge receipt of update
+    * Usual Prepare – Promise – Accept – Accepted (Paxos)
+
+![image-20201105135702239](images/09-cluster-storage/image-20201105135702239.png)
+
+
+
+### Client Sessions
+
+* **Sessions** maintained between client and server
+* Client Failure
+    * Master promises service for “lease time”
+    * Clients make **“Keep-alive”** RPCs to maintain session; master returns extended lease time (eg. 12 sec)
+    * If session is lost, server releases any client-held handles.
+* Master failure
+    * If client does not get a renewed lease, session is in jeopardy
+        * Clear local cache
+        * Wait for “grace period” (about 45 seconds)
+        * Continue attempt to contact (possibly new) master
+    * Successful attempt => ok; jeopardy over
+    * Failed attempt => session assumed lost
+
+
+
+### Cache Consistency
+
+* Clients cache all file content to reduce read traffic
+* Strict consistency
+    1. A file-modification is blocked until all caches are invalidated
+    2. Invalidation messages are piggybacked on keep-alive messages
+    3. Clients flush cache, and acknowledges (piggybacked on lease-renewal)
+
+
+
+### Master Re-Election
+
+* If replicas lose contact with master, they wait for grace period (shorter: 4 - 6 seconds)
+
+* On timeout, hold new election
+* The new master updates the DNS, gets a recent copy of the database, etc.
+* But how do the replicas agree on one (!) new master?
+* Paxos algorithm
+    * Also used to propagate write updates to the replicas
+
+
+
+### Conclusions
+
+* An “easy-to-use” file and locking service
+* Integration of well-known (but advanced) techniques
+* Rarely used code for fail-over contained “a rich collection of interesting bugs”
+* Extensive verification/testing necessary
+
+
+
+Google testing motto:
+
+* If it ain’t broke, you are not trying hard enough!
+
+
+
+## BigTable - A High-Performance Storage System
+
+Database used by Google
+
+![image-20201105140947292](images/09-cluster-storage/image-20201105140947292.png)
+
+* Distributed storage system: PBs, across 1000s of servers
+* Row/Column abstraction for storing data
+* Distributed Persistent multi-level sorted map
+
+(Keys are normally 10-100 bytes, max 64 KB)
+
+![image-20201105141013070](images/09-cluster-storage/image-20201105141013070.png)
+
+(Qualifiers are used to address individual column within family)
+
+
+
+### Example: "Web-table"
+
+![image-20201105141153113](images/09-cluster-storage/image-20201105141153113.png)
+
+Rows are lexicographically sorted: 
+
+* Webtable domain names are reversed so we group related pages. 
+* Efficient domain analysis: related information likely stored in same tablet!
+
+All row accesses are atomic!
+
+
+
+### BigTable Applications (2006)
+
+Example: Google Analytics stores information on raw clicks associated with users in one table and summarizes analyzed information in a second table.
+
+![image-20201105141343615](images/09-cluster-storage/image-20201105141343615.png)
+
+* Analytics: row = user session (sitename, starttime)
+* Earth: row = geographical segment, column family = sources of data
+* Personalized Search: row = userid, column family = type of action (search, webaccess)
+
+
+
+### Tablets
+
+![image-20201105141702367](images/09-cluster-storage/image-20201105141702367.png)
+
+* Tablet = consecutive set of rows
+* Size ~ 200MB
+* Tablets can be split/merged if too large/small
+* Each tablet is served by one Tablet Server (similar to a GFS chunkserver)
+* Stored in “Sorted Strings Table” SSTables (indexed keyvalue maps) file format in GFS
+    * immutable
+* Row access is atomic
+
+
+
+### System Structure
+
+![image-20201105141803473](images/09-cluster-storage/image-20201105141803473.png)
+
+![image-20201105141829651](images/09-cluster-storage/image-20201105141829651.png)
+
+* Main goal of the BigTable infrastructure: (1) manage tablets and access and change associated data…
+* … and (2) map tablet structure into the underlying file system.
+* BigTable Master is stateless: all data in Chubby!
+* Live set of servers detected via Chubby.
+* BigTable Master: 
+    * Tablet assignment: one server at a time.
+* Tablet Server
+    * Tablet localization: Tablets stored in a B+Tree: B-tree (range of keys in each level), where stored at the leaves (only)
+
+
+
+### Tablet Localization
+
+System maintains B+ tree index (in BigTable!) 
+
+Clients searches index 
+
+Clients cache tablet locations
+
+![image-20201105142359164](images/09-cluster-storage/image-20201105142359164.png)
+
+![image-20201105142406500](images/09-cluster-storage/image-20201105142406500.png)
+
+Eg. 128MB (2^27^) Meta-data tablets (1kB=2^10^ per key) in 2 index levels addresses 2^34^ tablets (of each 128Mb= 2^61^ B)
+
+
+
+### Tablet Serving
+
+![image-20201105142512226](images/09-cluster-storage/image-20201105142512226.png)
+
+
+
+### BigTable Features
+
+* **Single-row transactions**: easy to do read/modify/write operations
+* **Locality groups:** segregate columns into different SSTables
+* **In-memory columns:** random access to small items
+* **Suite of compression techniques:** per locality group
+* **Bloom filters:** avoid seeks for non-existent data
+    * Probabilistic set membership test: is item in set?
+        * Answer: “definitely not” no need to look up!
+        * Answer: “maybe in set”.
+* **Garbage Collection** of (immutable) SSTable Files
+
+
+
+### Performance
+
+Anno 2006 [Chang et al - TOCS 26(2)]
+
+![image-20201105142802293](images/09-cluster-storage/image-20201105142802293.png)
+
+* “Mem” = locality group marked to be placed in-memory
+* Random reads are slow because much data transferred from GFS, but little utilized, 1200 reads/s ~75MB/S
+    * Random reads are slow: cannot exploit locality, much data from GFS not used.
+    * Reads in memory much faster.
+* Sequential read: better: same block hit 64 times
+    * Sequential reads faster: entire block used!
+* Scans: use API for scanning over all values in a row range
+* Good scalability for most operations, but not linear due to load imbalance
+
+
+
+### Status (2009)
+
+* Continuous development
+    * Scaling, robustness
+    * Replication: eventual consistency replication across data centers (user facing services)
+* ~500 BigTable clusters
+* Largest cluster:
+    * 70+ PB data; sustained: 10M ops/sec; 30+ GB/s I/O
+
+
+
+## Summary
+
+![image-20201105143040734](images/09-cluster-storage/image-20201105143040734.png)
+

@@ -16,4 +16,4 @@ jobs:
         uses: mhausenblas/mkdocs-deploy-gh-pages@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CUSTOM_DOMAIN: notes.andresen.xyz
+          CUSTOM_DOMAIN: notes.mathiasandresen.dk

@@ -4,7 +4,8 @@ title: Introduction
 
 # Introduction and Crawlers
 
-
+* [Book - Chapter 20](https://nlp.stanford.edu/IR-book/pdf/20crawl.pdf)
+* [Slides](https://www.moodle.aau.dk/mod/resource/view.php?id=1110095)
 
 ## What is the web?
 
@@ -229,6 +230,59 @@ In practice: use multiple crawlers
 
 ## Duplicate Identification
 
+Many web-pages are duplicates or near-duplicates of other pages:
+
+* Mirrors
+* Identical product descriptions, user manuals, etc. contained on diverse web sites
+* ...
+
+Estimate: as many as 40% of pages have duplicates [Manning et al., 2009]
+
+* May not want to include all duplicates in index
+* The `index(doc)` operation may include a prior test whether `doc` is a (near-)duplicate of an already indexed page
+
+
+
+We only consider the texts of the pages!
+
+### Fingerprints
+
+If we wanted to detect identical texts, things would be relatively easy: construct a *hash code*
+
+$$
+text \to \text{64bit intergers}
+$$
+
+such that non-identical texts are unlikely to be mapped to the same integer ($1.8\cdot 10^{19}$ codes vs ~$10^{11}$ web documents).
+
+
+
+### Shingles
+
+**k-shingles** or **k-grams**
+
+We view text as a set of consecutive sequences of $k$ words:
+
+```
+we view text as a sequence of words
+we view text as
+	 view text as a
+				text as a sequence
+						 as a sequence of
+								a sequence of words
+```
+
+4-shingle representation:
+
+{ as a sequence of, a sequence of words, text as a sequence, view text as a, we view text as }
+
+* Order of occurrence of shingles is not included in representation
+* Number of occurrences of a shingle is not included in representation
+* Some pre-processing of raw html text before shingling (e.g.: ignore case, remove html tags)
+
+Assuming a fixed vocabulary of size $N$ there are $N^4$ different 4-shingles, and we can identify them with the integers $0,\dots,N^4 - 1$
+
+> [Broder, Andrei Z., et al. "Syntactic clustering of the web." Computer networks and ISDN systems 29.8-13 (1997): 1157-1166.]
 
 
 ### Jaccard Coefficient
@@ -279,7 +333,7 @@ called the **sketch** of $d_h$:
 
 ![image-20200914144807603](images/01-introduction-and-crawlers/image-20200914144807603.png)
 
-Now we can approximately estimate the Jaccard Coefficient:
+Now we can *approximately estimate* the Jaccard Coefficient:
 
 ![image-20200914144828911](images/01-introduction-and-crawlers/image-20200914144828911.png)
 

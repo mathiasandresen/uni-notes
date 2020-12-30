@@ -1,8 +1,26 @@
 # Index Construction
 
-
+* [Slides](https://www.moodle.aau.dk/pluginfile.php/2121811/mod_resource/content/1/wi_20_02.pdf)
 
 ## Text Preprocessing
+
+![image-20201230123857376](images/02-index-construction/image-20201230123857376.png)
+
+How to construct the index?
+
+* Depends on: what type of search (and: analytics) do we want to support?
+
+For now:  think about **Boolean queries** over single search terms:
+
+* (Corona OR Covid) AND vaccination
+
+
+
+### From Byte Stream to Index Terms
+
+![image-20201230124152866](images/02-index-construction/image-20201230124152866.png)
+
+
 
 
 
@@ -13,9 +31,49 @@ Initial heuristic for English (or Danish, German, ...):
 * split on whitespace
 * delete punctuation characters
 
+But:
+
+* some things should perhaps not be split:
+
+    ![image-20201230124315505](images/02-index-construction/image-20201230124315505.png) 
+
+* May also need to split where there is no white space:
+
+    ![image-20201230124405078](images/02-index-construction/image-20201230124405078.png)
+
+No golden bullet! Lots of language or domain-specific rules and heuristics.
 
 
 
+### Normalization
+
+Transform distinct ’equivalent’ tokens into one normalized form. E.g.:
+
+* write all in lower case: `This` $\to$ `this`
+* use non-hyphenated forms: `anti-discriminatory ` $\to$ `antidiscriminatory`
+* delete periods: `U.S.A` $\to$ `USA` (or `usa`)
+
+Have to balance:
+
+* more normalization:
+    * smaller index
+    * more permissive search: user searching for ’U.S.A’ also receives results containing ’usa’
+* less normalization:
+    * supports more specific search: users searching for ’C.A.T.’ don’t receive results for ’cat’. (try Google vs. Bing on this one!)
+
+
+
+### Stop word removal
+
+**Stop words:** very frequent words that are not semantically descriptive:
+
+* *the, a, this, and, of, that, ...*
+
+**Stop list:**  list of stop words that are removed. E.g. containing 15-200 stop words.
+
+Problem: stop words may become important as part of an expression:
+
+* *“To be or not to be”*
 
 
 
@@ -45,7 +103,7 @@ The strings that result from stemming are the **terms** that will be included in
 
 #### Porters Stemming Algorithm
 
-> https://tartarus.org/martin/PorterStemmer/
+> <https://tartarus.org/martin/PorterStemmer/>
 
 Set of rules for iteratively reducing/removing *suffixes* of words. E.g.
 
@@ -57,7 +115,7 @@ Only the most specific (longest suffix) rule is applied. Other applicable rules 
 
 Rules may be conditioned on what comes before the suffix:
 $$
-(m>1)\ \text{EMENT} \to 
+(m>1)\ \text{EMENT} \to
 $$
 only applies if the part before suffix EMENT has more than 1 syllable
 

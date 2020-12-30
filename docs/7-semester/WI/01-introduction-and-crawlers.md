@@ -59,19 +59,19 @@ Before we can do anything, web data needs to be retrieved and organized:
 
 ```pseudocode
 Crawl(URL set: seeds):
-    frontier = seeds
+	frontier = seeds
 	while frontier != Ø do
 		url = get_url(frontier)	// select next URL from frontier
         doc = fetch(url)		// pages returned as html source text docs
-		index(doc)				// send doc to indexer
+		index(doc)							// send doc to indexer
 		frontier.add(extract_urls(doc))
-    end
+  end
 ```
 
 Key design issue
 
 * the *frontier* of URLs to be processed
-* selection strategy implementing *get_url*
+* selection strategy implementing `get_url`
 
 
 
@@ -93,6 +93,7 @@ Both are too simple because
 * a pure sequential, single thread architecture will get stuck once a host does not respond (quickly) to a *fetch(url)* request
 * crawler must implement **robustness**
     * not get stuck in *spider traps*, i.e., large, dead-end (uninteresting) web components
+        * *spider traps* *"... are generators of web pages that mislead crawlers into getting stuck fetching an infinite number of pages in a particular domain. Crawlers must be designed to be resilient to such traps. Not all such traps are malicious; some are the inadvertent side-effect of faulty website development."* [Chapter 20](https://nlp.stanford.edu/IR-book/pdf/20crawl.pdf#page=1)
 * crawler must implement **politeness**
     * not overload a single web server with requests
 

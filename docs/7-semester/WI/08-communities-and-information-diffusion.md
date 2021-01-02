@@ -1,5 +1,368 @@
 # Communities and Information Diffusion
 
+* [Slides](https://www.moodle.aau.dk/pluginfile.php/2145324/mod_resource/content/1/wi_20_08.pdf)
+
+## Latent Space Embeddings
+
+### Graph Drawing
+
+Graph drawing/layout algorithms: map vertices to (x, y)-coordinates, so that graph plotted with nodes at coordinates “looks nice”, “reveals structure”, etc.
+
+![image-20210102153130836](images/08-communities-and-information-diffusion/image-20210102153130836.png)
+
+A standard clustering algorithm (e.g. kmeans) applied to the x, y-coordinates of the nodes will return clusters that correlate with communities
+
+### Problem Transformations
+
+#### From Graph Clustering to Euclidean Clustering
+
+Given graph $G$,
+
+* find embedding of nodes in d-dimensional Euclidean Space $\R^d$
+* apply clustering algorithm for $\R^d$-data
+
+
+
+#### From Any Clustering to Graph Clustering
+
+Given data points $x_1, \dots, x_N$ (any data space),
+
+* define a distance measure $d(x_i, x_j)$ between data points
+* construct distance matrix $D=(d(x_i, x_j))_{i,j}$ or some variant
+* graph-cluster $D$ (possibly via embedding in Euclidian space: **Spectral Clustering**)
+
+
+
+#### From Graph Clustering to Distance-based clustering
+
+Given graph $G$,
+
+* Define a graph-distance measure $d(v_i , v_j)$ between vertices
+*  Apply any clustering algorithm that operates on a distance matrix (e.g., hierarchical clustering)
+
+
+
+## Clustering by Matrix Factorization
+
+### **Adjacency Matrix**
+
+$$
+A=(a_{i,j})_{i,j}\quad \text{where } a_{i,j} = \left\{
+\begin{array}\
+1 & \text{if } (v_i, v_j) \in E\\
+0 & \text{if } (v_i, v_j) \notin E
+\end{array} \right.
+$$
+
+* $G$ is directed or undirected.
+* $A$ symmetric if $G$ undirected.
+
+Interpretation as linear mapping:
+
+$$
+A: \R^n \to \R^n
+$$
+
+A (column) vector $\bold x \in \R^n$ can be interpreted as a *potential or weight function* on nodes.
+The mapping $A: \bold x \mapsto A \bold x$ transforms the potential:
+$$
+(A\bold x)_i = \sum _{j:(i,j) \in E} x_j
+$$
+
+Alternatively for row vector $\bold x^T$:
+
+$$
+(\bold x^TA)_i = \sum_{j:(j,i) \in E} x_j
+$$
+
+### Illustration
+
+Potentials (non-negative) represented by colored boxes:
+
+![image-20210102154608532](images/08-communities-and-information-diffusion/image-20210102154608532.png)
+
+
+
+### Eigenvectors and Eigenvalues
+
+$\bold x$ is eigenvector with eigenvalue $\lambda$ if $A\bold x = \lambda \bold x$
+
+**Example**
+
+Eigenvectors and -values for triangle graph:
+
+![image-20210102154727958](images/08-communities-and-information-diffusion/image-20210102154727958.png)
+
+**Example**
+
+Collection of cliques:
+
+![image-20210102154745058](images/08-communities-and-information-diffusion/image-20210102154745058.png)
+
+![image-20210102154749269](images/08-communities-and-information-diffusion/image-20210102154749269.png)
+
+* The largest eigenvalue is the size (degree) of the largest clique minus one. The corresponding eigenvector is the indicator vector for the clique.
+* Indicator vectors for other cliques are eigenvectors with eigenvalues equal to the size of the cliques minus one.
+
+
+
+### Laplacian Matrix
+
+**The Graph Laplacian**
+
+* $A$: adjacency matrix of undirected graph
+* $D$: diagonal *degree matrix*: $d_{i,i} = \sum_{j=1}^n a_{i,j}$
+
+the (unnormalized) Laplacian is
+
+$$
+L = D - A
+$$
+
+**Properties**
+
+* $L$ is symmetric, and $\sum_{j=1}^n l_{i,j} = \sum_{j=1}^n l_{j,i} = 0$
+
+* The constant vector $\bold e = (1,\dots,1)$ is an eigenvector of $L$ with eigenvalue 0.
+
+* If $V' \subset V$ is a connected component, then the  indicator vector for $V'$
+
+    * $(\bold e_{V'})_i = \left\{ \begin{array}\ 1 & \text{if } v_i \in V' \\ 0 & \text{if } v_i \notin V' \end{array} \right .$
+
+    is an eigenvector of $L$ with eigenvalue 0
+
+* $L$ is positive semi-definite
+
+> [U. von Luxburg: A tutorial on spectral clustering. Stat. Comput., 2007 ]
+
+
+
+### Connected Components
+
+Connected components and eigenvectors:
+
+![image-20210102160025644](images/08-communities-and-information-diffusion/image-20210102160025644.png)
+
+* $L$: Laplacian, arranged so that connected components are contiguous blocks
+* $\bold e_{V'}$: indicator vector of "middle" component
+* $\bold 0$: 0-vector
+
+
+
+### SVD for L
+
+SVD for Laplacian matrix (special case for quadratic, symmetric, positive semi-definite matrices):
+
+![image-20210102160153756](images/08-communities-and-information-diffusion/image-20210102160153756.png)
+
+* $V$: matrix of orthogonal eigenvectors
+* $D$: diagonal, containing non-negative eigenvalues (in increasing order)
+
+
+
+### Zachary Example: Laplacian
+
+![image-20210102160242728](images/08-communities-and-information-diffusion/image-20210102160242728.png)
+
+### Zachary Example: Adjacency
+
+![image-20210102160306801](images/08-communities-and-information-diffusion/image-20210102160306801.png)
+
+
+
+## Information Diffusion
+
+**Information diffusion** in a (social) network:
+
+![image-20210102160624686](images/08-communities-and-information-diffusion/image-20210102160624686.png)
+
+Network: possibly heterogeneous with web page nodes, user nodes, . . .
+
+Information:
+
+* retweets
+* hashtags
+* internet rumours
+
+Some assumptions:
+
+* can identify the “same piece of information” being adopted/shared/propagated across the network
+* information “spawned” at one or several nodes, and then propagated along links
+
+
+
+### Prediction Problems
+
+Given the trace of an **information cascade** so far: 
+
+![image-20210102160656268](images/08-communities-and-information-diffusion/image-20210102160656268.png)
+
+How far is this going to spread?
+
+> [Cheng, Justin, Lada Adamic, P. Alex Dow, Jon Michael Kleinberg, and Jure Leskovec. "Can cascades be predicted?." In Proceedings of the 23rd international conference on World wide web, pp. 925-936. 2014.]
+
+
+
+![image-20210102160725138](images/08-communities-and-information-diffusion/image-20210102160725138.png)
+
+Which are the most effective spawning nodes for spreading a piece of information?
+
+> [Kempe, David, Jon Kleinberg, and Éva Tardos. "Maximizing the spread of influence through a social network." In Proceedings of the ninth ACM SIGKDD international conference on Knowledge discovery and data mining, pp. 137-146. 2003.]
+
+
+
+## Cascade Prediction
+
+> This section based on:
+>
+> Cheng, Justin, Lada Adamic, P. Alex Dow, Jon Michael Kleinberg, and Jure Leskovec. "Can cascades be predicted?." In Proceedings of the 23rd international conference on World wide web, pp. 925-936. 2014.
+
+**Data**
+
+From Facebook: “Sharing cascades” of images observed over a 28 day period in 2013
+
+* at least 5 reshares for each photo
+* initial node can be either:
+    * "page" (81%): company etc. accounts
+    * "user" (19%): individual users
+
+
+
+One cascade:
+
+![image-20210102161450770](images/08-communities-and-information-diffusion/image-20210102161450770.png)
+
+> Image source: [Cheng et al., 2014]
+
+* $\hat G$: cascade graph - nodes and edges along which information was transmitted
+* $G'$:  induced sub-graph – same nodes as $\hat G$, but also including the edges on which information was not transmitted.
+
+### Wiener Index
+
+For any graph $G = (V,E)$ with $|V|=n$
+
+$$
+d_w(G) = {2 \over n(n-1)} \sum _{u,v \in V} d(u,v) \quad \text{(average node distance)}
+$$
+
+![image-20210102161659803](images/08-communities-and-information-diffusion/image-20210102161659803.png)
+
+> Image source: [Cheng et al., 2014]
+
+Interpretation: higher Wiener index ∼ more viral cascade (passes across different communities)
+
+
+
+### Data Statistics
+
+Complementary cumulative distribution functions for size and Wiener index of cascades:
+
+![image-20210102161741858](images/08-communities-and-information-diffusion/image-20210102161741858.png)
+
+> Image source: [Cheng et al., 2014]
+
+$CCDF(x) = $ fraction of cases (=cascades) that have a value (of Cascade size, Wiener index) above $x$.
+
+* We observe power laws for both distributions
+* I Page induced cascades are larger but less viral than user induced cascades.
+
+
+
+### Predicting Cascade Growth
+
+**Given**
+
+* the observation of a cascade of current size $k$
+
+**Question**
+
+* how big will it grow?
+
+* Problem: default answer “not much bigger than it is now” has high accuracy
+
+**Question Adapted**
+
+* Will it reach size $2k$? (about half of cascades of size $k$ will reach size $2k$.)
+
+**Approach**
+
+* Define a number of *features* $f_1, f_2, \dots, f_m$ describing the currently observed size $k$ cascade
+* Use standard logistic regression model to predict $≥ 2k$ target
+* Separate prediction model for each $k$
+
+
+
+**Logistic Regression**
+
+Learn weights $w_0, \dots, w_m$, and predict $\geq 2k$ to be true for cascade $C$ if 
+
+* $w_0 + w_1f_1(C) + \dots + w_mf_m(C) > 0$
+
+* the absolute values of the weights are a measure for the *importance* of the features.
+
+
+
+#### Image Features
+
+![image-20210102162327863](images/08-communities-and-information-diffusion/image-20210102162327863.png)
+
+#### Poster Features
+
+* Page vs. user poster
+* Number of friends
+* Demographic info and Facebook use statistics
+* ...
+
+#### Resharer Features
+
+Similar features for the re-sharers up to now
+
+
+
+#### Cascade Structure
+
+* Out-degree of $i$th re-sharer in cascade graph $\hat G(i=1, \dots, k)$
+* Out-degree of $i$th re-sharer in induced graph $G'(i=1, \dots, k)$
+* Number of edges in $G'$
+* ...
+
+#### Temporal Features
+
+* Various features derived from the time stamps of the first $k$ re-shares
+
+
+
+All features only depend on the observed cascade, not the network structure beyond the cascade.
+
+
+
+### Results - Predicting Size
+
+Results with logistic regression for $k = 5$ using different feature sets:
+
+![image-20210102162643172](images/08-communities-and-information-diffusion/image-20210102162643172.png)
+
+* Temporal features most informative
+
+Further results:
+
+* Accuracies improve (slightly) for larger k
+* For larger k, relevance of cascade features increases, relevance of content/user features decreases.
+
+### Results - Predicting Wiener Index
+
+**Task** 
+
+* given cascade of size k = 5, predict whether Wiener index of final cascade is above the median value
+
+**Results**
+
+* Obtained accuracy of $0.725$
+* Temporal and structural features most informative
+
+
+
+
 
 
 ## Influence Maximization
@@ -29,7 +392,7 @@ Terminology:
 
 ![image-20201109143733132](images/08-communities-and-information-diffusion/image-20201109143733132.png)
 
-* Assume: edges u → v are associated with **weights** $b_{u,v}$, such that for all v
+* Assume: edges $u \to v$ are associated with **weights** $b_{u,v}$, such that for all $v$
 
 ![image-20201109143810329](images/08-communities-and-information-diffusion/image-20201109143810329.png)
 
@@ -43,7 +406,7 @@ Terminology:
 ![image-20201109143939163](images/08-communities-and-information-diffusion/image-20201109143939163.png)
 
 * Every node $v$ randomly chooses a **threshold** $θ_v$ uniformly from the interval $[0,1]$. 
-    * Thresholds indicated by redscale values in picture
+    * Thresholds indicated by red-scale values in picture
 
 * For $t = 1, 2, \dots>:$ the set of nodes *active at time* $t$ is
 

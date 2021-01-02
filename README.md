@@ -1,3 +1,6 @@
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mathiasandresen/uni-notes/Publish%20docs%20via%20GitHub%20Pages)](https://github.com/mathiasandresen/uni-notes/actions?query=workflow%3A%22Publish+docs+via+GitHub+Pages%22)
+[![Website](https://img.shields.io/website?up_message=online&url=https%3A%2F%2Fnotes.mathiasandresen.dk%2F)](https://notes.mathiasandresen.dk/)
+
 # Running Locally
 
 1. Install Python 3.

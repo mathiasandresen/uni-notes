@@ -12,15 +12,23 @@ Networks of very different types have many things in common:
 
 **Network science** investigates modeling and analysis problems for networks in general
 
+
+
 ## Degree distribution
 
 A small network and its degree distribution:
 
 ![image-20201026144243152](images/07-network-structure-and-communities/image-20201026144243152.png)
 
-Degree distribution in Movielens user-movie rating graph (user nodes only):
+
+
+Degree distribution in **Movielens** user-movie rating graph (user nodes only):
 
 ![image-20201026144317645](images/07-network-structure-and-communities/image-20201026144317645.png)
+
+
+
+**Citation Network**
 
 Source: Stanford Large Network Dataset Collection:
 http://snap.stanford.edu/data/index.html
@@ -72,7 +80,7 @@ Degree distribution in an ER-random graph:
 
 ### Diameter and Distance
 
-- $dist(u,v)$ length (# edges) of shortest path connecting $u$ and $v$
+- $dist(u,v)$ length (number of edges) of shortest path connecting $u$ and $v$
 - diameter of graph $\max_{u,v\in G}dist(u,v)$
 
 Distance statistics in some real networks, collected from Stanford Large Network Dataset Collection http://snap.stanford.edu:
@@ -190,6 +198,8 @@ Minimum weight cuts can be computed efficiently (but not for the more general $k
 
 ![image-20201026155230733](images/07-network-structure-and-communities/image-20201026155230733.png)
 
+
+
 ### Quality Measure - Kernighan, Lin 1970
 
 Quality Measure: Cut weight, subject to size constraints $n_1 ≤|C_i |≤ n_2$ for all $i$.
@@ -229,5 +239,101 @@ Newman, Girvan:
 
 
 
-!!!todo
-    complete notes
+### Edge Betweenness
+
+Intuition: edges connecting communities will be used on many shortest paths connecting nodes:
+
+![image-20210102150252027](images/07-network-structure-and-communities/image-20210102150252027.png)
+
+Many more shortest path traverse edge $e_1$ than $e_2$
+
+Shortest path betweenness:
+
+$$
+\beta(e):= \sum_{e,v \in V} \frac {\text{# shortest path connecting } u,v \text{ going through } e} {\text{# shortest paths connecting } u,v}
+$$
+
+Other formalizations of "betweenness": random walk betweenness, current-flow betweenness.
+
+
+
+### Newman-Girvan Algorithm
+
+![image-20210102150613414](images/07-network-structure-and-communities/image-20210102150613414.png)
+
+Line 11 can be implemented in time $O(mn)$ (modification of standard shortest path computations by breadth first search)
+
+Total time: $O(m^2n)$
+
+
+
+### Modularity
+
+Newman-Girvan algorithm produces a hierarchy of $n$ clusterings. Which one is most meaningful?
+
+![image-20210102150747646](images/07-network-structure-and-communities/image-20210102150747646.png)
+
+* $e_{i,j} = e_{j,i}$: proportion of edges that connect nodes in clusters $i$ and $j$
+    * Example: $e_{1,3} = 2/24,\quad e_{1,1}=6/24$
+* $a_i := e_{i,i} + \sum_{j \neq i} e_{i,j}/2$
+    * $\sum_i a_i = 1$
+    * Example: $a_1 = 6/24 + 1/48 + 2/48$
+
+
+
+In matrix form with marginal sums:
+
+![image-20210102151055822](images/07-network-structure-and-communities/image-20210102151055822.png)
+
+$a_i$: normalized sum of degrees of nodes in cluster $i$
+
+
+
+### Modularity Random Graph Model
+
+Given:
+
+* $n$ nodes partitioned into $k$ clusters $C_1, \dots, C_k$
+* Number $m$ of edges
+* Probabilities $a_1,\dots a_k$ (or degrees $d_1,\dots, d_n$ of all nodes)
+
+construct random graph by selecting for each of the $m$ edges randomly start and end node by 
+
+* randomly picking a cluster $C_i$ according to probability $a_i$, and then select a node in $C_i$ with uniform probability distribution
+
+or
+
+* randomly pick a node with a probability proportional to the degree of the node
+
+
+
+Either way: the expected proportion of edges inside cluster $C_i$ is $a_i^2$
+
+* Note: multiple edges possible; cf. PA model
+
+The modularity score compares the actual proportion of intra-cluster edges with the expected number under the random graph model:
+
+$$
+Q(C_1, \dots, C_k) := \sum_i (e_{i,i} - a_i^2)
+$$
+
+
+
+### Newman-Girvan Zachary Result
+
+![image-20210102151948980](images/07-network-structure-and-communities/image-20210102151948980.png)
+
+
+
+### Modularity Optimization
+
+Can one try to optimize modularity directly?
+
+* Exact solution: NP Hard
+* Approximation heuristics: greedy agglomerative hierarchical clustering (no quality of approximation guarantees)
+
+Modularity optimal clustering of Zachary (Q = 0.419):
+
+![image-20210102152048898](images/07-network-structure-and-communities/image-20210102152048898.png)
+
+> [U. Brandes et al.: On Modularity Clustering. IEEE Transactions on Knowledge and Data Engineering, 2008.]

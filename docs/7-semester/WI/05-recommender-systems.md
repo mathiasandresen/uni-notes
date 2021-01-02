@@ -1,5 +1,8 @@
 # Recommender Systems
 
+* [Slides](https://www.moodle.aau.dk/pluginfile.php/2134534/mod_resource/content/2/wi_20_05.pdf)
+* [Exercises](https://docs.google.com/document/d/1ZXyItz3hHcNA6sAY12_FbViZClMm4tMMECQZzv20LpQ/edit)
+
 ## Data Scenarios
 
 ![image-20201012143433509](images/05-recommender-systems/image-20201012143433509.png)
@@ -8,14 +11,20 @@
 * Rich item data
 * Explicit rating data
 
+---
+
 ![image-20201012143512346](images/05-recommender-systems/image-20201012143512346.png)
 
 * Rich item data
 * Explicit rating data
 
+---
+
 ![image-20201012143528919](images/05-recommender-systems/image-20201012143528919.png)
 
 * Explicit rating data
+
+---
 
 ![image-20201012143543746](images/05-recommender-systems/image-20201012143543746.png)
 
@@ -97,6 +106,8 @@ From <https://en.wikipedia.org/wiki/Filter_bubble>
 ## Netflix Prize
 
 ![image-20201012144738557](images/05-recommender-systems/image-20201012144738557.png)
+
+<https://www.netflixprize.com/rules.html>
 
 * A big driver for research in recommender technology
 
@@ -198,11 +209,16 @@ For a single term $t$ what is:
 
 **Bernouli model**
 
-![image-20201012151926886](images/05-recommender-systems/image-20201012151926886.png)
+* Use term occurrence features: $k \in \{0,1\}$
+* $P_u(\text{t}=1 \mid r_{u,i} = +)$: probability that term t occurs in the text (review) for an item $i$ that $u$ has rated positively
+    * = relative *document frequency* of term t in the "corpus" of items rated positively by *u* (cf. slide 3.9)
 
 **Multinomial model**
 
-![image-20201012151941357](images/05-recommender-systems/image-20201012151941357.png)
+* Use term frequency features (bag of words): $k= F[i,t] \in \N$
+* $P_u(t=k \mid r_{u,i} = +) = P_u(t \mid r_{u,i} = +)^k$, where
+    * $P_u(t \mid r_{u,i} = +)$ is the relative frequency of the term t in items rated positively by $u$.
+        * = relative *collection frequency* of term t in the "corpus" of items rated positively by $u$ (cf. slide 3.9)
 
  
 
@@ -243,7 +259,7 @@ A partial analogy to Information Retrieval (IR):
 
 **Idea**
 
-represent user by a vector in the same space as the item feature vectors by *summarizing the feature vectors of items for which there is implicit feedback.*
+Represent user by a vector in the same space as the item feature vectors by *summarizing the feature vectors of items for which there is implicit feedback.*
 
 **Example**
 
@@ -259,13 +275,19 @@ Then: rank candidate items according to similarity with user profile. Similarity
 
 All items
 
+---
+
 ![image-20201012153616286](images/05-recommender-systems/image-20201012153616286.png)
 
 Items with implicit rating by user $u$
 
+---
+
 ![image-20201012153633727](images/05-recommender-systems/image-20201012153633727.png)
 
 User profile of $u$ (= item prototype)
+
+---
 
 ![image-20201012153654689](images/05-recommender-systems/image-20201012153654689.png)
 
@@ -340,5 +362,153 @@ Some key techniques
 
 
 
-!!!todo
-    finish notes [slides 25-](https://www.moodle.aau.dk/pluginfile.php/2134534/mod_resource/content/2/wi_20_05.pdf#page=36)
+### Neighborhood Methods
+
+**Scenario**
+
+* No item features
+* No user features
+* Explicit feedback
+
+**Example**
+
+![image-20210102114752139](images/05-recommender-systems/image-20210102114752139.png)
+
+Here: explicit numeric feedback; could also be explicit categorical (+, −) feedback
+
+#### User Based
+
+To predict Eric's rating for Titanic:
+
+* Find users similar to Eric who have rated Titanic
+* Predict by taking average of similar users’ ratings
+
+
+
+#### Item Based
+
+To predict Eric's rating for Titanic:
+
+* Find items that Eric has rated which are similar to Titanic
+* Predict by taking average of Eric’s ratings for similar items
+
+
+
+#### User vs Item Based
+
+User- and item-based completely analogous: just transpose the matrix.
+
+Differences due to rating distribution in matrix:
+
+**User cold start:**  for a user $u$ with very few ratings (suppose exactly one rating):
+
+* *User-based*
+    * Many equally (and highly similar) other users.
+    * Prediction for $r_{u,i}$ for item $i$ close to global average of ratings for $i$
+* *Item-based*
+    * Only one candidate similar item.
+    * Prediction for $r_{u,i}$ for item $i$ equal to the only previous rating of $u$
+
+Similarly for **item cold start** (everything transposed ...)
+
+
+
+#### Normalization
+
+Suppose
+
+![image-20210102115619373](images/05-recommender-systems/image-20210102115619373.png)
+
+are user vectors.
+
+Two different users may use somewhat different semantics for their ratings: user 1 gives 5 stars whenever he likes a movie, user 2 gives 5 stars only once in a lifetime.
+
+##### Mean Centering
+
+Let $\overline r_u$ denote the mean value of all ratings of user $u$.
+
+Define the *user mean centered* ratings as
+
+$$
+h(r_{u,i})=r_{u,i} - \overline r_u
+$$
+
+Example:
+
+* $\overline r_u = 3, \quad \overline r_v = 2.25$
+
+![image-20210102115840642](images/05-recommender-systems/image-20210102115840642.png)
+
+(note the 0s!)
+
+
+
+#### Similarity
+
+**Problem**: measure similarity between two partial integer vectors:
+
+![image-20210102115328699](images/05-recommender-systems/image-20210102115328699.png)
+
+* these can be either a *user* (column) or *item* (row) vectors.
+* in a sparse vector, the “blank” entries would be equal to 0.
+
+
+
+Only consider the components that are <span style="color: red">present in both vectors:</span>
+
+![image-20210102115437792](images/05-recommender-systems/image-20210102115437792.png)
+
+* $(1, 5, 4, 3, 2) \quad (1, 4, 4, 1, 1)$
+
+Then what...
+
+* Dot product?
+* Cosine similarity?
+
+
+
+##### User-User Similarity
+
+* Center full user vectors
+
+![image-20210102120125107](images/05-recommender-systems/image-20210102120125107.png)
+
+* Calculate similarity $w_{u,v}$ as the cosine of the sub-vectors of commonly rated items:
+
+$$
+\cos((−2, 2, 1, 0, −1), (−1.25, 1.75, 1.75, −1.25, −1.25))
+$$
+
+> (this is equivalent to Equation (2.19) in Rec. Sys. Handbook, Ch. 2)
+
+
+
+##### Significance
+
+Problem with $w_{u,v}$: may obtain large similarity values from very small sets of common ratings:
+
+* $\cos((1),(1)) = 1$
+* $\cos((1, −1, 0, 2, 2, 0, −1, −2), (1, −1, 0, 1, 2, 0, −1, −2)) < 1$
+
+We can apply a penalty for 'short vectors':
+
+$$
+w'_{u,v} = \frac {\min(\text{#common ratings}, \gamma)} {\gamma} w_{u,v}
+$$
+
+* e.g. $\gamma =25$
+
+
+
+#### Putting Things Together
+
+User-based prediction of $r_{u,i}$:
+
+* Let $\mathcal N_i$ be the set of users that have rated $i$
+* Predict
+
+![image-20210102120637576](images/05-recommender-systems/image-20210102120637576.png)
+
+* Or use $w'_{u,v}$
+* Instead of summing over all users in $\mathcal N_i$, may only sum over the $k$ users that are most similar to $u$ denoted $\mathcal N_i(u)$
+

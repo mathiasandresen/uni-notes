@@ -18,7 +18,7 @@ Siden indeholder lige nu noter fra:
 
 <br>
 
-
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mathiasandresen/uni-notes/Publish%20docs%20via%20GitHub%20Pages)](https://github.com/mathiasandresen/uni-notes/actions?query=workflow%3A%22Publish+docs+via+GitHub+Pages%22)
 
 
 

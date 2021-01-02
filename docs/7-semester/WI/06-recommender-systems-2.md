@@ -1,6 +1,6 @@
 # Recommender Systems 2
 
-
+* [Slides](https://www.moodle.aau.dk/pluginfile.php/2137621/mod_resource/content/3/wi_20_06.pdf)
 
 ## Random Walk Methods
 
@@ -39,16 +39,22 @@ Use stationary probabilities of users and items as measure for:
 
 * A user $w$ can be (more or less) similar to $u$, even if $u$ and $w$ do no have any common ratings/interactions
 
-
-
 Is called **Personalized PageRank**
 
-![image-20201019151455228](images/06-recommender-systems-2/image-20201019151455228.png)
+### Personalized PageRank
+
+Let $K$ users be index $1,\dots,K$, and $L$ items $K+1, \dots , K+L$
+
+Then construct $(K+L) \times (K+L)$ transition matrix:
+
+$$
+P_{RW}=(1-\alpha)P_G + \alpha P_T
+$$
 
 where 
 
 * $P_G$ is the graph transition matrix
-    * for any user o item node, make a uniform random choice over the incident edges
+    * for any user or item node, make a uniform random choice over the incident edges
 * $P_T$ is the teleportation matrix
     * move to user node $u$ with probability 1
 * $a<1$ teleportation probability
@@ -59,3 +65,29 @@ The stationary probabilities (of user and item nodes) define a **Personalized Pa
 
 It is **personalized** for user $u$
 
+
+
+### User and Item Rankings
+
+The computed personalized PageRanks define a ranking of users and items $(\alpha = 0.1)$
+
+![image-20210102124416911](images/06-recommender-systems-2/image-20210102124416911.png)
+
+Use:
+
+* Use user rankings to find similar users and proceed as in neighborhood method
+* Use item ranking directly to recommend items
+
+
+
+### Itemrank
+
+![image-20210102124601888](images/06-recommender-systems-2/image-20210102124601888.png)
+
+[From slides](https://www.moodle.aau.dk/pluginfile.php/2137621/mod_resource/content/3/wi_20_06.pdf#page=28)
+
+
+
+### Matrix Factorization
+
+[Slides (pdfpage 29-)](https://www.moodle.aau.dk/pluginfile.php/2137621/mod_resource/content/3/wi_20_06.pdf#page=29)

@@ -1,4 +1,5 @@
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mathiasandresen/uni-notes/Publish%20docs%20via%20GitHub%20Pages)
+![Website](https://img.shields.io/website?up_message=online&url=https%3A%2F%2Fnotes.mathiasandresen.dk%2F)
 
 # Running Locally
 

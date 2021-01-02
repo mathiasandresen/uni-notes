@@ -15,5 +15,3 @@ Moodle side:
 <https://www.moodle.aau.dk/course/view.php?id=34705>
 
 <br>
-
-z

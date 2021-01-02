@@ -1,6 +1,7 @@
 # Structure-based Ranking
 
-
+* [Slides](https://www.moodle.aau.dk/pluginfile.php/2131622/mod_resource/content/1/wi_20_04.pdf)
+* [Exercises](https://docs.google.com/document/d/152CetmsgHOvZz3-ubO8MrkBYYRd5ZwpielGEfh9Mg9Q/edit)
 
 ## The Value of Links
 
@@ -46,7 +47,7 @@ $C_D$ is a **local** measure: only depends on local neighborhood of nodes
 ![image-20201005144450850](images/04-structure-based-ranking/image-20201005144450850.png)
 
 * $d(v,u)$: distance (= number of links on shortest connection) between $v$ and $u$
-* $C_C(v)= {n-1 \over \sum_{u\in v} d(v,u)}$
+* $C_C(v)= {n-1 \over \sum_{u\in V} d(v,u)}$
 * Example:
     * $C_C(a)= {26 \over 54}$
     * $C_C(b) = {26\over 80}$
@@ -314,11 +315,13 @@ until $\bold q^{(t)}$ does not change very much
 
 Let
 
-![image-20201005155130637](images/04-structure-based-ranking/image-20201005155130637.png)
+* $G$ an undirected graph, $\bold d = (d(1), \dots, d(n))$ degree vector
+* $d := \sum_{i=1}^n d(i)$
+* $q_i := d(i) / d$
 
 Then
 
-![image-20201005155149969](images/04-structure-based-ranking/image-20201005155149969.png)
+* $\bold q = (q_1,\dots,q_n)$ is a stationary distribution of the random walk on $G$
 
 **Proof**
 

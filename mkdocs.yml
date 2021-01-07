@@ -34,7 +34,9 @@ extra_javascript:
 markdown_extensions:
   - admonition
   - pymdownx.highlight
+      linenums: true
   - pymdownx.superfences
+  - pymdownx.inlinehilite
   # - codehilite:
   #     guess_lang: false
   #     linenums: true

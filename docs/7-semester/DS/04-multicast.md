@@ -23,7 +23,9 @@ A **multicast** is **one-to-many** communication between a single process and a 
 
 **Big Question:**
 
-How do we guarantee that everyone gets the same information? And what do we mean by **same**?
+How do we guarantee that everyone gets the same information?
+
+And what do we mean by **same**?
 
 
 
@@ -99,7 +101,7 @@ UDP can drop packages:
 
 ### Requirements
 
-Assuming
+**Assuming**
 
 * Reliable 1:1 communication
 * Sender might crash
@@ -109,7 +111,7 @@ Assuming
 
 
 
-Guarantee
+**Guarantee**
 
 * If a message is sent, it is **delivered** exactly once
 * Messages are eventually **delivered** to non-crashed processes
@@ -201,21 +203,72 @@ Agreement: Yes!
 
 
 
-### Hold--back Queue
+### Hold-back Queue
 
 ![image-20201001125842814](images/04-multicast/image-20201001125842814.png)
 
 The delivery queue is handled by Elixir in the code
 
+* Keep messages that have a higher sequence number than $R+1$ where $R$ is the latest message received
+* It requests missing messages by sending negative acknowledgements
 
+### Reliable Multicast over IP
 
-### Reliable Multicast
-
-
-
-![image-20201001130724536](images/04-multicast/image-20201001130724536.png)
-
-![image-20201001130733929](images/04-multicast/image-20201001130733929.png)
+```elixir
+defmodule IPReliableMulticast do
+...
+	defp loop(app, group \\ [], hb_q \\ %{}, seq \\ 0, r_seq \\ %{}) do
+		recieve do
+			{:group, group} ->
+				new_r_seq = for n <- group, do: { n, -1 }
+				loop(app, group, hb_q, seq, Enum.into(new_r_seq, %{}))  # insert new_r_seq into %{}
+      
+      # we got a message from application
+      {:send, m} ->
+      	udp_multicast group, {:message, self(), m, seq, r_seq}
+      	loop(app, group, hb_q, seq + 1, r_seq)
+      	
+      # we are asked to respond (negative ack)
+      {:nack, num, pid, sender} ->
+      	tcp_send sender, {:message, pid, hb_q[{pid, num}], num, r_seq} # get message from hold-back queue
+      	
+      # we got message from the network
+      {:message, sender, m, s_seq, s_r_seq} ->
+      	new_hb_q = Map.put(hb_q, {sender, s_seq}, m) # insert m into hold-back queue
+      	new_r_seq = try_deliver(app, sender, new_hq_q, r_seq, m, s_seq)
+      	send_nack(sender, new_r_seq, s_r_seq)
+      	loop(app, group, new_hb_q, seq, new_r_seq)
+      	
+    defp try_deliver(app, sender, r_seq, hb_q, m, s_seq) do
+    	if s_seq == r_seq[sender]+1 do # if the sequence number is one more than received
+    		# next message from sender, tell app
+    		send app, m
+    		n_r_seq = Map.put(r_seq, sender, s_seq) # update received sequence number from sender
+    		# check hold-back queue
+    		if Map.has_key?(hb_q, {sender, s_seq + 1}) do
+    			try_deliver(app, sender, n_r_seq, hb_q, hb_q[{sender, s_seq +1}], s_seq + 1)
+        else
+        	# done with hold-back
+        	{hb_q, n_r_seq} # return
+        end
+      else
+      	# handled elsewhere
+      	{ rb_q, r_seq } # return
+     	end
+    end
+    
+    defp send_nack(sender, r_seq, other_r_seq) do
+    	for {pid, seq} <- other_r_seq do
+    		if r_seq[pid] < seq do
+    			for m_id <- r_seq[pid]..seq do
+    				send sender, {:nack, m_id, pid, self()}
+    			end
+    		end
+    	end
+    end
+  end
+end
+```
 
 
 
@@ -327,7 +380,7 @@ The trick:
 Good:
 
 * Reliable crash-detection = robust
-    * Sequence nubmers are monotonically increasing
+    * Sequence numbers are monotonically increasing
     * Nobody will deliver "early"
 
 Bad

@@ -214,7 +214,7 @@ The delivery queue is handled by Elixir in the code
 
 ### Reliable Multicast over IP
 
-```erlang
+```elixir
 defmodule IPReliableMulticast do
 	...
 	defp loop(app, group \\ [], hb_q \\ %{}, seq \\ 0, r_seq \\ %{}) do
@@ -349,7 +349,7 @@ Idea
 
 #### Sequencer
 
-```erlang
+```elixir
 defmodule TOSEQMulticast do
   ...
     defp loop(app, group \\ %{}, hb_q \\ %{}, l_seq \\ 0, g_seq \\ -1, seq_map \\ %{}) do

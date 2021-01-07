@@ -214,9 +214,9 @@ The delivery queue is handled by Elixir in the code
 
 ### Reliable Multicast over IP
 
-```elixir
+```erlang
 defmodule IPReliableMulticast do
-...
+	...
 	defp loop(app, group \\ [], hb_q \\ %{}, seq \\ 0, r_seq \\ %{}) do
 		recieve do
 			{:group, group} ->
@@ -286,16 +286,16 @@ No drops, good ordering = $O(N)$ messages!
 
 ### Ordered Multicast
 
-FIFO Ordered
+**FIFO Ordered**
 
 * Messages from $p_n$ are received at $p_k$ in order send by $p_n$
     * Like speaking
 
-Total ordered
+**Total ordered**
 
 * All messages are received in same order at $p_n$ and $p_k$
 
-Casually Ordered
+**Casually Ordered**
 
 * if $p_n$ receives $m1$ before $m2$, then $m1$ **happened before** $m2$
 
@@ -309,7 +309,7 @@ Can lead to wrong states
 
 ![image-20201001132310064](images/04-multicast/image-20201001132310064.png)
 
-Use FIFO to fix this problem
+Use **FIFO** to fix this problem
 
 ![image-20201001132350368](images/04-multicast/image-20201001132350368.png)
 
@@ -317,7 +317,7 @@ If we introduce another process, it can fail again
 
 ![image-20201001132425590](images/04-multicast/image-20201001132425590.png)
 
-Introduces total order
+Introduces **total order**
 
 ![image-20201001132514231](images/04-multicast/image-20201001132514231.png)
 
@@ -330,6 +330,8 @@ Total order can also go wrong
 
 
 <u>Reliable IP-Multicast is FIFO</u>
+
+* We respect sequence numbers of sender!
 
 
 
@@ -347,12 +349,90 @@ Idea
 
 #### Sequencer
 
-![image-20201001133912883](images/04-multicast/image-20201001133912883.png)
+```erlang
+defmodule TOSEQMulticast do
+  ...
+    defp loop(app, group \\ %{}, hb_q \\ %{}, l_seq \\ 0, g_seq \\ -1, seq_map \\ %{}) do
+      receive do
+        # for setting our neighbours
+        {:group, group} ->
+          loop(app, group, hb_q, l_seq, g_seq, seq_map)
+        
+        # message from application
+        {:send, m} ->
+          # remember to make unique message ID!
+          id = {self(), l_seq}
+          b_multicast(group, {:message, m, id, self()})
+          loop(app, group, hb_q, l_seq + 1, g_seq, seq_map)
+          
+        # got message from network
+        {:message, m, id} ->
+          n_hb_q = Map.put(hb_q, id, m) # put message in HB queue
+          n_g_seq = try_deliver(app, group, n_hb_q, l_seq, n_g_seq, seq_map)
+          loop(app, group, n_hb_q, l_seq, n_g_seq, seq_map)
+        
+        # order from sequencer
+        {:order, id, order} ->
+          n_seq_map = Map.put(seq_map, order, id) # update sequence map
+          n_g_seq = try_deliver(app, group, hb_q, l_seq, n_g_seq, n_seq_map)
+          loop(app, group, hb_q, l_seq, n_g_seq, n_seq_map)
+          
+      defp try_deliver(app, hb_q, g_seq, seq_map) do
+        if seq_map[g_seq + 1] != nil and hb_q[seq_map[g_seq + 1]] != nil do
+          send app, hb_q[seq_map[g_seq + 1]]
+          try_deliver(app, hb_q, g_seq + 1, seq_map)
+        else
+          g_seq # return
+        end
+      end
+    end
+  end
+end
 
-* Sequencer is bottlenek
+defmodule Sequencer do
+  ...
+  defp loop(group \\ [], seq \\ 0) do
+    receive do
+      # for setting our neighbors
+      {:group, group} -> 
+        loop(group, seq)
+      
+      # got message from network
+      {:message, _m, id} ->
+        b_multicast(group, {:order, id, seq})
+        loop(group, seq + 1)
+    end
+  end
+enddefmodule TOISISMulticast do
+...
+	defp loop(app, group \\ %{}, hb_q \\ %{}, l_seq \\ 0, g_seq \\ -1, 
+								seq_map \\ %{}, a_seq \\ 0, p_seq \\ 0, votes \\ %{}) do
+		receive do
+			# for setting our neighbours
+			{:group, group} ->
+				loop(app, group, hb_q, l_seq, g_seq, seq_map, a_seq, p_seq, votes)
+			
+			# message from application
+			{:send, m} ->
+				# remember to make unique message ID!
+				id = {self(), l_seq}
+				b_multicast(group, {:message, m, id, self()})
+				loop(app, group, hb_q, l_seq + 1)
+		
+	end
+end
+```
+
+
+
+Problems
+
+* Sequencer is bottleneck
 * Single point of failure
 
+Bonus
 
+* What breaks w. IP-multicast instead of B-multicast?
 
 * Package loss = deadlock of process
 * Solution: reliable underlying multicast
@@ -413,10 +493,37 @@ Not-quite-Lamport clocks, and they are vectors
 
 
 
-![image-20201001140237396](images/04-multicast/image-20201001140237396.png)
+Let $V_i$ be the vector of process $p_i \in \{p_0, \dots, p_n\}$ then
+
+* initially $V_i[j] = 0$ for all $j \in 0\dots n$,
+* before event $V_i'[i] = V_i'[i] +1$,
+* attach $V$ to any message sent,
+* on receive of $V'$ we let $V''[j] = \max(V[j], V'[i])$ for $j \in 0 \dots n$
 
 
 
-!!! todo
-    finish notes [pdf page 47-](https://www.moodle.aau.dk/pluginfile.php/2129891/mod_resource/content/1/04.1-Multicast.pdf#page=47)
+Given two vectors $V$ and $W$,
 
+* $V=W$ if all values match
+    * for all $j \in 0...n,\quad V[j] = W[j]$
+* $V \leq W$ if all values in $V$ are less than or equal those in $W$,
+    * for all $j \in 0...n,\quad V[j] \leq W[j]$
+* $V \leq W$ if all values in $V$ are less than or equal to $W$ **and** $W \neq V$
+    * $V \leq W$ and $V \neq W$
+
+!!! example
+    [Example in slides 36](https://www.moodle.aau.dk/pluginfile.php/2129891/mod_resource/content/1/04.1-Multicast.pdf#page=48)
+
+
+
+#### Algorithm
+
+![image-20210107172144923](images/04-multicast/image-20210107172144923.png)
+
+**Notice**
+
+* Casual order implies FIFO
+* Casual order does **not** imply Total
+* Good: No extra communication for order!
+* Can be combined with total
+* Reliable if using R-multicast instead of B-multicast

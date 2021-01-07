@@ -33,9 +33,11 @@ extra_javascript:
 
 markdown_extensions:
   - admonition
-  - codehilite:
-      guess_lang: false
-      linenums: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+  # - codehilite:
+  #     guess_lang: false
+  #     linenums: true
   - toc:
       permalink: true
   - pymdownx.arithmatex

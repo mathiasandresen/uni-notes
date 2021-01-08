@@ -1,4 +1,6 @@
-# Replication
+# Replication and Consistency
+
+
 
 ## Goals of Replication
 
@@ -30,7 +32,7 @@ Performance
 
 
 
-## Caching
+### Caching
 
 Caching is also replication
 
@@ -42,10 +44,10 @@ Caching is also replication
 
 
 
-## Problems
+### Problems
 
 * Consensus
-    * ... or consistency
+    * ... or **consistency**
 * Overhead in communication
 * Failure detection and handling
 
@@ -53,7 +55,7 @@ Caching is also replication
 
 ## CAP Theorem
 
-It is **impossible** for a distributed computer system tom simultaneously provide **Consistency**, **Availability** and **Partition Tolerance**.
+It is **impossible** for a distributed computer system to simultaneously provide **Consistency**, **Availability** and **Partition Tolerance**.
 
 A distributed system **can satisfy any two** of these guarantees at the same time but **not all three**.
 
@@ -63,7 +65,7 @@ A distributed system **can satisfy any two** of these guarantees at the same tim
 
 ![image-20201015124750628](images/06-replication/image-20201015124750628.png)
 
-If we relax our requirements we can overcome this impossibility
+**But**: If we relax our requirements we can overcome this impossibility
 
 ### Examples
 
@@ -104,13 +106,11 @@ Core/critical services are often CP
     * no timer
     * no external events
 
-Notation
+**Notation**
 
-![image-20201015130030357](images/06-replication/image-20201015130030357.png)
+`o.m(v)` apply modifier `m` to object `o` with value `v`
 
-
-
-
+`myAccount.deposit(1000)`
 
 ![image-20201015130039276](images/06-replication/image-20201015130039276.png)
 
@@ -165,32 +165,54 @@ Transparent to clients is not yet formally defined
 
 
 
-### Consistency Models
+## Consistency Models
 
 **Strong consistency**
 
 * In real-time, after update A, everybody will see the modification done by A when reading
-
-[sildes 16-](https://www.moodle.aau.dk/pluginfile.php/2136991/mod_resource/content/1/06.1-Replication.pdf#page=31)
 
 **Weak Consistency**
 
 * What is the ordering, disregarding real-time?
 * "reasonably consistent"
 
-![image-20201015131408142](images/06-replication/image-20201015131408142.png)
 
 
 
-#### Desired Temporal Consistencies
 
-![image-20201015131010420](images/06-replication/image-20201015131010420.png)
+### Inconsistency
+
+[Example on sildes 16-](https://www.moodle.aau.dk/pluginfile.php/2136991/mod_resource/content/1/06.1-Replication.pdf#page=31)
+
+![image-20210108103719507](images/06-replication/image-20210108103719507.png)
+
+
+
+### Desired Temporal Consistencies
+
+* If I write a value, I will see that (or a newer value) on a subsequent read
+* If I read twice, the value returned on the second read is at least as new as from the first read
+* If data is related (questions and answers), I expect this to be reflected in a consistent manner
+    * ... no constraints on unrelated data!
 
 
 
 ### Linearizability (Lamport)
 
-![image-20201015131040342](images/06-replication/image-20201015131040342.png)
+$\bold {C_i}$ **operations**
+
+* $o_1^i, o_2^i, \dots, o_n^i$ for some operation $o \in O$
+
+**Timestamp**
+
+* Let $T(o^i_n)$ be the timestamp of $o^i_n$.
+
+**Linearizability**
+
+* An interleaving $\dots, o^i_5, o^j_{100}, o^i_6, \dots$ (with $i \neq j$) is linearizable if
+    * arrive at a (single) correct copy of the object (from specification)
+    * the order is consistent with real time
+        * $T(o^i_5) \leq T(o^j_{100}) \leq T(o^i_6)$
 
 
 
@@ -211,15 +233,24 @@ Transparent to clients is not yet formally defined
 
 
 
+### Interleavings
+
+![image-20201015131408142](images/06-replication/image-20201015131408142.png)
+
+
+
 ### Sequential Consistency (Lamport)
 
-$C_i$ operations
+$\bold {C_i}$ **operations**
 
 * $o_1^i, o_2^i, \dots , o_n^i$ for some operation $o \in O$
 
-Sequential Consistency
+**Sequential Consistency**
 
-![image-20201015131552793](images/06-replication/image-20201015131552793.png)
+* An interleaving $\dots, o^i_a, o^j_b, o^i_c, \dots$ (with $i \neq j$) is sequentially consistent if
+    * arrive at a (single) correct copy of the object (from specification)
+    * the order respects casuality of $C_i$
+        * $a < c$, i.e. from $C_i, o^i_a$ was sent before $o^i_c$
 
 Example on [slides 23](https://www.moodle.aau.dk/pluginfile.php/2136991/mod_resource/content/1/06.1-Replication.pdf#page=44)
 
@@ -231,17 +262,17 @@ Example on [slides 23](https://www.moodle.aau.dk/pluginfile.php/2136991/mod_reso
 
 ### Replication Architectures for Fault Tolerance
 
-Read-only replication
+**Read-only replication**
 
 * Immutable files
 * Cache-servers
 
-Passive replication (primary/secondary)
+**Passive replication (primary/secondary)**
 
 * High consistency
 * Banks?
 
-Active replication
+**Active replication**
 
 * Fast failover mechanism
     * Everyone can take over if one fails
@@ -305,7 +336,7 @@ Sacrifice linearizability => offload reads to backups!
 
 ## Gossip Architecture
 
-Operations
+**Operations**
 
 * Read
     * no state change
@@ -318,7 +349,7 @@ Operations
 
 **Relaxed Consistency**
 
-* R's apply operations "eventually" with specific order
+* $R$'s apply operations "eventually" with specific order
 * Client may receive outdated data
     * though newer than clients current data
 
@@ -337,13 +368,17 @@ Operations
 
 ### Idea
 
-Vector clocks, vector clocks everywhere
+**Vector clocks, vector clocks everywhere**
 
 Track “number of unique updates $R_i$ has seen of object from some frontend” as a vector.
 
-![image-20201015134158751](images/06-replication/image-20201015134158751.png)
-
-
+* Each entry in vector-clock corresponds to $R_i$
+    * $R_i$ updates own index in vector on update from some $F_i$
+    * Keep messages from future in hold-back queue
+    * Avoid duplicates
+* Frontend keep track of "last known" timestamp
+    * Frontend label their reads/writes with last-known timestamp
+    * Receive new timestamp updates from $R_i$ (or via gossip)
 
 ### Phases
 
@@ -383,13 +418,13 @@ Track “number of unique updates $R_i$ has seen of object from some frontend”
 
 ### Details
 
-Frequency of gossip
+**Frequency of gossip**
 
 * Minutes, hours or days
 * Depend on the requirement of application
     * think of git, how often are we committing?
 
-Topology
+**Topology**
 
 * Random
 * Deterministic: investigate known clocks

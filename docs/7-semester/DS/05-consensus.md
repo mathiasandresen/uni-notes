@@ -52,7 +52,7 @@ What is consensus?
 
 **Failures?**
 
-Wee need:
+We need:
 
 * Mechanism for failure detection
     * Difficult/impossible for async systems
@@ -94,7 +94,17 @@ If left army sends a message to right, they would not know if the message has be
 
 
 
-## System Model
+## Consensus Problem
+
+To reach consensus, every process $p_i$ begins in *undecided* state and *proposes* a value $v_i$ from the set $D$ (e.g. $\{1,2,\dots,N\}$).
+
+The processes communicate , exchanging values.
+
+Each process sets the value of a *decision variable* $d_i$ which cant change, and enters the *decided* state.
+
+
+
+### System Model
 
 * Synchronous Systems
 * Reliable Communication
@@ -119,11 +129,9 @@ Given $p_i \in \{p_0,\dots,p_n\}$ and a corresponding decision-variable $d_i\in 
 * **Agreement**
     * The decision values of all correct processes are the same
 * **Integrity**
-    * If all correct processes propose the same value, then any correct process in the decided state decide on that value
+    * If all correct processes propose the same value, then any correct process in the *decided* state decided on that value
 * **Weak Integrity**
     * The agreed value must be one proposed by a correct process
-
-
 
 **Decided State**
 

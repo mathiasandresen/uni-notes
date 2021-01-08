@@ -1,4 +1,4 @@
-# **Question 1 - Distributed Mutual Exclusion** 
+# Question 1 - Distributed Mutual Exclusion 
 
 * What is DME and what are the requirements to a DME algorithm?
 * What are the criteria to evaluate DME algorithms?

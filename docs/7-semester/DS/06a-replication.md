@@ -22,11 +22,11 @@ Performance
 
 ### Tolerance and Availability
 
- ![image-20201015123638146](images\06-replication\image-20201015123638146.png)
+ ![image-20201015123638146](images/06-replication/image-20201015123638146.png)
 
 ### Performance
 
-![image-20201015123743096](images\06-replication\image-20201015123743096.png)
+![image-20201015123743096](images/06-replication/image-20201015123743096.png)
 
 * Edge servers around the internet
 

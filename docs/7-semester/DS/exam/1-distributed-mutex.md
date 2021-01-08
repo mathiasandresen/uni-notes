@@ -8,3 +8,5 @@
 
 ### What is DME and what are the requirements to a DME algorithm?
 
+**Mutual exclusion** algorithms ensures that **one and only one** process can access a shared resource at any given time.
+

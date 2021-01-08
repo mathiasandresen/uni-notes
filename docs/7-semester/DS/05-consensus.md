@@ -6,16 +6,24 @@ What is consensus?
 
 
 
-**Practical applications**
+**Examples**
 
-* Redundancy
-    * Space and aeronautics
-    * Industrial systems
-* Replication
-    * Distributed file systems
-    * Ledger technology (e.g. blockchain)
+* **We have already seen**
 
+    * Mutex
+    * Leader election
+    * Multicast (ordering)
+    * Bank-accounts
 
+* **Practical Applications**
+    * Redundancy
+        * Space and aeronautics
+        * Industrial systems
+    * Replication
+        * Distributed file systems
+        * Ledger technology (e.g. blockchain)
+
+    
 
 **Big questions**
 
@@ -72,6 +80,7 @@ If left army sends a message to right, they would not know if the message has be
 **Informally**
 
 * Communication can be "blocked" indefinitely
+    * (which is not forever)
 
 **Reliable TO (Totally Ordered) Multicast is also impossible in async systems**
 
@@ -106,7 +115,7 @@ Given $p_i \in \{p_0,\dots,p_n\}$ and a corresponding decision-variable $d_i\in 
 * $⊥ \not \in D$
 
 * **Termination**
-    * Eventually a correct proccess sets its decision variable $d_i$
+    * Eventually a correct process sets its decision variable $d_i$
 * **Agreement**
     * The decision values of all correct processes are the same
 * **Integrity**
@@ -162,11 +171,15 @@ We say that $p_i$ is decided if $d_i \not = ⊥$
 
 
 
-### Byzantine Error
+## Byzantine Error
 
 What is processes do not crash-fail but interact unpredictably?
 
-#### Examples
+The term *arbitrary* or **Byzantine failure** is used to describe the worst possible failure semantics, in which any type of error may occur. For example, a process may set wrong values in its data items, or it may return a wrong value in response to an invocation.
+
+Byzantine failures in processes cannot be detected by seeing whether the process responds to invocations, because it might arbitrarily omit to reply.
+
+### Examples
 
 * Single Event Upset: A flipped bit
 * Single Event Latchup: Hardware error
@@ -194,13 +207,13 @@ Systems can "fall asleep" and later continue from where they left off
 
 
 
-#### Byzantine Consensus
+### Byzantine Consensus
 
 **Requirements**
 
 * ...
-* Byzantine integrity**
-    * If all non-faulty processes start with the same value, then all non-faulty processes diced on that value
+* **Byzantine integrity**
+    * If all non-faulty processes start with the same value, then all non-faulty processes decide on that value
 
 
 
@@ -218,7 +231,9 @@ Systems can "fall asleep" and later continue from where they left off
 
 
 
-#### Byzantine Non-Consensus
+### The Byzantine Generals Problem
+
+
 
 ![image-20201008131421164](images/05-consensus/image-20201008131421164.png)
 
@@ -232,7 +247,7 @@ $\uparrow \downarrow$ Proof that if 1/3 is faulty you cannot arrive at consensus
 
 
 
-#### Byzantine Consensus Algorithm
+### Byzantine Consensus Algorithm
 
 $f = 1$
 
@@ -246,11 +261,121 @@ $f = 1$
 
 
 
-#### Kings Algorithm
+### Kings Algorithm
 
 ![image-20201008133350257](images/05-consensus/image-20201008133350257.png)
 
-* We introduces a "leader"/tiebreaker
+We introduces a "leader"/tiebreaker
 
-!!!todo
-    Finish notes [slides 20-](https://www.moodle.aau.dk/pluginfile.php/2133486/mod_resource/content/1/05.1-Consensus.pdf)
+
+
+* Works only for any $n > 3 \times f$
+* Small messages, $O(n^2)$
+* $(f+1) \times 3$ rounds
+* Integrity is respected
+
+
+
+### Notes on Byzantine Algorithms
+
+* General case:
+    * Requires $f+1$ rounds
+    * Sends $O(n^{f+1})$ messages
+    * Number of rounds can be exchanged for messages
+        * Queen algorithm $(f+1) \times 2$ rounds $+ f < {n \over 4}$-robust
+        * King algorithm $(f+1) \times 3$ rounds
+* Using digital signiture
+    * Still $f+1$ rounds
+    * $O(n^2)$ messages
+
+**Note**
+
+* Costly in general form
+* Often specialized solutions are cheaper
+
+
+
+### Fixing the Async Problem
+
+
+
+#### Random Solution
+
+If we allow randomness in our algorithm we can have a solution to Byzantine Generals Problem in async setting
+
+
+
+## Paxos
+
+A family of algorithms by L. Lamport
+
+* No coordinator
+* Async system
+* Nodes may crash and recover
+    * OK with up to $n/2$ failures
+* Once a single process decides, all will (eventually) decide the same
+
+**Inconceivable**!
+
+* No guaranteed termination
+* ... but terminates in "reasonable environments"
+
+
+
+[The Paxos Algorithm](https://www.youtube.com/watch?v=d7nAGI_NZPk&feature=youtu.be)
+
+
+
+### Reaching Consensus with Paxos
+
+![image-20210108141904159](images/05-consensus/image-20210108141904159.png)
+
+* Consensus is agreeing on **one** result
+* Once a **majority** agrees on a proposal, that is the consensus
+* The reached consensus can be **eventually** known by anyone
+* The involved parties want to agree on **any** result, not on their proposal
+* Communication channels may be **faulty**, that is, messages can get lost
+
+
+
+### Basics
+
+* Paxos defines three roles:
+    * **Proposers**
+    * **Acceptors**
+    * **Learners**
+* Paxos nodes can take multiple roles, even all of them
+* Paxos nodes must know how many **acceptors** a majority is
+    * Two majorities will always overlap in at least one node
+* Paxos nodes must be persistent: they cant forget what they accepts
+* A **Paxos run** aims at reaching **a single consensus**
+    * Once consensus is reached, it **cannot progress** to another consensus
+    * In order to reach **another consensus**, a different **Paxos run** must happen
+
+
+
+### The Paxos Algorithm
+
+![image-20210108143127909](images/05-consensus/image-20210108143127909.png)
+
+
+
+### Majority of Promises
+
+![image-20210108143245077](images/05-consensus/image-20210108143245077.png)
+
+
+
+### Contention
+
+![image-20210108143345457](images/05-consensus/image-20210108143345457.png)
+
+### Majority of Accepts
+
+![image-20210108143524237](images/05-consensus/image-20210108143524237.png)
+
+
+
+### Practical Example - Simple Distributed Storage System
+
+![image-20210108143813131](images/05-consensus/image-20210108143813131.png)

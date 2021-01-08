@@ -32,7 +32,7 @@ A process $p=(S,s_i, M, \to)$ in a set of processes $p\in P$ has
 
 ### Example
 
-```erlang
+```elixir
 defmodule Pinger do
   def start_link() do
     Task.start_link(fn -> loop() end)
@@ -79,7 +79,7 @@ Time is counted in number of messages/events
 * Arbitrary delays
 * Unknown processing time
 
-![image-20200924140603250](images/Untitled/image-20200924140603250.png)
+![image-20210108093039262](images/03-mutex/image-20210108093039262.png)
 
 **Synchronous**
 
@@ -87,21 +87,17 @@ Time is counted in number of messages/events
     * or hard limits of them
 * Known drift
 
-![image-20200924142101737](images/Untitled/image-20200924142101737.png)
+![image-20210108093050607](images/03-mutex/image-20210108093050607.png)
 
 
 
+![image-20210108093111842](images/03-mutex/image-20210108093111842.png)
 
-
-Figure: Properties of the network can lead to confusion for Alice
-
-![image-20200924142920026](images/Untitled/image-20200924142920026.png)
-
-
+**Figure**: Properties of the network can lead to confusion for Alice
 
 ### Assumptions
 
-* Processes have **Crash Failures**
+* Processe have **Crash Failures**
     * Stays dead
 * Direct Communication
     * Transparent routing
@@ -114,9 +110,7 @@ Figure: Properties of the network can lead to confusion for Alice
         * Underlying protocol handles re-transmission etc.
     * Partitions are fixed eventually
 
-![image-20200924143113429](images/Untitled/image-20200924143113429.png)
-
-
+![image-20210108093201243](images/03-mutex/image-20210108093201243.png)
 
 
 
@@ -124,11 +118,11 @@ Figure: Properties of the network can lead to confusion for Alice
 
 ### **Requirements**
 
-1. Safety
+1. **Safety**
     * at most one is given access
-2. Liveness
+2. **Liveness**
     * Requests for access are (eventually) granted
-3. Ordering/Fairness
+3. **Ordering/Fairness**
     * A request $A$ **happened-before** request $B$
         $\Rightarrow$ grant $A$ before $B$
 
@@ -147,9 +141,7 @@ Figure: Properties of the network can lead to confusion for Alice
     * Synchronization Delay
         * Time from a release of $R$ to a grant of the next request $Q$
 
-![image-20200924143524337](images/Untitled/image-20200924143524337.png)
-
-
+![image-20210108093302308](images/03-mutex/image-20210108093302308.png)
 
 ### Centralized Algorithm
 
@@ -161,9 +153,7 @@ Figure: Properties of the network can lead to confusion for Alice
 
 #### Code
 
-![image-20200924143622573](images/Untitled/image-20200924143622573.png)
-
-
+![image-20210108093620405](images/03-mutex/image-20210108093347789.png)
 
 #### Properties
 
@@ -204,7 +194,7 @@ Figure: Properties of the network can lead to confusion for Alice
 
 #### Code
 
-![image-20200924144122488](images/Untitled/image-20200924144122488.png)
+![code-tokenring](images/03-mutex/image-20210108093613748.png)
 
 #### Properties
 
@@ -227,5 +217,171 @@ Figure: Properties of the network can lead to confusion for Alice
 
 * Deadlock if any process fail
 * Can be recovered if crash can be detected reliably
-* 
 
+
+
+### Ricard and Agrawala's Algorithm
+
+**Idea**
+
+* Order events!
+    * Extension of shared priority queue (Lamport '78)
+* Basic algorithm
+    * Request all for access
+    * Wait for all to grant
+
+**Secret Ingredient**
+
+* Lamport clocks
+
+
+
+#### Lamport Clocks
+
+* Counter number of messages/events
+* Annotate messages with clock
+* Increment local before send
+* "Correct" local clock on receive, then increment
+    * $\max(A,B)+1$
+
+![image-20210108094154541](images/03-mutex/image-20210108094154541.png)
+
+#### Code
+
+![image-20210108094241171](images/03-mutex/image-20210108094241171.png)
+
+#### Properties
+
+**Requirements**
+
+* Safe: Yes
+* Liveness: Yes
+* Ordering: Yes
+
+**Properties**
+
+* Client delay:
+    * Entry: 1 (multicast) + 1
+    * Exit: 1 (multicast) + 1
+* Synchronization delay
+    * 1
+* Bandwidth: $2(n-1)$ if no hardware multicast
+
+**Fault Tolerance**
+
+* Deadlock if any process fails
+
+
+
+### Maekawas Algorithm
+
+**Idea**
+
+* only communicate with a subset (Voting Set $V$)
+* pick $V$ cleverly
+* Basic algorithm
+    * Ask everybody in $V$ for access
+    * Wait for all to grant
+
+
+
+![image-20210108094818797](images/03-mutex/image-20210108094818797.png)
+
+* Voting set of $p_{14}= \{p_2, p_8, p_{13}, p_{14}, p_{15}, p_{16}, p_{17}, p_{18}, p_{20}, p_{26}, p_{32}\}$
+
+* Voting set of $p_{29} = \{p_5, p_{11}, p_{17}, p_{23}, p_{25}, p_{26}, p_{27}, p_{28}, p_{29}, p_{30}, p_{35}\}$
+
+Notice
+
+* Non-trivial to compute optimal sets
+
+
+
+#### Voting Set
+
+Let $P=\{p_0, \dots, p_n\}$ be a set of processes, then $V_i \subseteq P$ is a voting set for $p_i \in P$ if
+
+* any $p_i \in P$ has a $V_i$, and
+    * $p_i \in V_i$,
+        * **Every process has a voting set and is member of its own voting set**
+* for all $i,j$ we have $V_i \cap V_j \neq \empty$
+    * **At least one shared process between two voting sets**
+* for any $i$ we have $|V_i| = K$,
+    * **All voting sets have the same size**
+* for any $i$ we have $|\{V_k \mid p_i \in V_k\}| = M$
+    * **All processes are members of the same number of voting sets**
+* $M=K$ and $K \geq \sqrt{n-1}$
+
+
+
+#### Code
+
+![image-20210108095633472](images/03-mutex/image-20210108095633472.png)
+
+#### Problem
+
+* **Deadlock** can happen with three processes!
+* Can be solved by using **Lamport Clocks**
+
+
+
+#### Properties
+
+**Requirements**
+
+* Safe: Yes
+* Liveness: Yes
+* Ordering: Yes
+
+**Properties**
+
+* Client delay
+    * Entry: 2 (multicast)
+    * Exit: 1 (multicast)
+* Synchronization delay
+    * 2, *any two voting sets overlap*
+* Bandwidth: $3 \sqrt n$ if no hardware multicast
+
+**Fault tolerance**
+
+* Deadlock in voting-set if process crashes
+
+
+
+### Overview
+
+| Algorithm  | Messages Entry/Exit | Sync Delay  | Problems                            |
+| ---------- | ------------------- | ----------- | ----------------------------------- |
+| Central    | $3$                 | $2$         | Coord. Crash, Client Crash w. mutex |
+| Token ring | $1...\infty$        | avg $n / 2$ | Lost token, Crash of process        |
+| R & A      | $2(n-1)$            | $1$         | Crash of any process                |
+| Maekava    | $3 \sqrt n$         | $2$         | Crash in voting-set = deadlock      |
+
+
+
+### Summary
+
+* Crashes are bad
+* Mitigation is non-trivial
+* Detection is hard too
+
+
+
+## Heartbeat
+
+**For synchronized systems**
+
+* Assume transmission delay $D$
+* Send "beat" every $T$ seconds
+* Declared dead if not observed in last $T+D$ seconds
+
+**For asynchronized systems**
+
+* Guess a $D$
+* Send "beat" every $T$ seconds
+* Declared dead if not observed in last $T+D$ seconds
+    * $D$ too small $\Longrightarrow$ Inaccurate
+        * alive reported dead
+    * $D$ too large $\Longrightarrow$ Incomplete
+        * dead reported alive (zombies!)
+* We can only suspect a crash!

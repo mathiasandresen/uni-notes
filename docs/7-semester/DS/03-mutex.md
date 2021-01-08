@@ -246,7 +246,35 @@ Time is counted in number of messages/events
 
 ![image-20210108094154541](images/03-mutex/image-20210108094154541.png)
 
-#### Code
+#### Protocol Pseudo Code
+
+```pseudocode
+On initialization
+	state := RELEASED
+	
+To get mutex
+	state := WANTED												# 
+	Multicast request to every process		#	defer other request here
+	T := request's timestamp							#
+	wait until (len(replies received) = (N - 1))
+	state := HELD
+	
+On request <T_i, p_i> at p_j (i != j)
+	if (state = HELD or (state = WANTED and (T,p_j) < (T_i, p_i)))
+	then
+		queue request from p_i without reply
+  else
+  	reply immediately to p_i
+  end if
+  
+To exit mutex
+	state := RELEASED
+	reply to any queued requests
+```
+
+
+
+#### Elixir Code
 
 ![image-20210108094241171](images/03-mutex/image-20210108094241171.png)
 

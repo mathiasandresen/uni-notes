@@ -1,6 +1,6 @@
 # Exam
 
-**Question 1: Distributed Mutual Exclusion** 
+**Question 1: Distributed Mutual Exclusion** :heavy_check_mark:
 
 * What is DME and what are the requirements to a DME algorithm?
 * What are the criteria to evaluate DME algorithms?
@@ -8,7 +8,7 @@
 
 
 
-**Question 2: Multicast**
+**Question 2: Multicast** :x:
 
 * Why do you need multicast?
 * Explain basic multicast assuming reliable 1:1 communication
@@ -18,7 +18,7 @@
 
 
 
-**Question 3: Replication and Consistency**
+**Question 3: Replication and Consistency**​ :grey_exclamation:
 
 * Why do you need replication?
 * Explain the challenges resulting from replication
@@ -28,7 +28,7 @@
 
 
 
-**Question 4: Consensus**
+**Question 4: Consensus** :heavy_check_mark:
 
 * Explain the consensus problem
 * Solution in synchronous system
@@ -41,7 +41,7 @@
 
 
 
-**Question 5: Clustered Storage (GFS, Chubby, BigTable)** 
+**Question 5: Clustered Storage (GFS, Chubby, BigTable)** (:heavy_check_mark:)
 
 * What are the design principles behind the Google Infrastructure?
 * Go into depth with GFS: Explain the architecture, consistency model, replication, fault tolerance. What are its advantages and disadvantages?
@@ -50,7 +50,7 @@
 
 
 
-**Question 6: Big Data Processing (MapReduce/Hadoop, Spark, Pregel)**
+**Question 6: Big Data Processing (MapReduce/Hadoop, Spark, Pregel)** ​(:heavy_check_mark:)​
 
 * Explain the Map Reduce paradigm and programming model
 * Explain the system architecture
@@ -60,7 +60,7 @@
 
 
 
-**Question 7: Internet of Things Routing (Directed Diffusion, Tree Routing in ZigBee, AODV, DSR)**
+**Question 7: Internet of Things Routing (Directed Diffusion, Tree Routing in ZigBee, AODV, DSR)** :x:
 
 * Explain the characteristics and limitation of IoT
 * Describe goals of IoT platforms
@@ -71,7 +71,7 @@
 
 
 
-**Question 8: Peer to Peer (Gnutella, Chord)**
+**Question 8: Peer to Peer (Gnutella, Chord)** :x:
 
 * Explain the characteristics of peer-to-peer networks
 * Describe the initial architecture of Gnutella
@@ -81,7 +81,7 @@
 
 
 
-**Question 9: Blockchain (Tamper-free linked lists, Nakamoto Consensus, proof of work, transactions in Merkle trees)**
+**Question 9: Blockchain (Tamper-free linked lists, Nakamoto Consensus, proof of work, transactions in Merkle trees)** :x:
 
 * Explain the characteristics of the blocks in a blockchain (e.g.: immutability, linear growth)
 * Explain how the crypto tools used in blockchain work (hash function, signature, merkle tree, hash pointer) and how they are used in the blockchain

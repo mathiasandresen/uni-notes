@@ -109,6 +109,65 @@ The master tells each chunkserver to count how many times each song has been pla
 
 
 
-
-
 ## Describe Spark and Pregel, as difference from Hadoop
+
+### Spark
+
+**Map Reduce** is **inefficient** for applications which **reuse intermediate** results across multiple computations
+
+Spark uses **resilient distributed datasets** (**RDDs**)
+
+* Immutable, partitioned collections of records (normally in RAM)
+* fault-tolerant, parallel data structures,
+* efficient data reuse
+
+let users
+
+* explicitly persist intermediate results in memory
+
+
+
+RDD does not have to be materialized all the time: 
+
+* store the „lineage“, information about how it was derived from other datasets (operations on RDDs).
+    * re-computable
+
+![image-20201119135326225](../images/11-big-data-analytics/image-20201119135326225.png)
+
+![image-20210109205635597](images/6-big-data-processing/image-20210109205635597.png)
+
+
+
+### Pregel
+
+Pregel is  **tailored to graph computations**
+
+* scale to billions of vertices, trillions of edges
+
+Keeps **intermediate** results **like** **spark**
+
+
+
+Algorithm termination is based on every vertex voting to halt
+
+* In super-step 0, every vertex is in the active state
+* A vertex deactivates itself by voting to halt
+* A message may re-activate a vertex
+
+![image-20201119135530229](../images/11-big-data-analytics/image-20201119135530229.png)
+
+
+
+**Master - worker** architecture
+
+* Master monitors workers and partitions vertices to workers
+* Workers execute at each super-step
+    * report number of active vertices to master at end of step
+
+Uses GFS or BigTable for persistent data
+
+
+
+#### Example
+
+![image-20201119135557068](../images/11-big-data-analytics/image-20201119135557068.png)

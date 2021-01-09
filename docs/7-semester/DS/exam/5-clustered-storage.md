@@ -9,7 +9,19 @@
 
 ## What are the design principles behind the Google Infrastructure?
 
-todo
+Key philosophy: use large number of commodity PCs
+
+* best performance per dollar
+* high risk of failure
+
+
+
+Use **cluster architecture**
+
+![image-20201105125307238](../images/09-cluster-storage/image-20201105125307238.png)
+
+* Use software techniques for fault tolerance
+* Use replication and parallelism for throughput and availability
 
 
 

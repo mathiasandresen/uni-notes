@@ -119,6 +119,8 @@ Large variety of Software bugs, crashes
 
 ## GFS - A Distributed Filesystem
 
+:movie_camera: [Youtube Video about GFS](https://www.youtube.com/watch?v=eRgFNW4QFDc)
+
 ### Design Assumptions
 
 * Component failures are normal
@@ -144,7 +146,7 @@ Large variety of Software bugs, crashes
 
 ### Passive Replication - Write
 
-![image-20201105131451436](images/09-cluster-storage/image-20201105131451436.png)
+s
 
 1. Ask master who is primary (leasing) for chunk x
 2. the identity of the primary and the locations of the other (secondary) replicas.

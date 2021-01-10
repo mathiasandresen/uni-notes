@@ -46,9 +46,17 @@ We also want to make it **transparent for the user**
 
 ## What consistency models exist?
 
+strong + weak
+
+
+
 
 
 ## Explain the consistency model and compare them
+
+
+
+
 
 
 

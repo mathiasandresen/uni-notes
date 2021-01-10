@@ -13,7 +13,11 @@
 
 
 
+
+
 ## Explain how the crypto tools used in blockchain work (hash function, signature, merkle tree, hash pointer) and how they are used in the blockchain
+
+
 
 
 
@@ -21,4 +25,9 @@
 
 
 
+
+
 ## Bitcoin: explain the structure of the transaction and how they are verified by the miner
+
+
+

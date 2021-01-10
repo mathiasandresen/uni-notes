@@ -341,6 +341,8 @@ Let us do something that is not so cheap
 
 ### Nakamoto Consensus
 
+:movie_camera:[YouTube video about Nakamoto Consensus](https://www.youtube.com/watch?v=CdyDoCk8IKs)
+
 Let us decide that all the nodes send to each other the blockchain
 
 ![image-20201112133924150](images/10-blockchain/image-20201112133924150.png)
@@ -439,6 +441,8 @@ Are you really happy with the description of the data structures and algorithms?
 
 ### Transactions
 
+:movie_camera: [Short YouTube video about transactions](https://www.youtube.com/watch?v=ZPFL6R-voW0&t=37s)
+
 ![image-20201112141405917](images/10-blockchain/image-20201112141405917.png)
 
 
@@ -451,8 +455,10 @@ Are you really happy with the description of the data structures and algorithms?
     * But part of the money can be transferred to the same user
     * Or another public key of the same user – for privacy
 * Privacy: a real-life user can create one identity (sk,pk) each time it wants to receive money
-
-
+* When transaction is signed it is propagated to the nodes on the network
+    * It is saved in the **mempool**
+* When the transaction is added to a block onto the blockchain it is confirmed
+    * 1 level of confirmation per block above it
 
 ### More General Case - Scripts
 

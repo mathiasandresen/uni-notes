@@ -35,12 +35,12 @@ $$
     * One wins
 * Ideally, we could play at the same time but my cam is not working, and there is some jitter on the audio
     * Or the rock-paper-scissors championship is today, and I have no 4g connection, so we play via email
-* Well, tell me your move, and you can trust I will tell you mine!!!
+* **Well, tell me your move, and you can trust I will tell you mine!!!**
 * Or can you do something using hash functions?
 
 
 
-##### Solution 1
+##### Solution 1 / 3
 
 * M – your move
 * H – Hash function
@@ -52,9 +52,9 @@ $$
 
 Does this work?
 
-* **No**! You can just run rock paper and scissors through rock
+* **No**! You can just run rock paper and scissors through hash
 
-##### Solution 2
+##### Solution 2 / 3
 
 * M – your move
 * H – Hash function
@@ -71,7 +71,7 @@ Does this work?
 * What if I don’t trust you?
     * Nor your uncle working at NSA!
 
-##### Solution 3
+##### Solution 3 / 3
 
 * M – your move
 * H – Hash function
@@ -105,10 +105,10 @@ Bad algorithms in red:
 #### Usage
 
 * I want to use hash functions to sign a large data structure
-    * I compute the hash h
+    * I compute the hash $h$
     * I send you the hash using a secure/expensive channel
     * I send you data using normal channel
-    * If your H(data) is not h, **you know it is bad!**
+    * If your $H(data)$ is not $h$, **you know it is bad!**
 * You would have to ask for the **whole data** once again
 * Ok, let’s split data in chunks $c_1 \dots c_k$
     * I compute the hashes $h_1 =H(c_1) \dots h_k = H(c_k)$
@@ -161,7 +161,7 @@ import java.security.PublicKey;
 import javax.crypto.Cipher;
 ```
 
-
+... and so on
 
 ### Merkle Tree - Hash Tree
 
@@ -208,9 +208,9 @@ Main ingredient: a **complete binary tree** built starting from a initial set of
 #### Building a Merkle Tree
 
 * Let us organize all data as leaves of the hash tree
-    * Nodes at height h will depend on 2^h^ leaf values
-    * Tree of height H has $N= 2^H$ leaves
-* Obtaining the root **P** requires calculating all N leaf values plus $2^H-1$ more hash function evaluations
+    * Nodes at height h will depend on $2^H$ leaf values
+    * Tree of height $H$ has $N= 2^H$ leaves
+* Obtaining the root **P** requires calculating all $N$ leaf values plus $2^H-1$ more hash function evaluations
     * Is it too much work?
         * **It is 2N**
 
@@ -222,7 +222,7 @@ Main ingredient: a **complete binary tree** built starting from a initial set of
     * If suspicious, you can ask me for all data and verify the root is right
 * Compute the root from all the data
     * You can cache the hashes of the “witnesses” for performance
-    * You can hash elements “as you go” if data are produced slowly
+    * You can hash elements “as you go” if data is produced slowly
 
 ![image-20201112131033334](images/10-blockchain/image-20201112131033334.png)
 
@@ -259,7 +259,7 @@ Tamper-evident data pointer = Hash Pointer (HP)
 
 * Information organized into blocks
 * Each block has a hash pointer (HP) to previous block
-* To verify block n, has it and compare to HP(block n)
+* To verify block n, hash it and compare to HP(block n)
     * Which is contained into your block n+1
 * Tamper free block addition
 
@@ -275,7 +275,7 @@ Tamper-evident data pointer = Hash Pointer (HP)
 
 * If you tamper with data in block $i$
 * You **have** to tamper with hash pointer $i+1$, hash pointer $i+2$ and so on
-    * Since HP $i+2$ depends on HP $i+1$ and so on
+    * Since  $HP\ i+2$ depends on $HP\ i+1$ and so on
 * And I will store the HP on the head somewhere safe
     * Where? Everywhere!
 
@@ -430,8 +430,8 @@ Are you really happy with the description of the data structures and algorithms?
 
 * A user is somebody who can transfer money
     * A wallet, a user’s identity, a pair (sk : private key, pk : public key)
-* Transaction: ([input transactions], [output identity pk, how much], signature)
-    * The input transactions refer to previous transactions that transferred money to the user
+* **Transaction**: ([input transactions], [output identity pk, how much], signature)
+    * The **input transactions** refer to previous transactions that transferred money to the user
     * It specifies to whom transfer each fraction of the money, by means of users’ public keys
     * It signs the transaction with its private key
 
@@ -445,7 +445,7 @@ Are you really happy with the description of the data structures and algorithms?
 
 ### Characteristics of the Transaction
 
-* Since it is signed with the sk, only the owner of the identity can transfer (spend) that money
+* Since it is signed with the private key, only the owner of the identity can transfer (spend) that money
     * If it points to input transactions from different identities p1 … pk, it will sign the transaction with all the s1 … sk to prove it owns the money
 * All money from input transactions must be used
     * But part of the money can be transferred to the same user
@@ -462,7 +462,7 @@ Are you really happy with the description of the data structures and algorithms?
 
 ### General Output of a Transaction
 
-* It contains a challenge script (also called locking script or scriptPubKey) with:
+* It contains a **challenge script** (also called locking script or scriptPubKey) with:
     * the spending conditions under which the bitcoins associated can be spent
 
 Usually, it requires just a valid signature. Other cases:

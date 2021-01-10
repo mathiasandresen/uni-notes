@@ -169,9 +169,41 @@ No **Publish**
 
 * *i*th entry at peer with id *n* is first peer with $id \geq n+2^i (\mod 2^m)$
 
-
+* $O(log(N))$ for lookup
 
 
 
 ## Discuss Pastry/Tapestry, as differences from Chord
+
+* Assigns hexadecimal ids to nodes, just like Chord (using a virtual ring)
+
+* **Leaf Set** - Each node knows its successor(s) and predecessor(s)
+* **Routing tables** based on **prefix matching**
+
+![image-20210110150324137](../images/08-peer-to-peer/image-20210110150324137.png)
+
+* Example of **routing table** -- GUID `65A1...`
+* Contains rows for each **combination** each combination with matching **prefix**
+
+
+
+![image-20210110150550773](../images/08-peer-to-peer/image-20210110150550773.png)
+
+* Message can be delivered in $\log_{16} (N)$ hops
+
+
+
+
+
+### Tapestry
+
+* Works like Pastry
+* Main difference: **flexibility** since application can place replicas close (in network distance) to frequent users of resources for:
+    * reduced latency
+    * minimized network load
+    * tolerance of network and host failures
+
+
+
+![image-20210110152149578](../images/08-peer-to-peer/image-20210110152149578.png)
 

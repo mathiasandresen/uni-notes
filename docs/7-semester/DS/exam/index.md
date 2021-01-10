@@ -60,7 +60,7 @@
 
 
 
-**Question 7: Internet of Things Routing (Directed Diffusion, Tree Routing in ZigBee, AODV, DSR)**  :grey_exclamation:
+**Question 7: Internet of Things Routing (Directed Diffusion, Tree Routing in ZigBee, AODV, DSR)**  :heavy_check_mark:
 
 * Explain the characteristics and limitation of IoT
 * Describe goals of IoT platforms

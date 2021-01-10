@@ -286,7 +286,7 @@ $$
 
 * When a device receives a packet, checks if the destination is itself or one of its child devices
     * If so, accept the packet or forward it to a child
-    * Otherwise, relay it along the tree 
+    * Otherwise, relay it along the tree 78
 
 ![image-20210110094550833](images/07-wireless/image-20210110094550833.png)
 

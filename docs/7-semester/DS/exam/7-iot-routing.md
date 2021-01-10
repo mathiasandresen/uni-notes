@@ -26,7 +26,10 @@ Limitations in
 
 ## Describe goals of IoT platforms
 
-todo
+Designed for many small devices, such as sensors or smart home devices
+
+* The goal is to be resource efficient and dynamic
+* Communication between devices
 
 
 

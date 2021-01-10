@@ -60,7 +60,7 @@
 
 
 
-**Question 7: Internet of Things Routing (Directed Diffusion, Tree Routing in ZigBee, AODV, DSR)**  :heavy_check_mark:
+**Question 7: Internet of Things Routing (Directed Diffusion, Tree Routing in ZigBee, AODV, DSR)**  ​(:heavy_check_mark:)​
 
 * Explain the characteristics and limitation of IoT
 * Describe goals of IoT platforms
@@ -71,7 +71,7 @@
 
 
 
-**Question 8: Peer to Peer (Gnutella, Chord)** :x:
+**Question 8: Peer to Peer (Gnutella, Chord)** ​(:heavy_check_mark:)
 
 * Explain the characteristics of peer-to-peer networks
 * Describe the initial architecture of Gnutella

@@ -8,7 +8,7 @@
 
 
 
-**Question 2: Multicast** :x:
+**Question 2: Multicast** :warning:
 
 * Why do you need multicast?
 * Explain basic multicast assuming reliable 1:1 communication
@@ -18,7 +18,7 @@
 
 
 
-**Question 3: Replication and Consistency**​ :grey_exclamation:
+**Question 3: Replication and Consistency** :warning:
 
 * Why do you need replication?
 * Explain the challenges resulting from replication

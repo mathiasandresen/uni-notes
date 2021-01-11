@@ -235,7 +235,7 @@ defmodule IPReliableMulticast do
       # we got message from the network
       {:message, sender, m, s_seq, s_r_seq} ->
       	new_hb_q = Map.put(hb_q, {sender, s_seq}, m) # insert m into hold-back queue
-      	new_r_seq = try_deliver(app, sender, new_hq_q, r_seq, m, s_seq)
+      	new_r_seq = try_deliver(app, sender, new_hb_q, r_seq, m, s_seq)
       	send_nack(sender, new_r_seq, s_r_seq)
       	loop(app, group, new_hb_q, seq, new_r_seq)
       	
@@ -297,7 +297,7 @@ No drops, good ordering = $O(N)$ messages!
 
 **Casually Ordered**
 
-* if $p_n$ receives $m1$ before $m2$, then $m1$ **happened before** $m2$
+* if $p_n$ receives $m_1$ before $m_2$, then $m_1$ **happened before** $m_2$
 
 
 

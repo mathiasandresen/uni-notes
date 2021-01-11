@@ -1,4 +1,4 @@
-## Question 9 - Blockchain (Tamper-free linked lists, Nakamoto Consensus, proof of work, transactions in Merkle trees)
+# Question 9 - Blockchain (Tamper-free linked lists, Nakamoto Consensus, proof of work, transactions in Merkle trees)
 
 * Explain the characteristics of the blocks in a blockchain (e.g.: immutability, linear growth)
 * Explain how the crypto tools used in blockchain work (hash function, signature, merkle tree, hash pointer) and how they are used in the blockchain

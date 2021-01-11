@@ -81,12 +81,6 @@ To have **reliable multicast** we must satisfy **3 properties**
 
 ### Reliable over IP
 
-
-
-:warning: TODO
-
-
-
 To implement Reliable Multicast over IP-Multicast we steal some ideas from TCP
 
 * Sequence number
@@ -99,18 +93,18 @@ To implement Reliable Multicast over IP-Multicast we steal some ideas from TCP
 
 #### Implementation
 
-* IP multicast message to group
-* when message received
-    * add to hold-back queue
-    * try_deliver it
-    * try_deliver: check if sequence number is one more than stored sequence number from sender
-        * deliver message
-        * update sequence number for sender
-            * check if we have next message in hold-back queue and try_deliver 
-    * send negative ack for all sequence numbers below
-        * 
+* Each process maintains next sequence number $S^p$, and latest sequence number received from each member $R^q$
 
-
+* IP multicast message to group with $S^p$ and all pairs $<q, R^q>$ (all received sequence numbers)
+    * and increment sequence number ($S^p$++)
+* On IP-deliver at $q$ from $p$
+    * if received sequence number $S$ is equal to $R^p + 1$
+        * R-deliver message
+        * Increment received sequence number ($R^p$++)
+        * check hold-back queue for next message and IP-deliver it
+    * else ($S > R_g^p + 1$)
+        * store message in hold-back queue
+    * request missing messages
 
 
 
@@ -122,6 +116,7 @@ Messages from $p_n$ are received at $p_k$ in the order sent by $p_n$
 
 * like speaking
 * <u>Reliable IP-Multicast is FIFO</u>
+    * we respect sequence-numbers of sender
 
 ### Total Ordering
 
@@ -162,3 +157,66 @@ Lets say we have a bank
 
 
 ## Briefly explain the two ideas to implement TO-multicast. What can you say about reliability?
+
+The idea is to do like FIFO multicast -- but have only one sequence-number
+
+* each message has unique id
+* all processes agree on next message
+    * global sequencer or
+    * negotiation (ISIS)
+
+
+
+### Global Sequencer
+
+* **One** process works as a **global sequencer**
+* When **sequencer** receives **message**
+    * b-multicasts **order message** with **sequence number** for **message id**
+    * increments its own sequence number
+* when **order** is **received**
+    * **update** sequence **map** with **sequence** number for **message id**
+    * try-deliver
+
+* when **normal** process receives **message**
+    * put message in **hold-back queue**
+    * try-deliver
+* on **try-deliver**
+    * check if sequence number has been received and message exists in hold-back-queue
+    * deliver to application
+    * try-deliver next message
+
+
+
+#### Reliability
+
+* Global Sequencer is single point of failure
+* Also bottleneck
+* on package loss -> deadlock
+
+
+
+### ISIS
+
+![image-20210111121402833](images/2-multicast/image-20210111121402833.png)
+
+**Idea** -- Negotiate next ID
+
+1. Process $p$ broadcasts message $m$
+2. Every other process $q$ responds to $p$ with proposal
+3. $p$ picks largest proposed value, broadcasts
+
+Need to track "largest proposed value" and "largest agreed value" at each process
+
+
+
+#### Reliability
+
+If we have reliable crash-detection we have robust protocol
+
+* sequence numbers increases
+* no process delivers early
+
+* however
+    * every message requires 3 rounds for negotiation
+        * (the sequencer takes 2 rounds)
+        * 1 for proposal -- 1 for vote -- 1 for picking

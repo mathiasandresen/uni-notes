@@ -214,6 +214,50 @@ The delivery queue is handled by Elixir in the code
 
 ### Reliable Multicast over IP
 
+* Each process maintains sequence numbers
+    * $S^p_g$ -- next message to be sent
+    * $R^q_g$ (for all $q \in g$) -- latest message received from $q$ 
+* On R-multicast of $m$ to group $g$
+    * attach $S^p_g$ and all pairs $<q, R^q_g>$
+* R-deliver in process $q$ happens iff $S_m = R^p_g +1$ 
+    * if $S_m < R^p_g +1 $ -- process $q$ has seen the message before
+    * if $S_m > R^p_g +1$ or if $R_m > R^p_g$ for some pair $<q, R_m>$ in message -- a message has been lost
+
+![image-20210111113552237](images/04-multicast/image-20210111113552237.png)
+
+Data structures at process $p$:
+
+* $S_g^p$ -- sending sequence number
+* $R^{q}_{g}$ -- sequence number of the latest message $p$ delivered from $q$ (for each $q$)
+
+On initialization:
+
+* $S_g^p = 0$
+* $\bold R_g^q = -1$ for all $q \in g$
+
+For process $p$ to R-multicast message $m$ to group $g$
+
+* IP-multicast ($g$, $<m, S_g^p, <\bold R_g>>$)
+* $S_g^p$++
+
+On IP-deliver ($<m, S, <\bold R>>$) at $q$ from $p$
+
+* save $m$
+* if $S = R_g^p + 1$ then
+    * R-deliver($m$)
+    * $R_g^p$ ++
+    * check hold-back queue
+* else if $S > R_g^p + 1$ then
+    * store $m$ in hold-back queue
+    * request missing messages
+    * endif
+* endif
+* if $\exists p.r_g^p \in \bold R$ and $r_g^p > R_g^p$ then request missing messages -- endif
+
+
+
+#### Elixir Code
+
 ```elixir
 defmodule IPReliableMulticast do
 	...
@@ -403,23 +447,6 @@ defmodule Sequencer do
         loop(group, seq + 1)
     end
   end
-enddefmodule TOISISMulticast do
-...
-	defp loop(app, group \\ %{}, hb_q \\ %{}, l_seq \\ 0, g_seq \\ -1, 
-								seq_map \\ %{}, a_seq \\ 0, p_seq \\ 0, votes \\ %{}) do
-		receive do
-			# for setting our neighbours
-			{:group, group} ->
-				loop(app, group, hb_q, l_seq, g_seq, seq_map, a_seq, p_seq, votes)
-			
-			# message from application
-			{:send, m} ->
-				# remember to make unique message ID!
-				id = {self(), l_seq}
-				b_multicast(group, {:message, m, id, self()})
-				loop(app, group, hb_q, l_seq + 1)
-		
-	end
 end
 ```
 

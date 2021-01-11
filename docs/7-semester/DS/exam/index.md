@@ -18,7 +18,7 @@
 
 
 
-**Question 3: Replication and Consistency** :warning:
+**Question 3: Replication and Consistency** ​(:heavy_check_mark:)
 
 * Why do you need replication?
 * Explain the challenges resulting from replication

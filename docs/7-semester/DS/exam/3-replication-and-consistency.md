@@ -12,11 +12,11 @@
 
 The goals of replication is **Fault tolerance**, **high availability ** and **performance**
 
-We want to tolerate node and network failures
+We want to **tolerate** node and network **failures**
 
-We want the service to be available as much as possible
+We want the **service** to be **available** as much as possible
 
-We want to be able to scale the service, as well as overcome geographic- and network limits
+We want to be able to **scale** the service, as well as **overcome** **geographic- and network limits**
 
 
 
@@ -50,7 +50,7 @@ We also want to make it **transparent for the user**
 
 **Fault tolerance** -- what if a process crashes
 
-* f-resilience  -- $f$ amounts processes can crash without stopping service
+* f-resilience  -- $f$ **amounts** processes **can crash** without stopping service
 
 
 
@@ -62,11 +62,11 @@ We also want to make it **transparent for the user**
 
 
 
-### (Replication Architectures for Fault Tolerance
+### (Replication Architectures for Fault Tolerance)
 
 **Read-only replication**
 
-* Immutable files
+* **Immutable** files
 * Cache-servers
 
 **Passive replication (primary/secondary)**
@@ -103,7 +103,7 @@ We have $C_i$ operations
 
 Let $T(o^i_n)$ be the timestamp of $o^i_n$.
 
-We then say that an interleaving $\dots, o^i_5, o^j_{100}, o^i_6, \dots$ (where $i \neq j$) is linearizable if
+We then say that **an interleaving** $\dots, o^i_5, o^j_{100}, o^i_6, \dots$ (where $i \neq j$) **is linearizable** if
 
 * we arrive at a (single) correct copy of the object (from specification)
     * the **results** of the **client’s** operations **make sense** as they **occur** within the **interleaving**
@@ -118,7 +118,7 @@ We have $C_i$ operations
 
 * $o_1^i, o_2^i, \dots , o_n^i$ for some operation $o \in O$
 
-We then say that an interleaving $\dots, o^i_5, o^j_{100}, o^i_6, \dots$ (where $i \neq j$) is sequentially consistent if
+We then say that **an interleaving** $\dots, o^i_5, o^j_{100}, o^i_6, \dots$ (where $i \neq j$) **is sequentially consistent** if
 
 * arrive at a (single) correct copy of the object (from specification)
     * the **results** of the **client’s** operations **make sense** as they **occur** within the **interleaving**

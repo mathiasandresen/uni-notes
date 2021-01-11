@@ -10,23 +10,23 @@
 
 ## Explain the characteristics of peer-to-peer networks
 
-In a peer-to-peer network -- peers find each other
+In a **peer-to-peer** network -- **peers** find each other
 
-* Initiates communication with each other
-* Direct communication between peers
-* No reliance on centralized services or resources
-* Highly scalable
+* **Initiates** communication with each other
+* **Direct** communication between **peers**
+* **No** reliance on **centralized** services or resources
+* Highly **scalable**
 
 
 
-* peers can enter and leave the network
+* peers can **enter** and **leave** the network
 
 **Formal**
 
-* A peer is a node on a P2P network forming fundamental processing unit
-* Each peer has unique ID
-* Each peer belong to one or several peer groups
-* Each peer can communicate with other peers
+* A **peer** is a **node** on a **P2P network** forming fundamental processing unit
+* Each **peer** has **unique ID**
+* Each **peer** belong to **one** or **several** peer **groups**
+* Each peer can **communicate** with **other peers**
 
 **Different Purposes**
 
@@ -38,79 +38,81 @@ In a peer-to-peer network -- peers find each other
 
 ## Describe the initial architecture of Gnutella
 
-* Gnutella is unstructured Peer to Peer network
+* **Gnutella** is **unstructured** Peer to Peer network
 
-* Peers form overlay network
+* Peers form **overlay** network
 
 (**Query flooding**)
 
 **Join**
 
-* on startup, client contacts a few other nodes (learn from bootstrap-node); these become its “neighbors”
+* on **startup** -- client **contacts** a **few other** nodes (learn from bootstrap-node)
+    * become its “**neighbors**”
 
 No **Publish**
 
 **Search**
 
-* ask “neighbors”, who ask their neighbors, and so on... when/if found, reply to sender.
+* ask “**neighbors**” -- who ask their neighbors -- and so on... 
+    * when/if **found**, **reply** to **sender**.
 
 **Fetch**
 
-* get the file directly from peer
+* get the file **directly** from **peer**
 
 
 
 ![image-20201029132248586](../images/08-peer-to-peer/image-20201029132248586.png)
 
-* Its totally decentralized
-* Highly robust
+* Its totally **decentralized**
+* Highly **robust**
 * **However**
-    * Not scalable -- need to contact all peers for deterministic search
-    * Network can be flooded
-        * solved with TTL (Time-to-live)
+    * **Not scalable** -- need to contact **all peers** for **deterministic** search
+    * Network can be **flooded**
+        * solved with TTL **(Time-to-live)**
 
 **To avoid excessive traffic**
 
-* Query forwarded to all neighbors except peer from which received
-* Each Query (identified by DescriptorID) forwarded only once
-    * each peer maintains a list of recently received messages
-* QueryHit routed back only to peer from which Query received with same DescriptorID
+* Query **forwarded** to **all** neighbors except peer from which **received**
+* Each **Query** (identified by **DescriptorID**) forwarded only **once**
+    * each peer maintains a **list** of **recently** **received** messages
+* **QueryHit** routed back **only** to **peer** from which Query **received** with **same** **DescriptorID**
 
 **Download**
 
-* Choose "best" QueryHit responder
-* Download directly with HTTP
+* Choose "**best**" QueryHit **responder**
+* Download **directly** with **HTTP**
 
 
 
 ## Describe the novel architecture of Gnutella (with super-peers)
 
-* Protocol originally called FastTrack
-* some peers designated as super-nodes
-    * advantage of “healthier” participants in the system
-    * Contain a directory of files
+* Protocol **originally** called **FastTrack**
+* **some** **peers** designated as **super-nodes**
+    * advantage of “**healthier**” **participants** in the system
+    * Contain a **directory of files**
         * `<filename,peer pointer>`
-    * can change over time
+    * can **change** over **time**
         * decided with **reputation** -- affected by connectivity and uploads
 
 (**Query Flooding**)
 
 **Join**
 
-* client contacts super-node
+* client **contacts** **super-node**
 
 **Publish**
 
-* send list of offered files to super-node
+* send **list** of **offered** files to **super-node**
 
 **Search**
 
-* send query to super-node
-    * super-nodes flood query among themselves
+* send **query** to **super-node**
+    * super-nodes **flood** query among **themselves**
 
 **Fetch**
 
-* get file directly from peer(s)
+* get file **directly** from **peer**(s)
 
 
 
@@ -120,8 +122,8 @@ No **Publish**
 
 ## Describe Chord routing approach
 
-* a structured Peer-to-Peer network
-* GUID based API
+* a **structured** Peer-to-Peer network
+* **GUID** based API
     * `put(GUID, data)`
         * store data in replicas responsible for object based on GUID
     * `remove(GUID)`
@@ -135,7 +137,7 @@ No **Publish**
 
 
 
-* Nodes maintain pointer to successor
+* Nodes **maintain** **pointer** to **successor**
 * Node 8 responsible for GUID in [5,8]
 * Node 15 for [9,15]
 * Node 20 for [16, 20]
@@ -144,7 +146,7 @@ No **Publish**
 
 **Lookup**
 
-* Route packet sent to the node responsible for ID using successor pointer
+* Route **packet** sent to the **node** **responsible** for **ID** using **successor** pointer
 
 ![image-20201029135015911](../images/08-peer-to-peer/image-20201029135015911.png)
 
@@ -154,7 +156,7 @@ No **Publish**
 
 ### Robustness
 
-* Nodes periodically sends `stabilize()` messages to successor
+* Nodes **periodically** **sends** `stabilize()` messages to **successor**
 * Successor returns its predecessor with `notify(predecessor)` message
 * When receiving `notify(predecessor)`
     * if predecessor changed update successor
@@ -175,9 +177,9 @@ No **Publish**
 
 ## Discuss Pastry/Tapestry, as differences from Chord
 
-* Assigns hexadecimal ids to nodes, just like Chord (using a virtual ring)
+* Assigns **hexadecimal** **ids** to nodes, just **like** **Chord** (using a virtual ring)
 
-* **Leaf Set** - Each node knows its successor(s) and predecessor(s)
+* **Leaf Set** - Each node **knows** its **successor**(s) and **predecessor**(s)
 * **Routing tables** based on **prefix matching**
 
 ![image-20210110150324137](../images/08-peer-to-peer/image-20210110150324137.png)
@@ -189,7 +191,7 @@ No **Publish**
 
 ![image-20210110150550773](../images/08-peer-to-peer/image-20210110150550773.png)
 
-* Message can be delivered in $\log_{16} (N)$ hops
+* Message can be **delivered** in $\log_{16} (N)$ **hops**
 
 
 
@@ -197,11 +199,11 @@ No **Publish**
 
 ### Tapestry
 
-* Works like Pastry
+* Works **like** **Pastry**
 * Main difference: **flexibility** since application can place replicas close (in network distance) to frequent users of resources for:
-    * reduced latency
-    * minimized network load
-    * tolerance of network and host failures
+    * **reduced latency**
+    * **minimized** network **load**
+    * **tolerance** of network and host **failures**
 
 
 

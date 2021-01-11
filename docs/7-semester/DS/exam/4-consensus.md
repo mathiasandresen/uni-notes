@@ -16,16 +16,9 @@ Consensus is the ability for a **group of processes** to **agree on one, and onl
 
 For example in **Mutex**, we have to agree on who is holding the mutex.
 
-We need it in redundant systems in order.
+We need it in **redundant systems** in order.
 
-* For example in a space ship, there is a possibility of bits flipping, so we have multiple computers, that then has to agree on values.
-
-
-
-The big questions are
-
-* What do we agree on? and
-* When do we agree on what we agree on?
+* For example in **a space ship**, there is a possibility of **bits flipping**, so we have multiple computers, that then has to agree on values.
 
 
 
@@ -33,14 +26,14 @@ The big questions are
 
 ![image-20210108211624388](images/4-consensus/image-20210108211624388.png)
 
-We have a set of processes $p_i \in \{p_0,\dots,p_n\}$ and each has a decision variable $d_i$
+We have a **set of processes** $p_i \in \{p_0,\dots,p_n\}$ and each has a **decision variable** $d_i$
 
-* They all start in the *undecided* state, and **proposes** a value to each other.
-* Each process then has to agree on a value and set its decision variable $d_i$
+* They all start in the ***undecided*** state, and **proposes** a value to each other.
+* **Each** process then has to **agree on a value** and set its **decision variable** $d_i$
 
 #### Requirements
 
-A consensus algorithm has to fulfil the following requirements
+A **consensus algorithm** has to **fulfil** the following **requirements**
 
 * **Termination**
     * Eventually a correct process sets its decision variable $d_i$
@@ -55,12 +48,10 @@ A consensus algorithm has to fulfil the following requirements
 
 ## Solution in synchronous system
 
-
-
-* Takes $f+1$ rounds -- with timeout
-* At each round less than round $f+1$ -- b-multicast your value if it has changed
-* When value is received -- set your value to it - if value received is less than your value
-* At round $f+1$ you have reached consensus
+* Takes $f+1$ **rounds** -- with timeout
+* At **each round** less than round $f+1$ -- **b-multicast** your value if it has **changed**
+* When value is **received** -- set your **value to it** - if value received is **less than** your value
+* At round $f+1$ you have reached **consensus**
     * all processes has sent their value to all
 
 
@@ -80,15 +71,15 @@ A consensus algorithm has to fulfil the following requirements
 
 ![image-20210111142722757](images/4-consensus/image-20210111142722757.png)
 
-In the Byzantine Generals Problem we have 3 or more generals that has to agree to attack or retreat.
+In the **Byzantine Generals Problem** we have **3 or more** generals that has to agree to attack or retreat.
 
-* One is the commander and gives the order
-* Rest are lieutenants and has to decide on Attack or Retreat 
+* **One** is the **commander** and gives the **order**
+* Rest are **lieutenants** and has to **decide** on Attack or Retreat 
 
 One or more of the generals may be **treacherous** -- **faulty**
 
-* Treacherous commander may propose attack to one and retreat to another
-* Treacherous lieutenants may lie about command from commander
+* Treacherous **commander** may propose attack to one and retreat to another
+* Treacherous **lieutenants** may lie about order from commander
 
 
 
@@ -96,18 +87,18 @@ One or more of the generals may be **treacherous** -- **faulty**
 
 ![image-20201008131421164](images/4-consensus/image-20201008131421164.png)
 
-If we have 3 generals and 1 of them is faulty, it is impossible to detect who is the faulty one.
+If we have **3 generals and 1 of them is faulty**, it is **impossible** to detect who is the faulty one.
 
-Lets say that B is faulty.
+Lets say that **B is faulty.**
 
-* B sends Attack to A and retreat to C
+* B sends Attack to A -- and retreat to C
 * That means A receives both attack and retreat, and will not know who is faulty
 
-Lets say that C is faulty
+Lets say that **C is faulty**
 
 * B sends Attack to both A and C
-* C sends retreat to A
-* Again that means A receives both attack and retreat, and will not know who is faulty
+* **C** sends **retreat** to **A**
+* Again that means **A receives both attack and retreat**, and will not know who is faulty
 
 
 
@@ -139,21 +130,21 @@ There are 2 cases
 
 We assume that we have
 
-* reliable communication
-* crash failures and 
-* byzantine failures
-* and no signed messages
+* **reliable** communication
+* **crash failures** and 
+* **byzantine** failures
+* and **no signed** messages
     * we can have "identity theft"
 
 
 
 ## Discuss impossibility in asynchronous systems and practical workarounds
 
-It has been proved by Fischer et al. in ("Impossibility of distributed consensus with one faulty process") that no algorithm can guarantee consensus in a distributed system.
+It has been **proved** by that **no algorithm** can **guarantee consensus** in an **asynchronous** system.
 
-In asynchronous systems, the communication can be "blocked" indefinitely
+In asynchronous systems, the communication can be **"blocked" indefinitely**
 
-* we cannot know if a process is slow or crashed
+* we **cannot know** if a process is **slow or crashed**
 
 
 
@@ -176,28 +167,34 @@ An example of a consensus problem is the **two army problem**
 
 **Masking Faults**
 
-We can mask failures, for example by using a checksum with messages to ensure that they are not corrupted
+We can **mask failures**, for example by using a **checksum with messages** to ensure that they are not corrupted
 
-We can also save sufficient data on persistent storage to be able to recover from a crash
+We can also save sufficient data on **persistent storage** to be able to **recover** from a crash
 
 **Failure Detection**
 
-We cannot, by only passing messages, design a perfect failure detector.
+We **cannot**, by **only passing messages**, design a perfect failure detector.
 
-We can agree that if a process has not responded within a timeframe we **deem** it failed.
+We can **agree** that if a **process** has **not** **responded** within a timeframe we **deem** it failed.
 
-* We can then ignore the rest of its messages if it is still working -- fail-silent
+* We can then **ignore the rest of its messages** if it is still working -- **fail-silent**
 
-We have to be careful with the timeout
+We have to be **careful** with the **timeout**
 
-* too low and we ignore usable nodes
-* too high and we potentially has to wait a long time
+* **too low** and we **ignore usable** nodes
+* **too high** and we potentially has to **wait a long time**
 
 Problems can arrive if we have network partition
 
 **Randomness**
 
-If we introduce some randomness in the process's behavior, so that the system cannot be effectively thwarted.
+If we introduce some **randomness** in the process's behavior, so that the system cannot be **effectively thwarted.**
+
+
+
+
+
+
 
 
 

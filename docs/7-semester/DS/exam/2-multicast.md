@@ -11,10 +11,10 @@
 ## Why do you need multicast?
 
 * Multicast is **one-to-many** communication
-* Want to guarantee that all processes get same information
-* With hardware support
-    * send only one message to router
-    * router then takes care of sending messages to members
+* Want to **guarantee** that **all** processes get **same information**
+* With **hardware** support
+    * send **only one** message to router
+    * **router** then **takes care** of sending messages to members
 
 
 
@@ -24,11 +24,11 @@
 
 ## Explain basic multicast assuming reliable 1:1 communication
 
-* Each process is member of a group
+* Each **process** is **member of a group**
 * when message from application
-    * send message to every member of group -- including self
-* when receiving message
-    * send message to application
+    * send **message** to **every** member of group -- **including self**
+* when **receiving** message
+    * send message to **application** -- deliver
 
 
 
@@ -56,55 +56,55 @@ To have **reliable multicast** we must satisfy **3 properties**
 
 ### Reliable over Basic
 
-* First we b-multicast to group
-* When we receive message
-    * If we have not already delivered message
-        * if message is not from self -- b-multicast message
-        * and deliver message
+* First we **b-multicast** to group
+* When we **receive** message
+    * If we have not **already** **delivered** message
+        * **if** message is not from self -- **b-multicast** message
+        * and **deliver** message
 
 
 
 **Integrity** -- yes
 
-* message is only delivered once
+* message is **only** **delivered** **once**
 
 **Validity** -- yes
 
-* message is delivered to self
+* message is **delivered** to **self**
 
 **Agreement** -- yes
 
-* message is sent to all devices 
+* message is sent to **all devices** 
 * if process crashes after sending one -- message is sent from receiving process
 
 
 
 ### Reliable over IP
 
-To implement Reliable Multicast over IP-Multicast we steal some ideas from TCP
+To implement Reliable Multicast over **IP-Multicast** we **steal** some ideas from **TCP**
 
-* Sequence number
+* **Sequence** number
     * detect duplicates and lost messages
-* hold-back-queue
+* **hold-back-queue**
     * wait for re-transmission
     * replicate messages
-* track others sequence numbers
-* gossip sequence numbers
+* **track** others **sequence numbers**
+* **gossip** sequence numbers
 
 #### Implementation
 
-* Each process maintains next sequence number $S^p$, and latest sequence number received from each member $R^q$
+* Each process **maintains** next **sequence** number $S^p$, and latest sequence number received from each member $R^q$
 
-* IP multicast message to group with $S^p$ and all pairs $<q, R^q>$ (all received sequence numbers)
-    * and increment sequence number ($S^p$++)
-* On IP-deliver at $q$ from $p$
-    * if received sequence number $S$ is equal to $R^p + 1$
-        * R-deliver message
-        * Increment received sequence number ($R^p$++)
-        * check hold-back queue for next message and IP-deliver it
-    * else ($S > R_g^p + 1$)
-        * store message in hold-back queue
-    * request missing messages
+* **IP-multicast** message to **group** with $S^p$ and all pairs $<q, R^q>$ (all received sequence numbers)
+    * and **increment** sequence number ($S^p$++)
+* On **IP-deliver** at $q$ from $p$
+    * **if** received sequence number $S$ is equal to $R^p + 1$
+        * **R-deliver** message
+        * **Increment** received sequence number ($R^p$++)
+        * **check** **hold-back** queue for next message and **IP-deliver** it
+    * **else** ($S > R_g^p + 1$)
+        * **store** message in **hold-back queue**
+    * request **missing** messages
 
 
 
@@ -112,15 +112,15 @@ To implement Reliable Multicast over IP-Multicast we steal some ideas from TCP
 
 ### FIFO Ordering
 
-Messages from $p_n$ are received at $p_k$ in the order sent by $p_n$
+Messages from $p_n$ are received at $p_k$ in the **order sent** by $p_n$
 
-* like speaking
+* **like speaking**
 * <u>Reliable IP-Multicast is FIFO</u>
     * we respect sequence-numbers of sender
 
 ### Total Ordering
 
-All messages are received in same order at $p_n$ and $p_k$
+All messages are **received** in **same order** at $p_n$ and $p_k$
 
 ### Casual Ordering
 
@@ -140,7 +140,7 @@ Lets say we have a bank
 
 ![image-20201001132350368](../images/04-multicast/image-20201001132350368.png)
 
-* If we introduce another sending process -- we have problem again
+* If we introduce **another** sending **process** -- we have problem again
 
 ![image-20201001132425590](../images/04-multicast/image-20201001132425590.png)
 
@@ -150,7 +150,7 @@ Lets say we have a bank
 
 
 
-* Can however still go wrong
+* Can however **still go wrong**
 
 ![image-20201001132636501](../images/04-multicast/image-20201001132636501.png)
 
@@ -158,12 +158,12 @@ Lets say we have a bank
 
 ## Briefly explain the two ideas to implement TO-multicast. What can you say about reliability?
 
-The idea is to do like FIFO multicast -- but have only one sequence-number
+The idea is to **do like FIFO** multicast -- but have **only one** sequence-number
 
-* each message has unique id
-* all processes agree on next message
-    * global sequencer or
-    * negotiation (ISIS)
+* each message has **unique id**
+* **all processes agree** on next message
+    * **global sequencer** or
+    * **negotiation** (**ISIS**)
 
 
 
@@ -189,9 +189,9 @@ The idea is to do like FIFO multicast -- but have only one sequence-number
 
 #### Reliability
 
-* Global Sequencer is single point of failure
-* Also bottleneck
-* on package loss -> deadlock
+* Global Sequencer is **single point of failure**
+* Also **bottleneck**
+* on **package loss** -> **deadlock**
 
 
 
@@ -211,12 +211,12 @@ Need to track "largest proposed value" and "largest agreed value" at each proces
 
 #### Reliability
 
-If we have reliable crash-detection we have robust protocol
+If we have **reliable** **crash-detection** we have robust protocol
 
-* sequence numbers increases
-* no process delivers early
+* sequence numbers **increases**
+* **no process** delivers **early**
 
-* however
-    * every message requires 3 rounds for negotiation
+* **however**
+    * every message requires **3 rounds for negotiation**
         * (the sequencer takes 2 rounds)
         * 1 for proposal -- 1 for vote -- 1 for picking

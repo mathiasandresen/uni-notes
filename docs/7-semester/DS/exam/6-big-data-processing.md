@@ -10,31 +10,31 @@
 
 ## Explain the Map Reduce paradigm and programming model
 
-Map Reduce consists of 2 phases -- functions defined by user
+Map Reduce consists of **2 phases** -- functions defined by user
 
-* Map
-    * given key-value pairs, produce intermediate key-value pairs
-    * Combine values of the same key and send it to reducer
-* Reduce
-    * further compress the value set of the same key
+* **Map**
+    * given **key-value pairs**, produce **intermediate** key-value **pairs**
+    * **Combine** values of the same key and **send** it **to reducer**
+* **Reduce**
+    * further **compress** the value set of the same key
 
-Created for processing of large data sets.
+Created for processing of **large data sets.**
 
-Inspired by functional programming
+Inspired by **functional programming**
 
 
 
 ## Explain the system architecture
 
-The system consists of 1 master and several mappers and reducers.
+The system consists of **1 master** and **several mappers and reducers.**
 
 ![image-20210109162955727](../images/11-big-data-analytics/image-20210109162955727.png)
 
-The master
+The **master**
 
-* assigns map and reduce jobs to other workers
-* stores the state of each job
-* stores the location of output files of the jobs
+* **assigns** map and reduce **jobs** to other **workers**
+* **stores** the **state of each job**
+* stores the **location** of **output files** of the jobs
 
 
 
@@ -42,9 +42,9 @@ The master
 
 ![image-20210109163033255](../images/11-big-data-analytics/image-20210109163033255.png)
 
-* First we split the input into pieces
-* Master assigns mappers and reducers
-* Reducers get path of map output from master 
+* First we **split** the input into pieces
+* Master assigns **mappers and reducers**
+* **Reducers get path** of map **output** from master 
 
 
 
@@ -56,12 +56,12 @@ The master
 
 ![image-20210109192651311](images/6-big-data-processing/image-20210109192651311.png)
 
-* Chunkservers contains analytics for music played
-* We want to find the most played songs
+* **Chunk-servers** contains analytics for music played
+* We want to find the **most played songs**
 
 
 
-The master tells each chunkserver to count how many times each song has been played (map-phase)
+The master tells each chunk-server to **count how many times** each song has been played (map-phase)
 
 ![image-20210109192724391](images/6-big-data-processing/image-20210109192724391.png)
 
@@ -82,12 +82,12 @@ The master tells each chunkserver to count how many times each song has been pla
 ### Performance
 
 * **Locality**
-    * Worker should be close to the GFS replica storing the data
+    * Worker should be **close to the GFS** replica storing the data
 
 * **Stragglers**
-    * slow workers -- nearly always **some** worker is slow
-    * when program near finished
-        * in progress tasks are rescheduled at backup worker
+    * **slow workers** -- nearly always **some** worker is slow
+    * when program **near finished**
+        * in progress tasks are **rescheduled** at **backup worker**
         * done when either backup or original is done
 * **Barrier synchronization / pipelining**
     * whether we can start reducing while mapping
@@ -96,12 +96,12 @@ The master tells each chunkserver to count how many times each song has been pla
 
 ### Fault Tolerance
 
-* The master sends pings to workers
-* If one is idle
-    * if its running **map** task, task is marked **idle** and rescheduled
+* The master sends **pings** to workers
+* If one is **idle**
+    * if its **running** **map** task, **task** is marked **idle** and **rescheduled**
     * if its running **reduce** task two things can happen
-        * if task task is in progress, its rescheduled
-        * if task is done -- output written to global storage -- done
+        * if task task is in **progress**, its **rescheduled**
+        * if task is **done** -- output written to **global storage** -- **done**
 
 
 
@@ -115,19 +115,19 @@ The master tells each chunkserver to count how many times each song has been pla
 
 Spark uses **resilient distributed datasets** (**RDDs**)
 
-* Immutable, partitioned collections of records (normally in RAM)
+* **Immutable**, partitioned **collections of records** **(normally in RAM)**
 * fault-tolerant, parallel data structures,
-* efficient data reuse
+* efficient **data reuse**
 
 let users
 
-* explicitly persist intermediate results in memory
+* **explicitly persist** intermediate results in **memory**
 
 
 
 RDD does not have to be materialized all the time: 
 
-* store the „lineage“, information about how it was derived from other datasets (operations on RDDs).
+* store the „**lineage**“, information about how it was **derived** from other **datasets** (operations on RDDs).
     * re-computable
 
 ![image-20201119135326225](../images/11-big-data-analytics/image-20201119135326225.png)
@@ -148,11 +148,11 @@ Keeps **intermediate** results **like** **spark**
 
 
 
-Algorithm termination is based on every vertex voting to halt
+Algorithm **termination** is based on every vertex **voting to halt**
 
-* In super-step 0, every vertex is in the active state
-* A vertex deactivates itself by voting to halt
-* A message may re-activate a vertex
+* In super-step 0, every vertex is in the **active state**
+* A vertex **deactivates** itself by voting to halt
+* A **message** may **re-activate** a vertex
 
 ![image-20201119135530229](../images/11-big-data-analytics/image-20201119135530229.png)
 
@@ -160,9 +160,9 @@ Algorithm termination is based on every vertex voting to halt
 
 **Master - worker** architecture
 
-* Master monitors workers and partitions vertices to workers
-* Workers execute at each super-step
-    * report number of active vertices to master at end of step
+* Master **monitors** **workers** and partitions vertices to workers
+* Workers **execute** at each **super-step**
+    * report **number** of **active vertices** to master at **end** of step
 
 Uses GFS or BigTable for persistent data
 

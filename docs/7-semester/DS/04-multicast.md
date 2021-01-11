@@ -214,6 +214,8 @@ The delivery queue is handled by Elixir in the code
 
 ### Reliable Multicast over IP
 
+[Slides from Brian Nielsen](http://people.cs.aau.dk/~bnielsen/DS-E08/material/mcast.pdf)
+
 * Each process maintains sequence numbers
     * $S^p_g$ -- next message to be sent
     * $R^q_g$ (for all $q \in g$) -- latest message received from $q$ 

@@ -8,7 +8,7 @@
 
 
 
-**Question 2: Multicast** :warning:
+**Question 2: Multicast** :heavy_check_mark:
 
 * Why do you need multicast?
 * Explain basic multicast assuming reliable 1:1 communication

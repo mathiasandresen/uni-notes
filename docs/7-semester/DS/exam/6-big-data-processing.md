@@ -81,8 +81,6 @@ The master tells each chunkserver to count how many times each song has been pla
 
 ### Performance
 
-![image-20210109163350567](../images/11-big-data-analytics/image-20210109163350567.png)
-
 * **Locality**
     * Worker should be close to the GFS replica storing the data
 
@@ -133,6 +131,8 @@ RDD does not have to be materialized all the time:
     * re-computable
 
 ![image-20201119135326225](../images/11-big-data-analytics/image-20201119135326225.png)
+
+* black rectangles are already in memory
 
 ![image-20210109205635597](images/6-big-data-processing/image-20210109205635597.png)
 

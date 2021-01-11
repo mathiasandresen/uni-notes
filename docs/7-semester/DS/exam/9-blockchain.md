@@ -46,6 +46,10 @@ Block-chain built around **hash-pointers**
 
 
 
+![image-20201112132628948](../images/10-blockchain/image-20201112132628948.png)
+
+
+
 Asymmetric Cryptography used to create digital signatures
 
 * consists of a public and private key

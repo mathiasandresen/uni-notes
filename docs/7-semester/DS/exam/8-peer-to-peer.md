@@ -1,4 +1,4 @@
-# Question 8: Peer to Peer (Gnutella, Chord)
+# Question 8 - Peer to Peer (Gnutella, Chord)
 
 * Explain the characteristics of peer-to-peer networks
 * Describe the initial architecture of Gnutella

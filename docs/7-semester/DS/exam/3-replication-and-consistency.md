@@ -1,4 +1,4 @@
-# Question 3: Replication and Consistency
+# Question 3 - Replication and Consistency
 
 * Why do you need replication?
 * Explain the challenges resulting from replication
@@ -62,7 +62,7 @@ We also want to make it **transparent for the user**
 
 
 
-### (Replication Architectures for Fault Tolerance)
+### (Replication Architectures for Fault Tolerance
 
 **Read-only replication**
 

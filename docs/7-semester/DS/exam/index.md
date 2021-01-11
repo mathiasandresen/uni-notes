@@ -28,7 +28,7 @@
 
 
 
-**Question 4: Consensus** :heavy_check_mark:
+**Question 4: Consensus** :warning:
 
 * Explain the consensus problem
 * Solution in synchronous system

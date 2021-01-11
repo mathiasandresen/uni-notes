@@ -57,7 +57,7 @@ A consensus algorithm has to fulfil the following requirements
 
 
 
-Afsnit 15.5.2 i bogen!!!!
+Afsnit 15.5.2 i bogen!!!! :warning:
 
 
 
@@ -68,6 +68,8 @@ If we have a synchronous system, we could simply take the first value proposed, 
 
 
 ## Explain what the Byzantine generals problem is.
+
+![image-20210111142722757](images/4-consensus/image-20210111142722757.png)
 
 In the Byzantine Generals Problem we have 3 or more generals that has to agree to attack or retreat.
 

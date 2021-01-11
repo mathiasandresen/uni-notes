@@ -200,7 +200,10 @@ Each tablet is served by one **Tablet Server**
 
 * like GFS chunk-server
 
-Tablets are stored in SSTable (Sorted Strings Table) in GFS 
+Tablets are stored in **SSTable** (Sorted Strings Table) in GFS 
+
+* ordered and immutable map from keys to values (String, String)
+* mutations not performed on SSTables -- but written to log
 
 ![image-20210109142503313](images/5-clustered-storage/image-20210109142503313.png)
 

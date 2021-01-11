@@ -57,13 +57,22 @@ A consensus algorithm has to fulfil the following requirements
 
 
 
-Afsnit 15.5.2 i bogen!!!! :warning:
+* Takes $f+1$ rounds -- with timeout
+* At each round less than round $f+1$ -- b-multicast your value if it has changed
+* When value is received -- set your value to it - if value received is less than your value
+* At round $f+1$ you have reached consensus
+    * all processes has sent their value to all
 
 
 
+![image-20201008125454467](../images/05-consensus/image-20201008125454467.png)
 
+<center>(image not for slides)</center>
 
-If we have a synchronous system, we could simply take the first value proposed, and all agree on that. 
+**Not possible** to make algorithm with that requires **less than**  $f+1$ rounds
+
+* If $f$ devices fail -- there can be $f$ **faulty rounds**
+* we need **at least 1 correct round**
 
 
 
@@ -189,3 +198,92 @@ Problems can arrive if we have network partition
 **Randomness**
 
 If we introduce some randomness in the process's behavior, so that the system cannot be effectively thwarted.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Paxos if it comes up
+
+* No coordinator
+* Async system
+* Nodes may crash and recover
+    * OK with up to $n/2$ failures
+* Once a single process decides, all will (eventually) decide the same
+
+**Inconceivable**!
+
+* No guaranteed termination
+* ... but terminates in "reasonable environments"
+
+
+
+[The Paxos Algorithm](https://www.youtube.com/watch?v=d7nAGI_NZPk&feature=youtu.be)
+
+
+
+### Reaching Consensus with Paxos
+
+![image-20210108141904159](images/4-consensus/image-20210108141904159.png)
+
+* Once a **majority** agrees on a proposal, that is the consensus
+* The reached consensus can be **eventually** known by anyone
+* Processes will agree on **any** result -- not only own
+* Communication may be **faulty** -- messages can get lost
+
+
+
+### Basics
+
+* Paxos defines three **roles**:
+    * **Proposers**
+    * **Acceptors**
+    * **Learners**
+* Nodes can take multiple roles
+* Paxos nodes must know how many **acceptors** a majority is
+* Paxos nodes must be persistent: they cant forget what they accepts
+* A **Paxos run** aims at reaching **a single consensus**
+    * Once consensus is reached, it **cannot progress** to another consensus
+    * In order to reach **another consensus**, a different **Paxos run** must happen
+
+
+
+### The Paxos Algorithm
+
+![image-20210108143127909](images/4-consensus/image-20210108143127909.png)
+
+
+
+### Majority of Promises
+
+![image-20210108143245077](images/4-consensus/image-20210108143245077.png)
+
+
+
+### Contention
+
+![image-20210108143345457](images/4-consensus/image-20210108143345457.png)
+
+### Majority of Accepts
+
+![image-20210108143524237](images/4-consensus/image-20210108143524237.png)
+
+
+
+### Practical Example - Simple Distributed Storage System
+
+![image-20210108143813131](images/4-consensus/image-20210108143813131.png)

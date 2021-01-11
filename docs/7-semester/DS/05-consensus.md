@@ -157,6 +157,12 @@ We say that $p_i$ is decided if $d_i \not = ⊥$
 
 ### Algorithm
 
+* Takes $f+1$ rounds -- with timeout
+* At each round less than round $f+1$ -- b-multicast your value if it has changed
+* When value is received -- set your value to it - if value received is less than your value
+* At round $f+1$ you have reached consensus
+    * all processes has sent their value to all
+
 ![image-20201008125454467](images/05-consensus/image-20201008125454467.png)
 
 

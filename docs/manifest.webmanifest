@@ -3,12 +3,12 @@
   "name": "Mathias Andresen's Uni-Notes",
   "icons": [
     {
-      "src": "/assets/icons/icons-192.png",
+      "src": "assets/icons/icons-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/assets/icons/icons-512.png",
+      "src": "assets/icons/icons-512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

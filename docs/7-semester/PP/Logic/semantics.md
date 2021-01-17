@@ -60,6 +60,7 @@ For instance the following is an interpretation:
 
 
 
+
 ### Truth under an interpretation
 
 We define when a clause $\mathcal C$ is true under an interpretation $\mathcal I$. We write $\mathcal I \models \mathcal C $
@@ -70,3 +71,5 @@ We have:
 * $\mathcal I \models A_0 \Leftarrow A_1, \dots, A_n$ if whenever $\mathcal I \models A_i$ for all $1 \leq i \leq n$ then $\mathcal I \models A_0$
 
 The last condition is equivalent to requiring that either the head is true or every clause in the body is false.
+
+For a problem about interpretations and truth, see [problem set 2, problem 1](https://www.moodle.aau.dk/pluginfile.php/2162506/mod_resource/content/0/Problem%20set%202%20%28Logic%20programming%29%20-%20Solutions.pdf) on Moodle.

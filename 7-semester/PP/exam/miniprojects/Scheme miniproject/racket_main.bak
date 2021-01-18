@@ -1,0 +1,5 @@
+#lang R5RS
+
+(define student-file (open-input-file "all-students.lsp"))
+
+(define doc (read student-file))

@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
+
+code {
+    padding: .25em .2em;
+    border: 0;
+
+    margin: 0 .29412em;
+    padding: .07353em 0;
+    border-radius: .1rem;
+    box-shadow: 0.29412em 0 0 hsla(0,0%,92.5%,.5), -0.29412em 0 0 hsla(0,0%,92.5%,.5);
+    word-break: break-word;
+    -webkit-box-decoration-break: clone;
+
+    background-color: hsla(0,0%,92.5%,.5);
+    color: #37474f;
+    font-size: 85%;
+    direction: ltr;
+
+    font-family: "Roboto Mono","Courier New",Courier,monospace;
+}
+

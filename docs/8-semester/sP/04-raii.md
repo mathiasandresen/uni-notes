@@ -34,6 +34,8 @@
 
 ## RAII Principle
 
+* [Video about RAII](https://www.youtube.com/watch?v=uT3wL9K0DoQ)
+
 * **R**esources **A**cquisition **i**s **I**nitialization Principle
     * There is no automatic memory management in C++
     * Therefore it is attractive to attach *resource management* to construction and destruction of **stack-allocated objects**

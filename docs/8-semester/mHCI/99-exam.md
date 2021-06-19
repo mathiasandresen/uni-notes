@@ -59,9 +59,50 @@
 
 * **Personas**
   * Helps maintain **perspective** of **users**
-  * **Fictional** - created based on **research** - **never** of **asumptions**
+  * **Fictional** - created based on **research** - **never** of **assumptions**
   * Represent different **user types**
   * Helps understand users’ **needs**, **experiences**, **behaviors** and **goals**.
+* **4 types**
+    * **Goal oriented**
+        * Users' goals - workflow, contexts, attiturdes
+        * Based in **in-depth ethnographic research**
+        * Provides focused design and communication tool to finish discussions 
+    * **Role based**
+        * Users roles in organization 
+        * **data-driven** - incorporate data from both qualitative and quantitative sources
+        * efficient design tool - our cognitive ability to use fragmented and incomplete knowledge to form complete vision of people who surround us
+    * **Engaging**
+        * Designers seeing users as stereotypes -> actively involved in the lives of personas
+        * Requires **broad knowledge** of users
+            * Data should include information about - social background, psychological characteristics, emotional relationship with the focus area.
+    * **Fiction based**
+        * To explore and design - generate discussion and insights
+        * Based on intuition and experience
+        * Creates an empathetic focus in the design process
+        * Originate from brainstorming and workshops - participation from company
+* **How - 11 steps**
+    1. Collect extensive data on target users.
+    2. Determine the qualities of and differences between users.
+    3. Develop a hypothesis from the research, determining the qualities of and differences between users.
+    4. Ensure stakeholders agree on the hypothesis about the users.
+    5. Determine a number of personas – more than one per project, but focus *especially* on one
+    6. Name and describe each persona in 1-2 pages, including:
+        * A picture.
+        * (CONTEXT): User’s values, interests, education, lifestyle, needs, attitudes, desires, limitations, goals and behavior patterns.
+        * Extra details about the persona (e.g., interests) – anything to make him/her more real and relevant and help build empathy. A written story is better than bullet points.
+    7. Describe several situations/scenarios prompting the persona to use your product – put him/her in contexts with problems to overcome.
+    8. Include everyone involved in the project so they’ll accept the persona or advise revisions.
+    9. Send them the persona to use in their work
+    10. Ensure everyone develops scenarios – these should expose the persona optimally to potential use cases
+    11. Make continuous adjustments – revisit the persona; add new features; add required new personas; discard outdated personas.
+
+
+
+![The poster covers 10 Steps to Personas](images/99-exam/image3.jpg)
+
+
+
+
 
 ## Question 3
 

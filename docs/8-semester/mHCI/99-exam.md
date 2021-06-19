@@ -13,6 +13,12 @@
 
 
 
+
+
+
+
+
+
 ## Question 2
 
 * How can we collect data about the context of our idea? 
@@ -104,6 +110,12 @@
 
 
 
+
+
+
+
+
+
 ## Question 3
 
 * What is a digital ecosystem? 
@@ -113,8 +125,182 @@
 
 
 
+
+
+
+
+
+
 ## Question 4
 
 * Why is it important for designers know the difference between devices and platforms when we design for them? 
 * What is skeuomorphism? 
 * How do we ensure that our design will fit into the mobile platform that we design for (e.g., Android, iOS)? 
+
+----
+
+
+
+**Different devices and platforms**
+
+* 
+
+
+
+
+
+**Skeuomorphism**
+
+* Interface objects that mimics their real-world counterparts
+    * Recycle bin - floppy disk - toggles - buttons - dials
+    * sounds - animations
+* Makes users know what they can do with interfaces
+
+
+
+**Design Guidelines**
+
+* Follow design guidelines provided by platforms - Apple - Google
+* **iPhone** - purpose
+    * **Clarity** - Functionality motivates design
+    * **Deference** - Content fills the entire screen
+    * **Depth** - Go into depth with content
+* **iOS** - **guidelines**
+    1. **Aesthetic Integrity**
+        * How appearance and behavior integrate with its functions
+            * Productivity vs Fun/Gaming
+    2. **Consistency**
+        * Familiar standards and paradigms
+            * system provided interface elements
+            * well-known icons
+            * standard text styles
+            * uniform terminology
+        * Example: pull down to refresh
+    3. **Direct Manipulation**
+        * Rotating device - using gestures to affect content
+        * Example: pinch to zoom - swiping
+    4. **Feedback**
+        * acknowledges actions and shows results
+        * Example: Shutter sound - vibration
+    5. **Metaphors**
+        * metaphors for familiar experiences - either rooted in real world or digital world
+    6. **User Control**
+        * People - not apps - are in control
+        * Apps suggest course of action or warn about dangerous consequences
+
+* **Apple watch** - purpose
+    * **Lightweight interactions** - short interaction time
+    * **Holistic design** - not just on screen interaction
+        * "*Holistic design takes into account the person, the device, the moment, the ethnographic environment, the physical space as well as human behavior and psychology*..."
+    * **Personal communication** - Meant to be worn
+* **watchOS** - guidelines
+    1. **Glanceable**
+        * Interactions occur over short periods of time
+        * apps must convey most important information up front - clearly and without distraction
+    2. **Actionable**
+        * anticipates user's needs - ensuring onscreen is always current and relavant
+        * custom notification interface include custom actions without opening app
+    3. **Responsive**
+        * interactions should be quick
+        * responds to user interaction with immediate feedback
+            * what the app is gonna do
+        * notifications to deliver progress updates later
+
+
+
+
+
+
+
+## Question 5
+
+* What is a prototype? 
+    * When in the design process do, we introduce prototypes? 
+    * Give examples of the different prototypes and their strengths and weaknesses.
+
+----
+
+**Prototype**
+
+* simple experimental model of proposed solution
+* used to test or validate ideas, design assumptions and other aspects of conceptualization
+* cheap and quick
+
+* **Why?**
+    * reveal assumptions and biases
+    * uncover insights about users
+* **Attention points:**
+    * **People** - those whom you are testing and observers
+    * **Objects** - static and interactive - prototype and objects people and/or prototype interacts with
+    * **Location** - places and environments 
+    * **Interactions** - Digital or physical - between people, objects and location
+
+**Prototypes - When**
+
+
+
+![image-20210619170920555](images/99-exam/image-20210619170920555.png)
+
+...
+
+**Different Prototypes**
+
+* **Low fidelity**
+    * Medium unlike final medium - e.g. paper, cardboard
+    * Quick, cheap, easily changed
+    * Examples:
+        * Sketches of screens
+        * task sequences
+        * post-its
+        * storyboards
+        * Wizard of Oz
+            * Simulating actual functionality - combine different tools - tablets, email systems, PowerPoint with human intervention
+    * 
+
+
+
+
+
+
+
+
+
+
+
+## Question 6
+
+What kind of data can we collect in mHCI evaluations and how? Why do we collect such data, what is our purpose? Are there any differences between conducting evaluations in a lab and the field? 
+
+
+
+
+
+## Question 7
+
+Assume you have collected qualitative data. What is the process that you need to follow to conduct an analysis of this data? What are the two approaches for coding qualitative data, and what are their differences? 
+
+
+
+
+
+## Question 8
+
+What is a research hypothesis, and are there different types? What is the difference between independent and dependent variables? What is the operational definition of a variable? How can we assess the quality of operational definitions?
+
+
+
+
+
+
+
+## Question 9
+
+What can be the sources of systematic errors in an experiment? What can we do in order to minimize/eliminate them? Why is it important to pilot test?
+
+
+
+
+
+## Question 10
+
+What is the difference between basic and complex experiments in terms of number of variables and used statistical techniques? What are the differences between between-subjects and within-subjects designs? What are their advantages and disadvantages? 

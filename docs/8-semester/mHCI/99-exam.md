@@ -11,7 +11,9 @@
   * What is Big C and Small C? 
   * How can we communicate context to others?
 
+----
 
+!!!todo
 
 
 
@@ -123,7 +125,9 @@
 
 * Give short examples of the four categories of interaction (Collaboration, Communality, Complementarity, Continuity)
 
+----
 
+!!!todo
 
 
 
@@ -143,7 +147,7 @@
 
 **Different devices and platforms**
 
-* 
+!!!todo
 
 
 
@@ -248,20 +252,41 @@
 * **Low fidelity**
     * Medium unlike final medium - e.g. paper, cardboard
     * Quick, cheap, easily changed
-    * Examples:
+    * **Examples**:
         * Sketches of screens
         * task sequences
         * post-its
         * storyboards
         * Wizard of Oz
             * Simulating actual functionality - combine different tools - tablets, email systems, PowerPoint with human intervention
-    * 
+    * **Pros**
+        * quick, inexpensive
+        * instant changes and new iterations
+        * disposable/throw-away
+        * minimal time and effort
+        * Available to all
+        * Encourages and fosters design thinking
+    * **Cons**
+        * lack of realism
+            * results may lack validity
+        * may not be appropriate for intended users
+        * removes control from the user
 
-
-
-
-
-
+* **High fidelity**
+  * Materials expected to be in final product
+  * Looks more like final product
+  * **Example** - software prototyping
+  * **Pros**
+    * Engaging - stakeholders see vision realised
+      * can judge how it meets expectations, wants, and needs
+    * User testing - high validity and applicability
+  * **Cons**
+    * Takes time to produce
+    * Test users more inclined to focus and comment on superficial characteristics
+    * Designers often are often loathed to make changes
+    * Gives test users a false impression
+    * Making changes can take long time - delaying project
+* low-fi during early stages - high-fi during later stages
 
 
 
@@ -269,7 +294,76 @@
 
 ## Question 6
 
-What kind of data can we collect in mHCI evaluations and how? Why do we collect such data, what is our purpose? Are there any differences between conducting evaluations in a lab and the field? 
+* What kind of data can we collect in mHCI evaluations and how? 
+  * Why do we collect such data, what is our purpose? 
+  * Are there any differences between conducting evaluations in a lab and the field? 
+
+----
+
+**Data**
+
+* **Qualitative data**
+  * **What**
+    * Audio and video recordings
+    * Notes
+    * Materials produced by participants - sketches, drawings, pictures, etc.
+    * Usage data
+    * Online comments and articles
+    * ...
+  * **How**
+    * Interviews and focus groups
+    * Observations
+    * Photo/Video/Voice Elicitation
+    * Diaries/journaling
+      * Participants write down while working - can be talked about later
+    * Re-enactment Videos
+    * Cultural/Mobile Probes
+      * <img src="images/99-exam/1*KkXAmvbnY6OYoSG31Hi41Q.png" alt="img" style="zoom:25%;" />
+    * Online videos (e.g.Youtube)
+  * **Why**
+    * Explores attitudes, behaviors, and context in-depth
+    * Encourages discussion
+    * More opportunities for asking - people can explain answers
+* **Quantitative data**
+  * **What**
+    * Anything that can be understood as a number
+      * Time
+      * Performance metrics
+      * Success rates
+      * Answers to questionnaires
+    * Data is structured
+  * **How** - *scientific approach*
+    * Intuition and/or authority to generate ideas about phenomenon/behavior
+    * **Skepticism**: ideas must be evaluated on the basis of careful logic and results from scientific investigations
+    * **Empiricism**: knowledge is based on observations and the study of reality
+    * **Methods**
+      * **Case studies**
+        * Intensive empirical investigations of contemporary phenomena within small size entities such as groups, organizations, individuals, systems or tools in real-life context with the researcher distinct from the phenomena being studied.
+      * **Field studies**
+        * taking place in “the real world” covering a range of quantitative approaches in which a number of independent variables are manipulated.
+      * **Usage studies**
+        * Large-scale log-file based test-scenario in which a newly designed system is exposed to its target users in order to test its resilience under real-use conditions, and if and how it is employed for the tasks for which it was intended.
+      * **Lab experiments/studies**
+        * taking place in a controlled environment created for the purpose of research or in dedicated laboratories allowing a detailed focus on specific phenomena of interest with a large degree of experimental control.
+      * **Surveys**
+        * Informs research gathers large amounts of data through various techniques such as questionnaires and interviews from a known sample of selected respondents assumed to be independent of their environment.
+  * **Why**
+    * **Understanding** -  finding the meaning of studied phenomena
+      * ex: frameworks or theories developed from collected data
+    * **Engineering** - developing new systems or parts of systems
+      * ex: an interaction technique for a mobile device, or a mobile application or device
+    * **Re-engineering** - improving existing systems by redeveloping them
+      * ex: adapting a web browser to a small display
+    * **Evaluating** - assessing or validating products, theories or methods
+      * ex: the usability or user experience of a specific application, or a theory of interaction
+    * **Describing** - defining desirable properties of products
+      * ex: a mobile guide system
+
+**Lab vs Field**
+
+!!!todo
+
+
 
 
 
@@ -277,7 +371,63 @@ What kind of data can we collect in mHCI evaluations and how? Why do we collect 
 
 ## Question 7
 
-Assume you have collected qualitative data. What is the process that you need to follow to conduct an analysis of this data? What are the two approaches for coding qualitative data, and what are their differences? 
+* Assume you have collected qualitative data. 
+  * What is the process that you need to follow to conduct an analysis of this data? 
+  * What are the two approaches for coding qualitative data, and what are their differences? 
+
+---
+
+**Qualitative data analysis**
+
+* Transform unstructured data into something meaningful/useful for design
+* To gain deep/detailed knowledge of a situation/problem
+*  To know how our prototype/product is embedded into everyday life
+
+**Process**
+
+<img src="images/99-exam/image-20210620150627352.png" alt="image-20210620150627352" style="zoom: 25%;" />
+
+1. **Define** the dataset
+   * Where do we collect data?
+2. **Clean** the dataset
+   * Is everything relevant?
+3. **Code** the dataset
+   *  Assigning categories and descriptors to blocks of text - qualitative data in general
+   * **2** approaches:
+     * **Emergent coding**
+       * Extract structure of data from dataset
+       * No preconceptions exist
+       * **Objectivity** is **important**
+       * Often combined with grounded theory
+         * objective is to create a theory
+       * **Process**
+         1. Code data
+         2. Develop concepts
+         3. Group concepts into categories
+         4. Produce a theory
+       * <img src="images/99-exam/image-20210620151522307.png" alt="image-20210620151522307" style="zoom:25%;" />
+     * **A priori coding**
+       * Apply **existing** theory (taxonomy/framework) to structure data
+       * **Some** **preconceptions** on what we will identify
+       * Again, **objectivity** is important
+       * <img src="images/99-exam/image-20210620152432374.png" alt="image-20210620152432374" style="zoom:25%;" />
+       * **Process**
+         1. **Identify** a **relevant** **theory**/taxonomy
+         2. **Code** the data (a priori coding)
+         3. **Identify** how much theory explains situation
+         4. If necessary, **feed** back to theory
+   * **How to code:**
+     * **Look** for key items
+     * **Assign** codes
+     * **Reflect** and (**redesign**) codes - **iteratively**
+     * **Reflect** on the **relationship** between the codes
+     * **Afterwards**, may compare with:
+       * similar studies/evaluations
+       * results of previous version of product/prototype
+       * different target groups
+4. **Extract** Findings
+
+
 
 
 
@@ -285,9 +435,63 @@ Assume you have collected qualitative data. What is the process that you need to
 
 ## Question 8
 
-What is a research hypothesis, and are there different types? What is the difference between independent and dependent variables? What is the operational definition of a variable? How can we assess the quality of operational definitions?
+* What is a research hypothesis, and are there different types? 
+* What is the difference between independent and dependent variables?
+* What is the operational definition of a variable?
+* How can we assess the quality of operational definitions?
+
+----
+
+**Research Hypothesis**
+
+* A specific idea or question which can be tested through empirical investigation (using the scientific approach)
+* **Null hypothesis **- "no difference between conditions"
+* **Alternative hypothesis** - " is difference between the conditions"
+* They have to be mutually exclusive
+* Why null and alternative?
+  * Long tradition in experimental research
+  * In statistics we **do not** test if two conditions are **different**
+    * We **do** test if there are the **same**!
 
 
+
+**Variables**
+
+* All the things we can **measure** or **manipulate** are called **variables**.
+  * must have more than 2 levels
+* **Independent vs Dependent**
+  * **Independent variable**
+    * Variable we think is the **cause**
+    * Variable that is **independent** of a **participant’s behavior**
+    * Variable that we **manipulate** in our experiment
+  * **Dependent variable**
+    * Variable we think is the **effect**, as it **depends** on the **cause**
+    * Variable that is **dependent** on a **participant’s behavior**
+    * The **variable** that we **measure** in our experiment
+  * **Examples**
+    * <img src="images/99-exam/image-20210621100311115.png" alt="image-20210621100311115" style="zoom:50%;" />
+    * **Sex** has an effect on **perceived usability**
+    * **Income** has an effect on **happiness**
+    * **Education** has an effect on **IQ level**
+    * **Input devices** have an effect on **efficiency**
+
+* **Operational definition**
+  * defined procedure to measure or manipulate variable
+  *  If **many** options, we **select one**
+  * **selected** procedure is called the **operational definition** of the variable
+  * Example - Aggression
+    * number of times a kid hits a toy
+    * score on a aggression questionnaire
+    * number of times a kid cursed, etc.
+  * **Adequacy**
+    * **Construct validity** - adequacy of operational definition
+      * **Content Validity** - content of measure is linked to true meaning of variable
+      * **Convergent Validity** - scores of measure are related to other measures of the same construct
+      * **Discriminant Validity** - scores of measure are not related to other measures that are theoretically different
+      * **Other types**
+        * face validity - it "looks like" it is going to measure what it is supposed to measure
+        * predictive validity -
+        * concurrent validity - how well a new test compares to an well-established test.
 
 
 
@@ -295,7 +499,9 @@ What is a research hypothesis, and are there different types? What is the differ
 
 ## Question 9
 
-What can be the sources of systematic errors in an experiment? What can we do in order to minimize/eliminate them? Why is it important to pilot test?
+* What can be the sources of systematic errors in an experiment?
+  * What can we do in order to minimize/eliminate them?
+* Why is it important to pilot test?
 
 
 
@@ -303,4 +509,6 @@ What can be the sources of systematic errors in an experiment? What can we do in
 
 ## Question 10
 
-What is the difference between basic and complex experiments in terms of number of variables and used statistical techniques? What are the differences between between-subjects and within-subjects designs? What are their advantages and disadvantages? 
+* What is the difference between basic and complex experiments in terms of number of variables and used statistical techniques?
+* What are the differences between between-subjects and within-subjects designs?
+  * What are their advantages and disadvantages? 

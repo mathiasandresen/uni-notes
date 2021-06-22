@@ -2,7 +2,7 @@
 
 
 
-## Question 1
+## :white_medium_square: Question 1
 
 * How can we define and characterize mobile computing? 
   * Give examples of the different eras. 
@@ -21,7 +21,7 @@
 
 
 
-## Question 2
+## :white_check_mark: ​Question 2
 
 * How can we collect data about the context of our idea? 
   * Give examples of the different ways of communicating your idea to other team members/costumers/users?
@@ -118,7 +118,7 @@
 
 
 
-## Question 3
+## :white_medium_square: ​Question 3
 
 * What is a digital ecosystem? 
   * How can we classify interaction with multiple mobile devices in a digital ecosystem? 
@@ -135,7 +135,7 @@
 
 
 
-## Question 4
+## :construction: ​Question 4
 
 * Why is it important for designers know the difference between devices and platforms when we design for them? 
 * What is skeuomorphism? 
@@ -216,7 +216,7 @@
 
 
 
-## Question 5
+## :white_check_mark: ​Question 5
 
 * What is a prototype? 
     * When in the design process do, we introduce prototypes? 
@@ -292,7 +292,7 @@
 
 
 
-## Question 6
+## :construction: Question 6
 
 * What kind of data can we collect in mHCI evaluations and how? 
   * Why do we collect such data, what is our purpose? 
@@ -369,7 +369,7 @@
 
 
 
-## Question 7
+## :white_check_mark: ​Question 7
 
 * Assume you have collected qualitative data. 
   * What is the process that you need to follow to conduct an analysis of this data? 
@@ -433,7 +433,7 @@
 
 
 
-## Question 8
+## :white_check_mark: ​Question 8
 
 * What is a research hypothesis, and are there different types? 
 * What is the difference between independent and dependent variables?
@@ -497,18 +497,24 @@
 
 
 
-## Question 9
+## :white_medium_square: ​Question 9
 
 * What can be the sources of systematic errors in an experiment?
   * What can we do in order to minimize/eliminate them?
 * Why is it important to pilot test?
 
+---
+
+!!!todo
 
 
 
-
-## Question 10
+## :white_medium_square: ​Question 10
 
 * What is the difference between basic and complex experiments in terms of number of variables and used statistical techniques?
 * What are the differences between between-subjects and within-subjects designs?
   * What are their advantages and disadvantages? 
+
+---
+
+!!!todo

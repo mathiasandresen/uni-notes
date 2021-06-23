@@ -807,7 +807,7 @@ With a **focus on interaction** 4 structures emerges - like a database
 
 
 
-## :white_medium_square: ​Question 10
+## :white_check_mark: ​Question 10
 
 * What is the difference between basic and complex experiments in terms of number of variables and used statistical techniques?
 * What are the differences between between-subjects and within-subjects designs?
@@ -815,4 +815,89 @@ With a **focus on interaction** 4 structures emerges - like a database
 
 ---
 
-!!!todo
+**Basic vs Complex experiments**
+
+* **Basic** (simple)
+  * Only 1 independent variable
+  
+  * The independent variable has minimum two levels - leads to minimum two conditions, treatments, or groups
+  
+  * If we have **two conditions** we use t-test
+  
+    * **Within-group** design => Paired samples t-tes
+  
+    ![image-20210623210750654](images/99-exam/image-20210623210750654.png)
+  
+    * **Between-group** design => Independent t-test
+  
+    ![image-20210623210828777](images/99-exam/image-20210623210828777.png)
+  
+  * If we have **more than two** conditions we use ANOVA
+  
+    * **Between-group** design => One-way independent ANOVA
+    * **Within-group** design => One-way repeated measures ANOVA
+
+* **Complex**
+  * More than two independent variables
+  * The independent variables have minimum two levels
+  * Often callled **factorial designs** - we have more than one indpendent variable (**factors**)
+    * Simplest factorial design is known as 2x2
+      * Two independent variables, each with two **levels**
+    * Number of lvels of first IV    x    Number of levels of second IV     x     Number of levels of third IV
+  * Statistical Technique - **Factorial ANOVA**
+    * **Between-subjects** design => Independent factorial ANOVA
+    * **Within-subject** design => Repeated measures factorial ANOVA
+    * **Mixed** design => Mixed factorial ANOVA
+
+
+
+
+
+#### Within-group designs
+
+![image-20210623205202069](images/99-exam/image-20210623205202069.png)
+
+* The **same** participants experience both conditions
+* Often called **repeated measures design**
+
+**Advantages**
+
+* We need **less** participants
+* The systematic error caused by the participants will be the **same** in both conditions - easier to get better results
+
+**Disadvantages**
+
+* Hard to control the **practice**, **order**, and **fatigue** effects
+
+
+
+
+
+##### Counterbalancing
+
+* All possible orders of conditions are included in the experiment
+
+![image-20210623205512002](images/99-exam/image-20210623205512002.png)
+
+
+
+
+
+#### Between-group designs
+
+![image-20210623205215646](images/99-exam/image-20210623205215646.png)
+
+* **Different** participants experience the conditions
+* Often called **independent groups design**
+
+**Advantages**
+
+* Easier to control the **practice, order**, and **fatigue** effects - often do not exist
+
+**Disadvantages**
+
+* We need **many** participants
+* The systematic error caused by the participants' characteristics is more **difficult** to control
+
+
+

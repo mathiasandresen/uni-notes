@@ -420,3 +420,134 @@ Example: **Usability**
 
 ![image-20210622220229100](images/08-introduction-to-quantitive-studies/image-20210622220229100.png)
 
+
+
+## Making Studies
+
+* Non experimental methods
+  * Descriptive investigations (Usage studies, surveys, etc.)
+  * Relational investigations (Case studies)
+* Experimental methods
+  * Lab experiments
+  * Field experiments
+
+
+
+### Nonexperimental Methods
+
+Often called correlational methods
+
+* We make observations, or measures of the variables of interest in natural settings
+  * By asking people to describe their behaviour
+  * By making direct observations
+  * By recording log files, physiological reponses
+  * By examining public records
+  * ...
+* **Characteristics**
+  * We can have data that two variables are correlated (or covary - they vary together) with each other
+  * We do not know which one is the cause or the effect
+  * Very good for having an initial understanding of a domain
+
+
+
+### Experimental Methods
+
+* We basically make experiments
+* They help us reducing the ambiguity of the results
+* They help us deal with the **directionality** and **confounding variable** problem
+
+
+
+When we are certain that there is an **uncontrolled external** (or extraneous) variable, then it is called a **confounding variable**
+
+
+
+#### mHCI Example
+
+**Directionality Problem**
+
+![image-20210623194455021](images/08-introduction-to-quantitive-studies/image-20210623194455021.png)
+
+**Third variable Problem**
+
+![image-20210623194531677](images/08-introduction-to-quantitive-studies/image-20210623194531677.png)
+
+
+
+#### Characteristics
+
+* We **manipulate** a variable to measure its effect on another one
+* We try to create situations (or treatments or conditions) where the proposed cause is present or absent
+* We try to keep **constant** all the **confounding** variables across all the conditions (**experiment control**)
+* We **randomize** the participants and other variables in order to minimize the influence of other possible external variables that might affect the results
+
+
+
+
+
+### Independent and Dependent Variables
+
+* **Independent variable**
+  * Variable we think is the **cause**
+  * Variable that is **independent** of a **participant’s behavior**
+  * Variable that we **manipulate** in our experiment
+* **Dependent variable**
+  * Variable we think is the **effect**, as it **depends** on the **cause**
+  * Variable that is **dependent** on a **participant’s behavior**
+  * The **variable** that we **measure** in our experiment
+* **Examples**
+  * <img src="images/99-exam/image-20210621100311115.png" alt="image-20210621100311115" style="zoom:50%;" />
+  * **Sex** has an effect on **perceived usability**
+  * **Income** has an effect on **happiness**
+  * **Education** has an effect on **IQ level**
+  * **Input devices** have an effect on **efficiency**
+
+
+
+
+
+## Descriptive Statistics Univariate Analysis
+
+* **Descriptive Statistics** - numbers that describe our data
+* **Univariate analysis** - the process of analysing one variable
+
+
+
+### Frequency Distribution
+
+* A plot that shows how many times each value occurs
+* Usually we have the values on the horizontal axes and the times it occurred on the vertical one
+
+![image-20210623195000350](images/08-introduction-to-quantitive-studies/image-20210623195000350.png)
+
+### Normal Distribution
+
+* In an ideal world our data should be distributed symmetrically around the center of all scores. 
+* If we draw a line in the center, the distribution should look the same on both sides
+* Kurtosis, skew = 0
+
+<img src="images/08-introduction-to-quantitive-studies/image-20210623195049321.png" alt="image-20210623195049321" style="zoom:67%;" />
+
+
+
+### Ways a distribution can deviate from normal
+
+* **Skew** - lack of symmetry (most scores are clustered at one end of the scale)
+  * **Positively skewed** distribution - it has a long tail to the **right** side
+  * **Negatively skewed** distribution - it has a long tail to the **left** side
+* **Kurtosis** - pointiness
+  * **Positive kurtosis** (leptokurtic) - very pointy
+  * **Negative kurtosis** (platykurtic) - flatter than normal
+
+<img src="images/08-introduction-to-quantitive-studies/image-20210623195331845.png" alt="image-20210623195331845" style="zoom:80%;" />
+
+
+
+### Measures of central tendency
+
+* **Mode** - the score that occurs the most
+  * It is the tallest bar in the distribution - we can have multimodal distributions
+* **Median** - the middle score of a distribution
+  * We order the scores and we get the middle one (the one in position $(n+1)/2$) if not integer, we average the neighboring ones
+* **Mean** - the average score
+  * We sum all the scores and divide by the number of scores

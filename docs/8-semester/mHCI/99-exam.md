@@ -2,7 +2,7 @@
 
 
 
-## :construction: Question 1
+## :white_check_mark: Question 1
 
 * How can we define and characterize mobile computing? 
   * Give examples of the different eras. 
@@ -13,7 +13,109 @@
 
 ----
 
-!!!todo
+**Mobile computing**
+
+* *Mobile computing can be divided into a number of eras, or waves, each characterized by a particular technological focus, interaction design trends, and by leading to fundamental changes in the design and use of mobile devices*
+
+* Divided into eras - characterized by
+
+  * particular technological focus
+  * interaction design trends
+  * by leading to fundamental changes in design and use of mobile devices
+
+* **Eras**
+
+  * **Portability**
+
+    * <img src="images/99-exam/image-20210222083506307.png" alt="image-20210222083506307" style="zoom:50%;" />
+
+  * **Miniturization**
+
+    * <img src="images/99-exam/image-20210222083621012.png" alt="image-20210222083621012" style="zoom:50%;" />
+
+  * **Connectivity**
+
+    * <img src="images/99-exam/image-20210623120149843.png" alt="image-20210623120149843" style="zoom:25%;" />
+
+  * **Convergence**
+
+    * "doing many things"
+      * Not just phone or computer anymore
+      * You can now play and do spreadsheets on the phone (Nokia 9000)
+    * <img src="images/99-exam/image-20210222083902699.png" alt="image-20210222083902699" style="zoom:50%;" />
+
+  * **Divergence**
+
+    * "Doing one thing well"
+
+    <img src="images/99-exam/image-20210222084034875.png" alt="image-20210222084034875" style="zoom:50%;" />
+
+  * **Apps**
+
+    * In the beginning, only the manifactures made apps
+      * limited selection
+    * Then came Developing kits and app stores
+      * Google Play - Apple App Store
+
+  * **Digital Ecosystems**
+
+    * <img src="images/99-exam/image-20210222084332304.png" alt="image-20210222084332304" style="zoom:25%;" />
+
+
+
+**Context**
+
+* Everything about how something is used, who uses it, where, when and how
+  * What is important to the users, which can depend on different external factors
+* *The circumstances that form the setting for an event, statement, or idea, and in terms of which it can be fully understood*
+* Context is important for mobile computing
+  * The context can easily change because of mobility
+  * Car vs train vs at home
+    * Example - Spotify Car Mode
+* Context can be defined in two ways
+  * Big C - Context
+  * Small c - context
+
+
+
+**Big C**
+
+* *“Context enables us to better understand a person, a place, a thing, a situation, or even an idea by adding information to it”*
+* "How the users will derive value from something they are currently doing" / "the understanding of circumstance"
+  * "standing in front of Berlin Wall and reading about it on Wiki" => adding Context to task
+* "This information is providing me Context or better understanding of what this moment in time means to me"
+* **Some Questions**
+  * **The Problem**
+    * What problems are you trying to design a solution for?
+    * What value do you want to bring for your users?
+  * **Users and their situation**
+    * Who are your users and what do you know about them?
+    * How are they able to or how will they interact with your design?
+  * **Location**
+    * What and where is it happening?
+  * **Markets**
+    * How is your idea different from other designs already available?
+
+
+
+**Small c**
+
+* "the mode, medium, or environment in which we perform a task" / "the circumstances of understanding"
+* Using phone in car    => more private information, but restricted because driving
+* Using phone in train => less private information, but not restricted
+* Understanding how the location changes a users behavior and what they want from their device
+* **Which requirements / constraints lies in the context**
+  * **Physical and spatial considerations**
+    * Are there any restrictions in the physical environment or the location?
+      * e.g. will I be able to use the design all the time?
+  * **Technological considerations**
+    * How are different devices present in different situations?
+      * e.g. why smart watches might be better than smartphones when running or swimming
+  * **Psycological/demographical considerations**
+    * Users mental models and prerequisites for interacting with certain devices
+      * e.g. knowledge, common conceptions in community etc.
+
+
 
 
 
@@ -72,7 +174,7 @@
 
 
 
-## :construction: ​Question 2
+## :white_check_mark: ​Question 2
 
 * How can we collect data about the context of our idea? 
   * Give examples of the different ways of communicating your idea to other team members/costumers/users?
@@ -116,11 +218,50 @@
 
 **Communicate** idea:
 
-!!!todo
+* **Storyboard**
+  * *"A storyboard communicates a story through images displayed in a sequence of panels that chronologically maps the story’s main events."*
+  * Used to gain common ground
+  * Research and usability
+  * **Parts**
+    1. **Scenario**
+       * Who is persona?
+       * Short text describing scenario
+         * E.g. *Corporate buyer, James, needs to replenish office supplies*
+    2. **Visuals**
+       * Each step in scenario is represented visually in a sequence - sketches, illustrations, photos
+       * Include details relevant to the story
+         * what the users environment looks like
+         * speech bubbles with quoutes from the user
+         * sketch of the screen user is interacting with
+       * <img src="images/99-exam/image-20210623115006260.png" alt="image-20210623115006260" style="zoom:33%;" />
+    3. **Captions**
+       * Each visual has corresponding caption
+       * Caption describes user's actions, environment, emotional state, device, and so on
+       * Captions are concise and dont typically exceed two bullet points
+  * **Steps**
+    1. Gather your data (ie. interviews)
+    2. Choose fidelity level (ie. sketches, photos)
+    3. Define basicsx (persona and scenario)
+    4. Plan out steps (which steps will storyboard contain)
+    5. Create visuals and add captions (create you storyboard - stick figures are okay)
+    6. Distribute and Iterate (ie. to audience, stakeholders)
+* **Wireframes**
+  * *Wireframes are used early in the development process to establish the basic structure of a page before visual design and content is added*
+  * Demonstrates **key** elements of a **design**
+  * Demonstrates **key** structure of a page/app
+  * Low-fidelity: Quicker and cheaper to make changes to
+* **Mock-ups**
+  * *Mock-ups are used by designers mainly to acquire feedback from users about designs and design ideas early in the design process. Mock-ups are 'very early prototypes' made of cardboard or otherwise low-fidelity materials.*
+  * Visualises the key elements of a design
+  * Still not final design, but conveys more design than wireframes
+  * Low-fidelity: made quicker and dirty - easy to make changes to
+    * Example in cardboard
 
 
 
-## :white_medium_square: ​Question 3
+
+
+## :white_check_mark: Question 3
 
 * What is a digital ecosystem? 
   * How can we classify interaction with multiple mobile devices in a digital ecosystem? 
@@ -129,7 +270,78 @@
 
 ----
 
-!!!todo
+
+
+**Digital Ecosystem**
+
+* **Theoretical Framing**
+  * A network of **nodes** interacting - consists of users and digital artifacts, bound dynamically by the users' actions
+* When a user interacts with not just one, but multiple devices at once
+  * or multiple users interact with a single device
+* Example:
+  * Google Cast
+  * Apple's announced Universal Control - move cursor from Mac to iPad
+
+
+
+**Classify interaction with multiple mobile devices in ecosystem**
+
+With a **focus on interaction** 4 structures emerges - like a database
+
+<img src="images/99-exam/image-20210623142619160.png" alt="image-20210623142619160" style="zoom:67%;" />
+
+* The interesting structures are the three with either **many users** or **many artifacts**
+* We can further divide interactions with several artifacts into two
+  * **Sequential **- users first interact with one device - then continues with another device
+    * Example: Checking emails on phone - then moving to desktop to read specific one or answer
+  * **Simultanious** - users uses several devices at once
+    * Example: Overview of calendar on large screen while sending meeting invitation from phone
+* This leads us to the **4C Framework**
+  * Combines the structural relationships of many users and many artifacts with the differentiation between sequential or simultaneous in a 2x2 matrix
+
+![image-20210623143424800](images/99-exam/image-20210623143424800.png)
+
+
+
+**4 Categories of interaction**
+
+* **Communality**
+  * Artifacts are shared between users, but only one user interacts at a time
+  * **Subcategories**
+    * **Personalization** - relationship between users and artifacts are individual and tailored to each person	
+      * Example: Accounts on social media on shared tablet
+    * **Generalization** - relationship is same for everyone
+      * Example: Ticket booth at train station - automatic passport photobooth
+  * Might seem trivial - but decision can have great impact on system
+    * Eg. login can be irrelevant
+* **Collaboration**
+  * Simultaneous interaction by many users
+  * **Subcategories**
+    * **Division** - interaction with artifact is split between users
+      * Indiviual parallel points of attention
+      * Example: Split-screen gaming
+      * Can also be done by other means such as different sound channels
+    * **Merging** - several users's simultaneous interaction with an artifact
+      * Example: multi-user board games on single tablet - mixing desk
+* **Continuity**
+  * Sequential interaction with several artifacts
+  * Interaction starts on one device and continues on another
+  * **Subcategories**
+    * **Synchronization **- data and data structures is kept consistent across all devices
+      * When artifact synchronizes with ecosystem - content and its organization is replicated
+      * Example: Cloud based storage (Dropbox, Google Drive, etc.) - email and calendar services
+    * **Migration** - users switch between artifacts by transfering state of their activity - partially or completely
+      * Example: Amazon Kindle - continue reading,  Google Cast - continue playback on large screen
+* **Complementarity**
+  * Simultaneous interaction with multiple arifacts
+  * Interaction with one artifact adds to the interaction with another
+    * Jointly makes up a larger whole
+  * **Subcategories**
+    * **Extension** - One digital artifact directly adds to another
+      * Example: Using several smartphones and tables to create large display
+      * Example: Companion apps - Adobe Nav - Digitizer app
+    * **Remote control** - One digital artifact controls another
+      * Examples: TV Remote apps - Home automation
 
 
 

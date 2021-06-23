@@ -323,6 +323,10 @@ Example: **Usability**
 
 
 
+
+
+
+
 ### Measuring
 
 * Every time we measure a variable there is an error
@@ -335,8 +339,84 @@ Example: **Usability**
 
 
 
-!!!todo
-    fill in from slides 32-46
+#### Reliability
+
+* Refers to the consistency or stability of a measure
+  * If I measure the same thing twice I should have the same results
+* The measurement error of a reliable measurement tool has less variability than an unreliable one
 
 
+
+#### Assessing Reliability
+
+* Test-retest reliability
+  * We measure the same thing twice and the results should be correlated (usually correlation coefficient >0.80)
+* Internal consistency reliability. Used when multiple items are measuring the same variable (i.e. questionnaire)
+  * Split-half reliability
+    * We split the data randomly into two halves. The correlation of total score on a half of a measure should be high with the other half (Spearman-Brown split-half reliability coefficient)
+  * Cronbach’a alpha (α), the correlation of each item on the measure with every other item on the measure
+
+
+
+#### Correlation Coefficient
+
+* A numerical index of the **strength** of relationships between variables
+* Most common: **Pearson product-moment** correlation coefficient (*r*)
+* $-1.00 \to 0.00 \to +1.00$
+  * $0$ = no relation at all
+  * $+$ = positive linear
+  * $-$ = negative lnear
+
+
+
+##### Types of relationships between variables
+
+* *Education has an effect on IQ level*
+
+**Positive Linear and Negative Linear**
+
+![image-20210622215113274](images/08-introduction-to-quantitive-studies/image-20210622215113274.png)
+
+**No relationship**
+
+![image-20210622215132215](images/08-introduction-to-quantitive-studies/image-20210622215132215.png)
+
+**Curvilinear**
+
+![image-20210622215148567](images/08-introduction-to-quantitive-studies/image-20210622215148567.png)
+
+
+
+### Types of Variables
+
+#### Categorical
+
+* **Nominal** Variable
+  * The levels **do not** hae any meaningful numerical, quantitative properties.
+  * Example: eye color, university degree, marital status, sex
+  * If there are only two levels its called a **binary** or **dichotomous** variable
+* **Ordinal **variable
+  * Levels **do** have meaningful, quantitative properties, usually ordered
+  * Example: Exam grades, athlete placement on podium
+  * Usually distance among levels is not equal
+
+#### Continuous
+
+* **Interval** variable
+  * Different between levels are equal in size
+  * Thus, difference between 1 and 2 have same meaning as 6 and 7
+  * Example: Example, strongly agree/strongly disagree question, time, age
+* **Ratio** variable
+  * Same as above, but 0 indicate absence of variable
+
+**Tricky part**
+
+* Continuous variables can be sometimes discrete, depending on the level of precision.
+* We cannot answer on a questionnaire the value 4.32, but we assume that there is a continuum that the scale is following.
+
+
+
+#### Categorizing a Variable
+
+![image-20210622220229100](images/08-introduction-to-quantitive-studies/image-20210622220229100.png)
 

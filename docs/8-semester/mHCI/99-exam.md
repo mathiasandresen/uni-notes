@@ -2,7 +2,7 @@
 
 
 
-## :white_medium_square: Question 1
+## :construction: Question 1
 
 * How can we define and characterize mobile computing? 
   * Give examples of the different eras. 
@@ -17,11 +17,62 @@
 
 
 
+**Communicate Context:**
+
+* **Personas**
+  * Helps maintain **perspective** of **users**
+  * **Fictional** - created based on **research** - **never** of **assumptions**
+  * Represent different **user types**
+  * Helps understand users’ **needs**, **experiences**, **behaviors** and **goals**.
+* **4 types**
+  * **Goal oriented**
+    * Users' goals - workflow, contexts, attiturdes
+    * Based in **in-depth ethnographic research**
+    * Provides focused design and communication tool to finish discussions 
+  * **Role based**
+    * Users roles in organization 
+    * **data-driven** - incorporate data from both qualitative and quantitative sources
+    * efficient design tool - our cognitive ability to use fragmented and incomplete knowledge to form complete vision of people who surround us
+  * **Engaging**
+    * Designers seeing users as stereotypes -> actively involved in the lives of personas
+    * Requires **broad knowledge** of users
+      * Data should include information about - social background, psychological characteristics, emotional relationship with the focus area.
+  * **Fiction based**
+    * To explore and design - generate discussion and insights
+    * Based on intuition and experience
+    * Creates an empathetic focus in the design process
+    * Originate from brainstorming and workshops - participation from company
+* **How - 11 steps**
+  1. Collect extensive data on target users.
+  2. Determine the qualities of and differences between users.
+  3. Develop a hypothesis from the research, determining the qualities of and differences between users.
+  4. Ensure stakeholders agree on the hypothesis about the users.
+  5. Determine a number of personas – more than one per project, but focus *especially* on one
+  6. Name and describe each persona in 1-2 pages, including:
+     * A picture.
+     * (CONTEXT): User’s values, interests, education, lifestyle, needs, attitudes, desires, limitations, goals and behavior patterns.
+     * Extra details about the persona (e.g., interests) – anything to make him/her more real and relevant and help build empathy. A written story is better than bullet points.
+  7. Describe several situations/scenarios prompting the persona to use your product – put him/her in contexts with problems to overcome.
+  8. Include everyone involved in the project so they’ll accept the persona or advise revisions.
+  9. Send them the persona to use in their work
+  10. Ensure everyone develops scenarios – these should expose the persona optimally to potential use cases
+  11. Make continuous adjustments – revisit the persona; add new features; add required new personas; discard outdated personas.
+
+
+
+![The poster covers 10 Steps to Personas](images/99-exam/image3.jpg)
 
 
 
 
-## :white_check_mark: ​Question 2
+
+
+
+
+
+
+
+## :construction: ​Question 2
 
 * How can we collect data about the context of our idea? 
   * Give examples of the different ways of communicating your idea to other team members/costumers/users?
@@ -65,56 +116,7 @@
 
 **Communicate** idea:
 
-* **Personas**
-  * Helps maintain **perspective** of **users**
-  * **Fictional** - created based on **research** - **never** of **assumptions**
-  * Represent different **user types**
-  * Helps understand users’ **needs**, **experiences**, **behaviors** and **goals**.
-* **4 types**
-    * **Goal oriented**
-        * Users' goals - workflow, contexts, attiturdes
-        * Based in **in-depth ethnographic research**
-        * Provides focused design and communication tool to finish discussions 
-    * **Role based**
-        * Users roles in organization 
-        * **data-driven** - incorporate data from both qualitative and quantitative sources
-        * efficient design tool - our cognitive ability to use fragmented and incomplete knowledge to form complete vision of people who surround us
-    * **Engaging**
-        * Designers seeing users as stereotypes -> actively involved in the lives of personas
-        * Requires **broad knowledge** of users
-            * Data should include information about - social background, psychological characteristics, emotional relationship with the focus area.
-    * **Fiction based**
-        * To explore and design - generate discussion and insights
-        * Based on intuition and experience
-        * Creates an empathetic focus in the design process
-        * Originate from brainstorming and workshops - participation from company
-* **How - 11 steps**
-    1. Collect extensive data on target users.
-    2. Determine the qualities of and differences between users.
-    3. Develop a hypothesis from the research, determining the qualities of and differences between users.
-    4. Ensure stakeholders agree on the hypothesis about the users.
-    5. Determine a number of personas – more than one per project, but focus *especially* on one
-    6. Name and describe each persona in 1-2 pages, including:
-        * A picture.
-        * (CONTEXT): User’s values, interests, education, lifestyle, needs, attitudes, desires, limitations, goals and behavior patterns.
-        * Extra details about the persona (e.g., interests) – anything to make him/her more real and relevant and help build empathy. A written story is better than bullet points.
-    7. Describe several situations/scenarios prompting the persona to use your product – put him/her in contexts with problems to overcome.
-    8. Include everyone involved in the project so they’ll accept the persona or advise revisions.
-    9. Send them the persona to use in their work
-    10. Ensure everyone develops scenarios – these should expose the persona optimally to potential use cases
-    11. Make continuous adjustments – revisit the persona; add new features; add required new personas; discard outdated personas.
-
-
-
-![The poster covers 10 Steps to Personas](images/99-exam/image3.jpg)
-
-
-
-
-
-
-
-
+!!!todo
 
 
 
@@ -497,7 +499,7 @@
 
 
 
-## :white_medium_square: ​Question 9
+## :white_check_mark: Question 9
 
 * What can be the sources of systematic errors in an experiment?
   * What can we do in order to minimize/eliminate them?
@@ -505,7 +507,80 @@
 
 ---
 
-!!!todo
+**Systematic Errors**
+
+* THE rule in experiments
+  * All **confounding/external** variables that may have an effect on our conditions must be **controlled**
+    * Either through randomization
+    * Or by keeping them constant
+  * **THE RULE**
+    * Our aim is that all the conditions differ **only** on the independent variable and nothing else
+  * If we are successful, our experiment has high **internal validity**
+* **Systematic error** - due to confounding/external variables that covary with our independent variable
+  * Strong negative effect on **internal validity**
+  * Usually systematic errors push the true scores at the same direction
+* **Sources of systematic errors**
+  * **Participants**
+    * carry their own experiences and expectations, and have different characteristics
+    * get tired if kept a long time - **fatigue effect**
+    * **Tips**
+      * Select participants that **fit** target group - representative of the **population**
+      * Track, based on experience and literature, all the characteristics that can influence experiment
+      * Try to **minimize** the **fatigue effect** either by having breaks or by introducing fun, irrelevant activities 
+        * (i.e. ask them to play a game for a while)
+      * Keep participants **blind** regarding experiments purpose - **manipulate** them
+  * **Researchers**
+    * We can influence by simply being there
+    * By commenting on participants' performance
+    * **Tips**	
+      * **Same** researcher always communicates with the participants
+      * **Same** instructions provided to all - video good solution
+      * **Never** **comment** on their behaviour
+      * **Always** be **prepared** and **polite**
+      * **Always** have a talk after the experiment - **debriefing session**
+      * **Often** we keep the **moderator blind** for the purpose of our experiment - **double blind experiment**
+  * **Digital artifacts**
+    * Digital artifacts might have characteristics that can influence the experiment 
+    * screen sizes, keyboards, brands, etc.
+    * **Tips**
+      * Carefully select digital artifacts participants will interact with and try to **remove** any influential characteristics
+      * Keep **same** digital artifacts throughout experiment
+  * **Environment**
+    * Pysical environment can influence experiment
+    * **Tips**
+      * Prepare a **nice** (suitable) environment
+      * **Never** change the physical conditions 
+        * (i.e. keep the noise at the same level, have the lights always on, etc.)
+      * **Never** change the position/placement of the participants 
+        * (i.e. ask them all to sit the same way)
+  * **Procedure**
+    * **Framing** of tasks can influence results
+    * Order of tasks influences results - **order effect**
+    * Practice gained in one task will influence the rest - **practice effect**
+    * Experience they will have from a task will influence the rest - **carryover effect**
+    * **Tips**
+      * **Meaningful** and **clear** tasks
+      * Always **randomize** the sequence of the tasks
+  * **Measurement tools**
+    * Tools used to measure dependent variable will influence result
+    * **Tips**
+      * Always use measurement tools that are **reliable**
+      * Always **test** their performance
+      * **Never change** measurement tools during the experiment 
+
+
+
+**Pilot test**
+
+* It is is **important** to pilot test to
+  * make sure that everything is working as expected
+  * make sure that the participants are **influenced** **only** by the **independent** variable among the **conditions**
+  * have **preliminary** **findings** that will tell us if we need more conditions, or a different setup
+  * check the tasks we have designed for:
+    * **Ceiling effect**: too easy tasks and all the participants reach the maximum performance
+    * **Floor effect**: too difficult tasks and hardly anyone performs well
+
+
 
 
 

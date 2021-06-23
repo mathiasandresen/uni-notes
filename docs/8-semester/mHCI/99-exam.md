@@ -349,7 +349,7 @@ With a **focus on interaction** 4 structures emerges - like a database
 
 
 
-## :construction: ​Question 4
+## :white_check_mark: ​Question 4
 
 * Why is it important for designers know the difference between devices and platforms when we design for them? 
 * What is skeuomorphism? 
@@ -361,9 +361,18 @@ With a **focus on interaction** 4 structures emerges - like a database
 
 **Different devices and platforms**
 
-!!!todo
-
-
+* Different things are possible on different platforms
+  * Performance, screen size, operating system
+* Different contexts
+  * Smartphones can show more details than smartwatches
+* Following the design guidelines makes the app familiar
+  * Using same icons lets users know what buttons do
+    * Example: share icon is different on iOS and Android
+  * We can take advantage of platform features - such as widgets
+    * Notification actions on Android
+* Devices says something about the users
+  * People using Android may be "more powerusers"
+  * Linux vs Mac/Windows
 
 
 
@@ -372,7 +381,9 @@ With a **focus on interaction** 4 structures emerges - like a database
 * Interface objects that mimics their real-world counterparts
     * Recycle bin - floppy disk - toggles - buttons - dials
     * sounds - animations
+    * Volume icon where the speaker outputs more or less sound
 * Makes users know what they can do with interfaces
+    * Example: Folders in a file system - users know they can put files into it even though its a new concept
 
 
 

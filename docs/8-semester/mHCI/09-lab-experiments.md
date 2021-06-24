@@ -209,3 +209,85 @@ Independent variable A (two levels A1, A2), Independent Variable B (B1, B2) have
 More than 2 experimental conditions, more than 2 categorical independent variables, one continuous dependent one
 
 ![image-20210623220430038](images/09-lab-experiments/image-20210623220430038.png)
+
+
+
+## Normality Test
+
+* We check whether our distribution deviates from a normal distribution
+
+* H1: “Our distribution is different from a normal distribution”
+
+* H0: “Our distribution is the same as a normal distribution”
+
+* Two tests:
+  * Kolmogorov-Smirnov, and
+  * Shapiro-Wilk
+
+* Analyze $\to$ Descriptive Statistics $\to$ Explore
+* If the tests are significant $p<0.05$ then our distribution is **significantly different** from a normal distribution
+
+
+
+## Tests for homogeneity of variance
+
+* H1: “Our variances are not equal among the groups”
+* H0: “Our variances are equal among the groups”
+* A typically used test:
+  * Lavene’s Test
+* Analyze $\to$ Descriptive Statistics $\to$ Explore
+* If the test is significant $p<0.05$ then our variances are **significantly different** in the different groups.
+
+
+
+## Reducing the bias
+
+* Trimming the data
+* Winsorizing
+* Bootstrapping (too advanced for this course)
+* Transforming the data
+
+OR
+
+* We select an advanced technique that does not assume normality of the data (way too advanced for this course)
+
+
+
+### Trimming Data
+
+* We delete some scores from the extremes/outliers
+  * Only when we have good reasons to do so
+* We use two rules
+  * We trim a percentage from each end of the ordered scores (i.e. 5%)
+  * We trim data above a certain number of standard deviations (usually 3)
+
+
+
+#### Spotting Outliers
+
+<img src="images/09-lab-experiments/image-20210624082317940.png" alt="image-20210624082317940" style="zoom:50%;" />
+
+
+
+### Winsorizing
+
+* We replace outliers with:
+  * The highest score that is not an outlier
+* Or we replace extreme scores with
+  * A score three standard deviations from the mean
+
+
+
+### Transforming the Data
+
+* If we are looking the relationships between two or more variables, we can transform only the problematic one
+* If we are looking for differences with one variable (i.e. a change in a variable over time) then we need to transform all of them in order to have the same units of measurement
+* When we transform the data we basically change our hypothesis and we address a different variable than the originally measured
+* The consequences for applying the ‘wrong’ transformation can be worst than analyzing the original ones
+
+
+
+#### Choosing Transformation
+
+<img src="images/09-lab-experiments/image-20210624082721063.png" alt="image-20210624082721063" style="zoom: 33%;" />
+

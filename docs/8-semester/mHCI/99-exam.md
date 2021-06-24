@@ -586,7 +586,14 @@ With a **focus on interaction** 4 structures emerges - like a database
 
 **Lab vs Field**
 
-!!!todo
+* Field takes place *in the wild* - lab is a controlled environment
+  * Field is more **natural** but we cannot control everything
+  * In field we can get results that we cant get otherwise
+    * Some participants might "realize" what they are doing
+  * We can see how our product/prototype fits users’ **’natural habitat’**
+* In the field we often collect both quantitative and qualitative data
+* Field is harder to conduct
+  * Example: mounted camera - from lecture 10
 
 
 

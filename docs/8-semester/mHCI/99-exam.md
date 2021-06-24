@@ -78,7 +78,7 @@
 
 
 
-**Big C**
+**Big C** - **Context**
 
 * *“Context enables us to better understand a person, a place, a thing, a situation, or even an idea by adding information to it”*
 * "How the users will derive value from something they are currently doing" / "the understanding of circumstance"
@@ -98,11 +98,11 @@
 
 
 
-**Small c**
+**Small c** - **context**
 
 * "the mode, medium, or environment in which we perform a task" / "the circumstances of understanding"
-* Using phone in car    => more private information, but restricted because driving
-* Using phone in train => less private information, but not restricted
+* Using phone in **car**    => **more** **private** information, but **restricted** because driving
+* Using phone in **train** => **less** **private** information, but **not restricted**
 * Understanding how the location changes a users behavior and what they want from their device
 * **Which requirements / constraints lies in the context**
   * **Physical and spatial considerations**
@@ -517,7 +517,9 @@ With a **focus on interaction** 4 structures emerges - like a database
 
 
 
-## :construction: Question 6
+
+
+## :white_check_mark: Question 6
 
 * What kind of data can we collect in mHCI evaluations and how? 
   * Why do we collect such data, what is our purpose? 

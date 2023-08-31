@@ -1,0 +1,6106 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Mathias Andresen">
+      
+      
+        <link rel="canonical" href="http://notes.mathiasandresen.dk/7-semester/DS/03-mutex/">
+      
+      
+        <link rel="prev" href="../02-os-and-networking-fundamentals/">
+      
+      
+        <link rel="next" href="../04-multicast/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
+    
+    
+      
+        <title>Mutual Exclusion (Mutex) and Election - Uni Noter</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Open Sans";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mutual-exclusion-mutex-and-election" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Uni Noter" class="md-header__button md-logo" aria-label="Uni Noter" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Uni Noter
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Mutual Exclusion (Mutex) and Election
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mathiasandresen/uni-notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mathiasandresen/uni-notes
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Forside
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../3-semester/" class="md-tabs__link">
+        3 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../4-semester/" class="md-tabs__link">
+        4 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../5-semester/" class="md-tabs__link">
+        5 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../6-semester/" class="md-tabs__link">
+        6 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        7 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../8-semester/" class="md-tabs__link">
+        8 semester
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Uni Noter" class="md-nav__button md-logo" aria-label="Uni Noter" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82Z"/></svg>
+
+    </a>
+    Uni Noter
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mathiasandresen/uni-notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mathiasandresen/uni-notes
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Forside
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" tabindex="0" aria-expanded="false">
+          3 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="3 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          3 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" tabindex="0" aria-expanded="false">
+          AD1
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="AD1" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          AD1
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/02-analysing-algorithms/" class="md-nav__link">
+        Analysing Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/03-divide-and-conquer/" class="md-nav__link">
+        Divide-and-Conquer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/04-solving-recurrences/" class="md-nav__link">
+        Solving Recurrences
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/05-sorting-algorithms/" class="md-nav__link">
+        Sorting Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/06-heap-sort/" class="md-nav__link">
+        Heap Sort
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/07-data-structures/" class="md-nav__link">
+        Data Structures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/08a-hash-tables/" class="md-nav__link">
+        Hash Tables
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/08b-binary-search-tree/" class="md-nav__link">
+        Binary Search Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/09-dynamic-programming/" class="md-nav__link">
+        Dynamic Programming
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/10a-graph-theory/" class="md-nav__link">
+        Elementary graph algorithms (A)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/10b-graph-algorithms/" class="md-nav__link">
+        Elementary graph algorithms (B)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/10c-topological-sort/" class="md-nav__link">
+        Elementary graph algorithms (C) - Topological Sort
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/11a-strongly-connected-components/" class="md-nav__link">
+        Strongly Connected Components
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/11b-minimum-spanning-tree/" class="md-nav__link">
+        Minimum Spanning Tree
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/12-finding-shortest-paths/" class="md-nav__link">
+        Finding Shortest Paths
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/extra1-big-o-cheat-sheet/" class="md-nav__link">
+        Big-O Cheat-Sheet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/extra2-standard-notation-and-common-functions/" class="md-nav__link">
+        Standard Notation and Common Functions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/extra3-standard-knowledge/" class="md-nav__link">
+        Earlier Knowledge
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2_3" type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" tabindex="0" aria-expanded="false">
+          DEB
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="DEB" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          DEB
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/03-envisionment/" class="md-nav__link">
+        Envisionment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/04-physical-design/" class="md-nav__link">
+        Physical Design
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/05-physical-design-memory-and-attention/" class="md-nav__link">
+        Physical Design - Memory & Attention
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/06-perception-and-navigation/" class="md-nav__link">
+        Physical Design - Perception & Navigation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/07-evaluation/" class="md-nav__link">
+        Evaluation - What is Usability and Usability Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/08-evaluation-identifying-problems/" class="md-nav__link">
+        Evaluation - Identifying Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/09a-user-experience/" class="md-nav__link">
+        Evaluation - Alternative methods and UX
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/09b-alternative-methods-for-testing-usability/" class="md-nav__link">
+        Evaluation - Alternative methods and UX
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2_4" type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" tabindex="0" aria-expanded="false">
+          SU
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SU" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          SU
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/1-classes-and-objects/" class="md-nav__link">
+        Classes and Objects
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/2-factor/" class="md-nav__link">
+        FACTOR
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/3-structure/" class="md-nav__link">
+        Structure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/4-usage/" class="md-nav__link">
+        Usage
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          4 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="4 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          4 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2" tabindex="0" aria-expanded="false">
+          PSS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="PSS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          PSS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/1-intro/" class="md-nav__link">
+        Introduction to Operating Systems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/5-memory-management/" class="md-nav__link">
+        Memory Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_2_4" type="checkbox" id="__nav_3_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2_4" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/1-processes-and-threads/" class="md-nav__link">
+        1 - Processes and Threads
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/2-scheduler/" class="md-nav__link">
+        2 - Scheduling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/3-memory-management/" class="md-nav__link">
+        3 - Memory Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/4-paged-memory/" class="md-nav__link">
+        4 - Paged Memory
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/5-concurrency/" class="md-nav__link">
+        5 - Concurrency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/6-concurrency-problems/" class="md-nav__link">
+        6 - Concurrency Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/7-io-and-device-drivers/" class="md-nav__link">
+        7 - I/O and Device Drivers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/8-xv6/" class="md-nav__link">
+        8 - XV6 Exercise of Choice
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3" tabindex="0" aria-expanded="false">
+          SPO
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SPO" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          SPO
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/01-programming-languages-and-compilers/" class="md-nav__link">
+        Programming Languages and Compilers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/02-tombstone-diagrams/" class="md-nav__link">
+        Tombstone Diagrams
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/03a-the-phases-of-a-compiler/" class="md-nav__link">
+        The Phases of a Compiler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/03b-the-ac-language-and-compiler/" class="md-nav__link">
+        The 'ac' Language and Compiler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/04-language-specification/" class="md-nav__link">
+        Language Specification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/05a-context-free-grammars/" class="md-nav__link">
+        Context Free Grammars
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/05b-from-tokens-to-parse-trees/" class="md-nav__link">
+        From Tokens to Parse Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/06-lexical-analysis/" class="md-nav__link">
+        Lexical Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_3_10" type="checkbox" id="__nav_3_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3_10" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/1-language-design-and-control-structures/" class="md-nav__link">
+        1 - Language Design and Control Structures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/2-structure-of-the-compiler/" class="md-nav__link">
+        2 - Structure of the Compiler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/3-lexical-analysis/" class="md-nav__link">
+        3 - Lexical Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/4-parsing/" class="md-nav__link">
+        4 - Parsing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/5-semantic-analysis/" class="md-nav__link">
+        5 - Semantic Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/6-runtime-organization/" class="md-nav__link">
+        6 - Runtime Organization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/7-heap-allocation-and-gc/" class="md-nav__link">
+        7 - Heap Allocation and Garbage Collection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/8-code-generation/" class="md-nav__link">
+        8 - Code Generation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_4" type="checkbox" id="__nav_3_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_4" tabindex="0" aria-expanded="false">
+          SS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_4">
+          <span class="md-nav__icon md-icon"></span>
+          SS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/0-eksamen-fremgangsm%C3%A5der/" class="md-nav__link">
+        Eksamen - Fremgangsmåder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/01a-regul%C3%A6re-sprog/" class="md-nav__link">
+        Regulære Sprog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/01b-endelige-automater/" class="md-nav__link">
+        Endelige Automater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/02-nondeterministiske-endelige-automater/" class="md-nav__link">
+        Nondeterministiske Endelige Automater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/03-regul%C3%A6re-udtryk/" class="md-nav__link">
+        Regulære Udtryk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/04-pumping-lemma/" class="md-nav__link">
+        Pumping Lemma
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/05-kontekstfrie-grammatikker/" class="md-nav__link">
+        Kontekstfrie Grammatikker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/06-pushdown-automater/" class="md-nav__link">
+        Pushdown Automater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/07-pumping-lemma-for-kontekstfrie-sprog/" class="md-nav__link">
+        Pumping Lemma for Kontekstfrie Sprog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/15-rekursive-definitioner/" class="md-nav__link">
+        Rekursive Definitioner
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" tabindex="0" aria-expanded="false">
+          5 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="5 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          5 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2" tabindex="0" aria-expanded="false">
+          CC
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="CC" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          CC
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/01-turing-maskiner/" class="md-nav__link">
+        Turing Maskiner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/02-church-turing-tesen/" class="md-nav__link">
+        Church-Turing-Tesen
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/03-acceptproblemet-for-tm/" class="md-nav__link">
+        Acceptproblemet for Turing-maskiner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/04-more-problems-than-algorithms/" class="md-nav__link">
+        Er der Flere Problemer end Algoritmer? Og er Problemer Beslægtede?
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/05-beregningshistorier/" class="md-nav__link">
+        Uafgørbare Problemer om Beregningshistorier
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/06-posts-korrespondanceproblem/" class="md-nav__link">
+        Posts Korrospondanceproblem ; Teorien for Reduktioner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/07-rice/" class="md-nav__link">
+        Rice's Sætning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/09-tidskompleksitet/" class="md-nav__link">
+        Tidskompleksitet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/10-np-fuldstaendighed/" class="md-nav__link">
+        NP og NP-fuldstændighed
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/12-np-complete-sprog/" class="md-nav__link">
+        Flere NP-fuldstændige Sprog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/13-pladskompleksitet/" class="md-nav__link">
+        Pladskompleksitet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/99-sprog-i-pensum/" class="md-nav__link">
+        Sprogproblemer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3" tabindex="0" aria-expanded="false">
+          MI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="MI" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          MI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-04-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-09-problem-solving-as-search/" class="md-nav__link">
+        Problem Solving as Search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-16-constrains-satisfaction-problems/" class="md-nav__link">
+        Constraints Satisfaction Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-16appendix/" class="md-nav__link">
+        Constraints Satisfaction Problems - Appendix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-23-reasoning-under-certainty/" class="md-nav__link">
+        Reasoning Under Uncertainty
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-07-bayesian-networks/" class="md-nav__link">
+        Bayesian Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-14-inference-in-bayesian-networks/" class="md-nav__link">
+        Inference in Bayesian Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-21-decision-trees/" class="md-nav__link">
+        Learning: Introduction and Decision Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-28-neural-networks/" class="md-nav__link">
+        Learning: Neural Network
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-28appendix/" class="md-nav__link">
+        Learning: Neural Network - Appendix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-04-methods-and-issues/" class="md-nav__link">
+        Learning: Methods and Issues
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-11-clustering/" class="md-nav__link">
+        Learning: Clustering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-18-planning-uncertainty/" class="md-nav__link">
+        Planning under Uncertainty
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-25-multi-agent/" class="md-nav__link">
+        Multi-Agent Systems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/99_exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/probability-calculus-cheatsheet/" class="md-nav__link">
+        Cheat Sheet for Probability Calculus
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_4" type="checkbox" id="__nav_4_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4" tabindex="0" aria-expanded="false">
+          SOE
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SOE" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          SOE
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/01-introduction/" class="md-nav__link">
+        Software Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/02-agile-xp-and-scrum/" class="md-nav__link">
+        Agile, XP, and Scrum
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/04a-rup/" class="md-nav__link">
+        (R)UP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/05-planning/" class="md-nav__link">
+        Project Planning and Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/06-risk-management/" class="md-nav__link">
+        Risk Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/07-quality/" class="md-nav__link">
+        Quality Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/9ba-test/" class="md-nav__link">
+        Test
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_4_9" type="checkbox" id="__nav_4_4_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4_9" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_4_9">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/" class="md-nav__link">
+        Exam Questions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/01-waterfall/" class="md-nav__link">
+        1. Software process models: waterfall
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/02-incremental-iterative/" class="md-nav__link">
+        2. Software process model: incremental and iterative
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/03-integration-configuration/" class="md-nav__link">
+        3. Software process model: integration & configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/04-plandriven-vs-agile/" class="md-nav__link">
+        4. Comparison of plan-driven and agile SOE processes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/05-scrum/" class="md-nav__link">
+        5. Key features of Scrum
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/06-rup/" class="md-nav__link">
+        6. Key features of RUP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/07-requirements/" class="md-nav__link">
+        7. Requirements Elicitation and Managing change to requirements
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/08-quality-control/" class="md-nav__link">
+        8. Quality Control: Verification and Validation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/09-risk-management/" class="md-nav__link">
+        9. Risk Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/10-project-planning-management/" class="md-nav__link">
+        10. Project Planning and Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/11-quality-management/" class="md-nav__link">
+        11. Quality Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/12-configuration-management/" class="md-nav__link">
+        12. Configuration Management
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="false">
+          6 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="6 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          6 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2" tabindex="0" aria-expanded="false">
+          AALG
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="AALG" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          AALG
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/01-dc/" class="md-nav__link">
+        Dynamic Programming
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/02-dp-all-pairs-shortest-paths/" class="md-nav__link">
+        All-pairs Shortest Paths (Dynamic Programming)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/03-flow-networks/" class="md-nav__link">
+        Flow Networks and Maximum Flow
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/04-greedy-algorithms/" class="md-nav__link">
+        Greedy Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/05-amortized-analysis/" class="md-nav__link">
+        Amortized Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/06-computational-geometry-sweeping/" class="md-nav__link">
+        Computational Geometry Algorithms: Sweeping Techniques
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/08-computational-geometry-range-searching/" class="md-nav__link">
+        Computational Geometry Data Structures: Range Searching
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/10-multithreaded-algorithms/" class="md-nav__link">
+        Multithreaded Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/11-approximation/" class="md-nav__link">
+        Approximation for NP-complete Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/12-backtracking/" class="md-nav__link">
+        Backtracking and Branch-and-Bound
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2_12" type="checkbox" id="__nav_5_2_12" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2_12" tabindex="0" aria-expanded="false">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Guides" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_2_12">
+          <span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/amortized-analysis/" class="md-nav__link">
+        Amortized Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/approx-and-parallel/" class="md-nav__link">
+        Approximation and Parallelism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/flow-networks/" class="md-nav__link">
+        Flow Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/graphs/" class="md-nav__link">
+        Graphs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/others/" class="md-nav__link">
+        Others
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/range-queries/" class="md-nav__link">
+        Range Queries and Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/sweeping/" class="md-nav__link">
+        Sweeping
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2_12_8" type="checkbox" id="__nav_5_2_12_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2_12_8" tabindex="0" aria-expanded="false">
+          Year based old
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Year based old" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_2_12_8">
+          <span class="md-nav__icon md-icon"></span>
+          Year based old
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/year-based-old/2015/" class="md-nav__link">
+        2015
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/year-based-old/2016/" class="md-nav__link">
+        2016
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/year-based-old/2017/" class="md-nav__link">
+        2017
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3" tabindex="0" aria-expanded="false">
+          DBS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="DBS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          DBS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/02-relational-model-and-relational-algebra/" class="md-nav__link">
+        Relational Model and Relational Algebra
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/03-entity-relationship-model/" class="md-nav__link">
+        The Entity Relationship Model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/04-relational-database-theory/" class="md-nav__link">
+        Relational Database Design Theory
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/05-sql/" class="md-nav__link">
+        SQL
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/06-transactions/" class="md-nav__link">
+        Transactions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/07-physical-dbs/" class="md-nav__link">
+        Physical Design
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/08-query-optimization/" class="md-nav__link">
+        Query Processing and Optimization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_3_10" type="checkbox" id="__nav_5_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3_10" tabindex="0" aria-expanded="false">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Guides" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/logical-query-optimization/" class="md-nav__link">
+        Logical (Heuristic) Query Optimization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/lossless-decomposition-and-dependency-preservation/" class="md-nav__link">
+        Lossless Decomposition and Dependency Preservation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/mapping-er-to-relations/" class="md-nav__link">
+        Mapping ER to Relations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/minimal-cover/" class="md-nav__link">
+        Calculate Minimal Cover (Canonical Cover)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/normal-form/" class="md-nav__link">
+        Determine Relational Schema Normal Form
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" tabindex="0" aria-expanded="true">
+          7 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="7 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          7 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_2" type="checkbox" id="__nav_6_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_2" tabindex="0" aria-expanded="true">
+          DS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="DS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_2">
+          <span class="md-nav__icon md-icon"></span>
+          DS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-os-and-networking-fundamentals/" class="md-nav__link">
+        OS and Networking Fundamentals
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Mutual Exclusion (Mutex) and Election
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Mutual Exclusion (Mutex) and Election
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#system-model" class="md-nav__link">
+    System Model
+  </a>
+  
+    <nav class="md-nav" aria-label="System Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    Events
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-models" class="md-nav__link">
+    Network Models
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assumptions" class="md-nav__link">
+    Assumptions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mutex-algorithms" class="md-nav__link">
+    Mutex Algorithms
+  </a>
+  
+    <nav class="md-nav" aria-label="Mutex Algorithms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#centralized-algorithm" class="md-nav__link">
+    Centralized Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="Centralized Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code" class="md-nav__link">
+    Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_1" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token-ring-algorithm" class="md-nav__link">
+    Token Ring Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="Token Ring Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code_1" class="md-nav__link">
+    Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_2" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ricard-and-agrawalas-algorithm" class="md-nav__link">
+    Ricard and Agrawala's Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="Ricard and Agrawala's Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lamport-clocks" class="md-nav__link">
+    Lamport Clocks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#protocol-pseudo-code" class="md-nav__link">
+    Protocol Pseudo Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elixir-code" class="md-nav__link">
+    Elixir Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_3" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maekawas-algorithm" class="md-nav__link">
+    Maekawas Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="Maekawas Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#voting-set" class="md-nav__link">
+    Voting Set
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code_2" class="md-nav__link">
+    Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problem" class="md-nav__link">
+    Problem
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_4" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#heartbeat" class="md-nav__link">
+    Heartbeat
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#leader-election" class="md-nav__link">
+    Leader Election
+  </a>
+  
+    <nav class="md-nav" aria-label="Leader Election">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requirements_1" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assumptions_1" class="md-nav__link">
+    Assumptions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chang-roberts" class="md-nav__link">
+    Chang Roberts
+  </a>
+  
+    <nav class="md-nav" aria-label="Chang Roberts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#idea" class="md-nav__link">
+    Idea
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code_3" class="md-nav__link">
+    Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_5" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bully-algorithm" class="md-nav__link">
+    Bully Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="Bully Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#idea_1" class="md-nav__link">
+    Idea
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code_4" class="md-nav__link">
+    Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_6" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beware" class="md-nav__link">
+    Beware
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-multicast/" class="md-nav__link">
+        Multicast
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-consensus/" class="md-nav__link">
+        Consensus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06a-replication/" class="md-nav__link">
+        Replication and Consistency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06b-transactions/" class="md-nav__link">
+        Transactions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-wireless/" class="md-nav__link">
+        Wireless Sensor Networks and Internet of Things
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-peer-to-peer/" class="md-nav__link">
+        Peer to Peer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-cluster-storage/" class="md-nav__link">
+        Cluster Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-blockchain/" class="md-nav__link">
+        Blockchain
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-big-data-analytics/" class="md-nav__link">
+        Big Data Analytics
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-soa/" class="md-nav__link">
+        Service-oriented Architectures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_2_15" type="checkbox" id="__nav_6_2_15" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_2_15" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_2_15">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/1-distributed-mutex/" class="md-nav__link">
+        Question 1 - Distributed Mutual Exclusion
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/2-multicast/" class="md-nav__link">
+        Question 2 - Multicast
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/3-replication-and-consistency/" class="md-nav__link">
+        Question 3 - Replication and Consistency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/4-consensus/" class="md-nav__link">
+        Question 4: Consensus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/5-clustered-storage/" class="md-nav__link">
+        Question 5 - Clustered Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/6-big-data-processing/" class="md-nav__link">
+        Question 6 - Big Data Processing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/7-iot-routing/" class="md-nav__link">
+        Question 7 - Internet of Things Routing (Directed Diffusion, Tree Routing in ZigBee, AODV, DSR)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/8-peer-to-peer/" class="md-nav__link">
+        Question 8 - Peer to Peer (Gnutella, Chord)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/9-blockchain/" class="md-nav__link">
+        Question 9 - Blockchain (Tamper-free linked lists, Nakamoto Consensus, proof of work, transactions in Merkle trees)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3" type="checkbox" id="__nav_6_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3" tabindex="0" aria-expanded="false">
+          PP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="PP" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_3">
+          <span class="md-nav__icon md-icon"></span>
+          PP
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3_2" type="checkbox" id="__nav_6_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3_2" tabindex="0" aria-expanded="false">
+          Logic
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Logic" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Logic
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/Logic/semantics/" class="md-nav__link">
+        Semantics of Datalog / Prolog
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3_3" type="checkbox" id="__nav_6_3_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3_3" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/" class="md-nav__link">
+        PP Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/datalog-and-prolog/" class="md-nav__link">
+        Datalog and Prolog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/haskell/" class="md-nav__link">
+        Haskell
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/scheme/" class="md-nav__link">
+        Scheme
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3_3_5" type="checkbox" id="__nav_6_3_3_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3_3_5" tabindex="0" aria-expanded="false">
+          Solutions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Solutions" data-md-level="4">
+        <label class="md-nav__title" for="__nav_6_3_3_5">
+          <span class="md-nav__icon md-icon"></span>
+          Solutions
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/solutions/01-scheme/" class="md-nav__link">
+        Scheme Exercises
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/solutions/02-haskell/" class="md-nav__link">
+        Haskell Exercises
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/solutions/03-datalog-prolog/" class="md-nav__link">
+        Datalog and Prolog Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4" tabindex="0" aria-expanded="false">
+          WI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="WI" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          WI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/01-introduction-and-crawlers/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/02-index-construction/" class="md-nav__link">
+        Index Construction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/03-content-based-ranking/" class="md-nav__link">
+        Content-based Ranking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/04-structure-based-ranking/" class="md-nav__link">
+        Structure-based Ranking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/05-recommender-systems/" class="md-nav__link">
+        Recommender Systems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/06-recommender-systems-2/" class="md-nav__link">
+        Recommender Systems 2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/07-network-structure-and-communities/" class="md-nav__link">
+        Network Structure and Communities
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/08-communities-and-information-diffusion/" class="md-nav__link">
+        Communities and Information Diffusion
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/09%2B10-node-classification/" class="md-nav__link">
+        Node Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_4_11" type="checkbox" id="__nav_6_4_11" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4_11" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/exam/" class="md-nav__link">
+        WI Exam
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" tabindex="0" aria-expanded="false">
+          8 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="8 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          8 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" tabindex="0" aria-expanded="false">
+          MDLS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="MDLS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          MDLS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/MDLS/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_3" type="checkbox" id="__nav_7_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_3" tabindex="0" aria-expanded="false">
+          mHCI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="mHCI" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          mHCI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/01-introduction/" class="md-nav__link">
+        mHCI Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/02-concepts-and-context/" class="md-nav__link">
+        MCHI Concepts and Understanding Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/08-introduction-to-quantitive-studies/" class="md-nav__link">
+        	Introduction to Quantitative Studies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/09-lab-experiments/" class="md-nav__link">
+        Lab Experiments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/10-field-experiments/" class="md-nav__link">
+        Field Experiments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/99-exam/" class="md-nav__link">
+        Exam Questions
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" tabindex="0" aria-expanded="false">
+          sP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="sP" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          sP
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/02-fundamentals/" class="md-nav__link">
+        Fundamentals
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/03-initialization/" class="md-nav__link">
+        Initialization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/04-raii/" class="md-nav__link">
+        Classes Continued
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/05-pimpl/" class="md-nav__link">
+        PIMPL Idiom and Dynamic Polymorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/06-double-dispatch/" class="md-nav__link">
+        Double Dispatch
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/07-generic-programming/" class="md-nav__link">
+        Generic Programming
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/10-lambda/" class="md-nav__link">
+        Lambda Expressions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/10-rval-and-forward/" class="md-nav__link">
+        Rvalue and Forwarding References
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/11-concurrency/" class="md-nav__link">
+        Concurrency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/99-exam/" class="md-nav__link">
+        Exam Notes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#system-model" class="md-nav__link">
+    System Model
+  </a>
+  
+    <nav class="md-nav" aria-label="System Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#events" class="md-nav__link">
+    Events
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-models" class="md-nav__link">
+    Network Models
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assumptions" class="md-nav__link">
+    Assumptions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mutex-algorithms" class="md-nav__link">
+    Mutex Algorithms
+  </a>
+  
+    <nav class="md-nav" aria-label="Mutex Algorithms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#centralized-algorithm" class="md-nav__link">
+    Centralized Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="Centralized Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code" class="md-nav__link">
+    Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_1" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#token-ring-algorithm" class="md-nav__link">
+    Token Ring Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="Token Ring Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code_1" class="md-nav__link">
+    Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_2" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ricard-and-agrawalas-algorithm" class="md-nav__link">
+    Ricard and Agrawala's Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="Ricard and Agrawala's Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lamport-clocks" class="md-nav__link">
+    Lamport Clocks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#protocol-pseudo-code" class="md-nav__link">
+    Protocol Pseudo Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elixir-code" class="md-nav__link">
+    Elixir Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_3" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maekawas-algorithm" class="md-nav__link">
+    Maekawas Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="Maekawas Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#voting-set" class="md-nav__link">
+    Voting Set
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code_2" class="md-nav__link">
+    Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problem" class="md-nav__link">
+    Problem
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_4" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#heartbeat" class="md-nav__link">
+    Heartbeat
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#leader-election" class="md-nav__link">
+    Leader Election
+  </a>
+  
+    <nav class="md-nav" aria-label="Leader Election">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#requirements_1" class="md-nav__link">
+    Requirements
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assumptions_1" class="md-nav__link">
+    Assumptions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chang-roberts" class="md-nav__link">
+    Chang Roberts
+  </a>
+  
+    <nav class="md-nav" aria-label="Chang Roberts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#idea" class="md-nav__link">
+    Idea
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code_3" class="md-nav__link">
+    Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_5" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bully-algorithm" class="md-nav__link">
+    Bully Algorithm
+  </a>
+  
+    <nav class="md-nav" aria-label="Bully Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#idea_1" class="md-nav__link">
+    Idea
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code_4" class="md-nav__link">
+    Code
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties_6" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#beware" class="md-nav__link">
+    Beware
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+<h1 id="mutual-exclusion-mutex-and-election">Mutual Exclusion (Mutex) and Election<a class="headerlink" href="#mutual-exclusion-mutex-and-election" title="Permanent link">&para;</a></h1>
+<p><strong>Mutual exclusion</strong> algorithms ensures that <strong>one and only one</strong> process can access a shared resource at any given time.</p>
+<p><strong>Examples</strong></p>
+<ul>
+<li>Printing</li>
+<li>Using Coffee Machine</li>
+<li>Writing a file</li>
+<li>Changing an actuator<ul>
+<li>Arm of robot</li>
+</ul>
+</li>
+<li>Wireless communication</li>
+<li>Wired communication</li>
+</ul>
+<h2 id="system-model">System Model<a class="headerlink" href="#system-model" title="Permanent link">&para;</a></h2>
+<p>What is a (computer science) process?</p>
+<p>A process <span class="arithmatex"><span class="MathJax_Preview">p=(S,s_i, M, \to)</span><script type="math/tex">p=(S,s_i, M, \to)</script></span> in a set of processes <span class="arithmatex"><span class="MathJax_Preview">p\in P</span><script type="math/tex">p\in P</script></span> has</p>
+<ul>
+<li>a set of states <span class="arithmatex"><span class="MathJax_Preview">S</span><script type="math/tex">S</script></span></li>
+<li>an initial state <span class="arithmatex"><span class="MathJax_Preview">s_i\in S</span><script type="math/tex">s_i\in S</script></span></li>
+<li>a set of messages <span class="arithmatex"><span class="MathJax_Preview">M</span><script type="math/tex">M</script></span><ul>
+<li>including the empty message <span class="arithmatex"><span class="MathJax_Preview">\epsilon \in M</span><script type="math/tex">\epsilon \in M</script></span></li>
+</ul>
+</li>
+<li>and a transition function <span class="arithmatex"><span class="MathJax_Preview">\to \subseteq S \times M \mapsto S \times 2^{P\times M}</span><script type="math/tex">\to \subseteq S \times M \mapsto S \times 2^{P\times M}</script></span></li>
+</ul>
+<h3 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Pinger</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="kd">def</span><span class="w"> </span><span class="n">start_link</span><span class="p">()</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nc">Task</span><span class="o">.</span><span class="n">start_link</span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">loop</span><span class="p">()</span><span class="w"> </span><span class="k">end</span><span class="p">)</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="kd">defp</span><span class="w"> </span><span class="n">loop</span><span class="p">(</span><span class="n">output_ping</span><span class="w"> </span><span class="p">\\</span><span class="w"> </span><span class="no">false</span><span class="p">)</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="n">recieve</span><span class="w"> </span><span class="k">do</span>
+<span class="w">      </span><span class="p">{</span><span class="ss">:ping</span><span class="p">}</span><span class="w"> </span><span class="o">-&gt;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">output_ping</span><span class="w"> </span><span class="k">do</span>
+<span class="w">          </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p">(</span><span class="s2">&quot;ping&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="w">          </span><span class="nc">IO</span><span class="o">.</span><span class="n">puts</span><span class="p">(</span><span class="s2">&quot;pong&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">end</span>
+<span class="w">        </span><span class="n">loop</span><span class="p">(</span><span class="o">!</span><span class="n">output_ping</span><span class="p">)</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li><span class="arithmatex"><span class="MathJax_Preview">S=\{loop(output\_ping = true), loop(output\_ping = false)\}</span><script type="math/tex">S=\{loop(output\_ping = true), loop(output\_ping = false)\}</script></span></li>
+<li><span class="arithmatex"><span class="MathJax_Preview">s_i=\{(output\_ping = false\}</span><script type="math/tex">s_i=\{(output\_ping = false\}</script></span></li>
+<li><span class="arithmatex"><span class="MathJax_Preview">M=\{:ping\}</span><script type="math/tex">M=\{:ping\}</script></span></li>
+<li><span class="arithmatex"><span class="MathJax_Preview">\to\ = recieve</span><script type="math/tex">\to\ = recieve</script></span></li>
+</ul>
+<h3 id="events">Events<a class="headerlink" href="#events" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Computation is fast</li>
+<li>Communication is slow</li>
+</ul>
+<p><strong>Measure of Performance</strong></p>
+<p>Time is counted in number of messages/events</p>
+<h3 id="network-models">Network Models<a class="headerlink" href="#network-models" title="Permanent link">&para;</a></h3>
+<p><strong>Asynchronous</strong></p>
+<ul>
+<li>Arbitrary delays</li>
+<li>Unknown processing time</li>
+</ul>
+<p><img alt="image-20210108093039262" src="../images/03-mutex/image-20210108093039262.png" /></p>
+<p><strong>Synchronous</strong></p>
+<ul>
+<li>Known delays<ul>
+<li>or hard limits of them</li>
+</ul>
+</li>
+<li>Known drift</li>
+</ul>
+<p><img alt="image-20210108093050607" src="../images/03-mutex/image-20210108093050607.png" /></p>
+<p><img alt="image-20210108093111842" src="../images/03-mutex/image-20210108093111842.png" /></p>
+<p><strong>Figure</strong>: Properties of the network can lead to confusion for Alice</p>
+<h3 id="assumptions">Assumptions<a class="headerlink" href="#assumptions" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Processe have <strong>Crash Failures</strong><ul>
+<li>Stays dead</li>
+</ul>
+</li>
+<li>Direct Communication<ul>
+<li>Transparent routing</li>
+<li>No forwarding</li>
+</ul>
+</li>
+<li>Reliable Communication<ul>
+<li>Synchronous<ul>
+<li>Delivery within fixed timeframe</li>
+</ul>
+</li>
+<li>Asynchronous<ul>
+<li>Delivery at at some point</li>
+<li>Underlying protocol handles re-transmission etc.</li>
+</ul>
+</li>
+<li>Partitions are fixed eventually</li>
+</ul>
+</li>
+</ul>
+<p><img alt="image-20210108093201243" src="../images/03-mutex/image-20210108093201243.png" /></p>
+<h2 id="mutex-algorithms">Mutex Algorithms<a class="headerlink" href="#mutex-algorithms" title="Permanent link">&para;</a></h2>
+<h3 id="requirements"><strong>Requirements</strong><a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Safety</strong><ul>
+<li>at most one is given access</li>
+</ul>
+</li>
+<li><strong>Liveness</strong><ul>
+<li>Requests for access are (eventually) granted</li>
+</ul>
+</li>
+<li><strong>Ordering/Fairness</strong><ul>
+<li>A request <span class="arithmatex"><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> <strong>happened-before</strong> request <span class="arithmatex"><span class="MathJax_Preview">B</span><script type="math/tex">B</script></span>
+    <span class="arithmatex"><span class="MathJax_Preview">\Rightarrow</span><script type="math/tex">\Rightarrow</script></span> grant <span class="arithmatex"><span class="MathJax_Preview">A</span><script type="math/tex">A</script></span> before <span class="arithmatex"><span class="MathJax_Preview">B</span><script type="math/tex">B</script></span></li>
+</ul>
+</li>
+</ol>
+<h3 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Fault tolerance<ul>
+<li>What happens when a process crashes?</li>
+</ul>
+</li>
+<li>Performance<ul>
+<li>Message Complexity<ul>
+<li>How many messages to get mutex?</li>
+<li>How many to release? </li>
+</ul>
+</li>
+<li>Client Delay<ul>
+<li>Time from a request <span class="arithmatex"><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span> to a grant of <span class="arithmatex"><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span></li>
+</ul>
+</li>
+<li>Synchronization Delay<ul>
+<li>Time from a release of <span class="arithmatex"><span class="MathJax_Preview">R</span><script type="math/tex">R</script></span> to a grant of the next request <span class="arithmatex"><span class="MathJax_Preview">Q</span><script type="math/tex">Q</script></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img alt="image-20210108093302308" src="../images/03-mutex/image-20210108093302308.png" /></p>
+<h3 id="centralized-algorithm">Centralized Algorithm<a class="headerlink" href="#centralized-algorithm" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Assume one external coordinator<ul>
+<li>Coordinator has ordered queue</li>
+</ul>
+</li>
+<li>Ask coordinator for access</li>
+</ul>
+<h4 id="code">Code<a class="headerlink" href="#code" title="Permanent link">&para;</a></h4>
+<p><img alt="image-20210108093620405" src="../images/03-mutex/image-20210108093347789.png" /></p>
+<h4 id="properties_1">Properties<a class="headerlink" href="#properties_1" title="Permanent link">&para;</a></h4>
+<p><strong>Requirements</strong></p>
+<ul>
+<li>Safe: Yes</li>
+<li>Liveness: Yes</li>
+<li>Ordering: No!</li>
+</ul>
+<p><strong>Properties</strong></p>
+<ul>
+<li>Client Delay<ul>
+<li>Entry: 2 (request + grant)</li>
+<li>Exit: 1</li>
+</ul>
+</li>
+<li>Synchronization Delay<ul>
+<li>2 (release + grant)</li>
+</ul>
+</li>
+<li>Bandwidth: 3</li>
+</ul>
+<p><strong>Fault Tolerance</strong></p>
+<ul>
+<li>Deadlock if Coordinator fails </li>
+<li>Deadlock if mutex-holder fails</li>
+</ul>
+<h3 id="token-ring-algorithm">Token Ring Algorithm<a class="headerlink" href="#token-ring-algorithm" title="Permanent link">&para;</a></h3>
+<p><strong>Idea</strong></p>
+<ul>
+<li>Send token around in a ring<ul>
+<li>Assumes ordering of processes</li>
+</ul>
+</li>
+<li>Forward token to "next" if not using mutex</li>
+<li>Enter mutex if token is acquired</li>
+</ul>
+<h4 id="code_1">Code<a class="headerlink" href="#code_1" title="Permanent link">&para;</a></h4>
+<p><img alt="code-tokenring" src="../images/03-mutex/image-20210108093613748.png" /></p>
+<h4 id="properties_2">Properties<a class="headerlink" href="#properties_2" title="Permanent link">&para;</a></h4>
+<p><strong>Requirements</strong> </p>
+<ul>
+<li>Safe: Yes</li>
+<li>Liveness: Yes</li>
+<li>Ordering: No (order by ring)</li>
+</ul>
+<p><strong>Properties</strong></p>
+<ul>
+<li>Client Delay<ul>
+<li>Entry: <span class="arithmatex"><span class="MathJax_Preview">n/2</span><script type="math/tex">n/2</script></span> avg, <span class="arithmatex"><span class="MathJax_Preview">n − 1</span><script type="math/tex">n − 1</script></span> worst case</li>
+<li>Exit: 1</li>
+</ul>
+</li>
+<li>Synchronization Delay<ul>
+<li><span class="arithmatex"><span class="MathJax_Preview">n/2</span><script type="math/tex">n/2</script></span> avg, <span class="arithmatex"><span class="MathJax_Preview">n-1</span><script type="math/tex">n-1</script></span> worst case</li>
+</ul>
+</li>
+<li>Bandwidth: <span class="arithmatex"><span class="MathJax_Preview">\infty</span><script type="math/tex">\infty</script></span></li>
+</ul>
+<p><strong>Fault Tolerance</strong></p>
+<ul>
+<li>Deadlock if any process fail</li>
+<li>Can be recovered if crash can be detected reliably</li>
+</ul>
+<h3 id="ricard-and-agrawalas-algorithm">Ricard and Agrawala's Algorithm<a class="headerlink" href="#ricard-and-agrawalas-algorithm" title="Permanent link">&para;</a></h3>
+<p><strong>Idea</strong></p>
+<ul>
+<li>Order events!<ul>
+<li>Extension of shared priority queue (Lamport '78)</li>
+</ul>
+</li>
+<li>Basic algorithm<ul>
+<li>Request all for access</li>
+<li>Wait for all to grant</li>
+</ul>
+</li>
+</ul>
+<p><strong>Secret Ingredient</strong></p>
+<ul>
+<li>Lamport clocks</li>
+</ul>
+<h4 id="lamport-clocks">Lamport Clocks<a class="headerlink" href="#lamport-clocks" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Counter number of messages/events</li>
+<li>Annotate messages with clock</li>
+<li>Increment local before send</li>
+<li>"Correct" local clock on receive, then increment<ul>
+<li><span class="arithmatex"><span class="MathJax_Preview">\max(A,B)+1</span><script type="math/tex">\max(A,B)+1</script></span></li>
+</ul>
+</li>
+</ul>
+<p><img alt="image-20210108094154541" src="../images/03-mutex/image-20210108094154541.png" /></p>
+<h4 id="protocol-pseudo-code">Protocol Pseudo Code<a class="headerlink" href="#protocol-pseudo-code" title="Permanent link">&para;</a></h4>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code>On initialization
+    state := RELEASED
+
+To get mutex
+    state := WANTED                                             # 
+    Multicast request to every process      #   defer other request here
+    T := request&#39;s timestamp                            #
+    wait until (len(replies received) = (N - 1))
+    state := HELD
+
+On request &lt;T_i, p_i&gt; at p_j (i != j)
+    if (state = HELD or (state = WANTED and (T,p_j) &lt; (T_i, p_i)))
+    then
+        queue request from p_i without reply
+  else
+    reply immediately to p_i
+  end if
+
+To exit mutex
+    state := RELEASED
+    reply to any queued requests
+</code></pre></div></td></tr></table></div>
+<h4 id="elixir-code">Elixir Code<a class="headerlink" href="#elixir-code" title="Permanent link">&para;</a></h4>
+<p><img alt="image-20210108094241171" src="../images/03-mutex/image-20210108094241171.png" /></p>
+<h4 id="properties_3">Properties<a class="headerlink" href="#properties_3" title="Permanent link">&para;</a></h4>
+<p><strong>Requirements</strong></p>
+<ul>
+<li>Safe: Yes</li>
+<li>Liveness: Yes</li>
+<li>Ordering: Yes</li>
+</ul>
+<p><strong>Properties</strong></p>
+<ul>
+<li>Client delay:<ul>
+<li>Entry: 1 (multicast) + 1</li>
+<li>Exit: 1 (multicast) + 1</li>
+</ul>
+</li>
+<li>Synchronization delay<ul>
+<li>1</li>
+</ul>
+</li>
+<li>Bandwidth: <span class="arithmatex"><span class="MathJax_Preview">2(n-1)</span><script type="math/tex">2(n-1)</script></span> if no hardware multicast</li>
+</ul>
+<p><strong>Fault Tolerance</strong></p>
+<ul>
+<li>Deadlock if any process fails</li>
+</ul>
+<h3 id="maekawas-algorithm">Maekawas Algorithm<a class="headerlink" href="#maekawas-algorithm" title="Permanent link">&para;</a></h3>
+<p><strong>Idea</strong></p>
+<ul>
+<li>only communicate with a subset (Voting Set <span class="arithmatex"><span class="MathJax_Preview">V</span><script type="math/tex">V</script></span>)</li>
+<li>pick <span class="arithmatex"><span class="MathJax_Preview">V</span><script type="math/tex">V</script></span> cleverly</li>
+<li>Basic algorithm<ul>
+<li>Ask everybody in <span class="arithmatex"><span class="MathJax_Preview">V</span><script type="math/tex">V</script></span> for access</li>
+<li>Wait for all to grant</li>
+</ul>
+</li>
+</ul>
+<p><img alt="image-20210108094818797" src="../images/03-mutex/image-20210108094818797.png" /></p>
+<ul>
+<li>
+<p>Voting set of <span class="arithmatex"><span class="MathJax_Preview">p_{14}= \{p_2, p_8, p_{13}, p_{14}, p_{15}, p_{16}, p_{17}, p_{18}, p_{20}, p_{26}, p_{32}\}</span><script type="math/tex">p_{14}= \{p_2, p_8, p_{13}, p_{14}, p_{15}, p_{16}, p_{17}, p_{18}, p_{20}, p_{26}, p_{32}\}</script></span></p>
+</li>
+<li>
+<p>Voting set of <span class="arithmatex"><span class="MathJax_Preview">p_{29} = \{p_5, p_{11}, p_{17}, p_{23}, p_{25}, p_{26}, p_{27}, p_{28}, p_{29}, p_{30}, p_{35}\}</span><script type="math/tex">p_{29} = \{p_5, p_{11}, p_{17}, p_{23}, p_{25}, p_{26}, p_{27}, p_{28}, p_{29}, p_{30}, p_{35}\}</script></span></p>
+</li>
+</ul>
+<p>Notice</p>
+<ul>
+<li>Non-trivial to compute optimal sets</li>
+</ul>
+<h4 id="voting-set">Voting Set<a class="headerlink" href="#voting-set" title="Permanent link">&para;</a></h4>
+<p>Let <span class="arithmatex"><span class="MathJax_Preview">P=\{p_0, \dots, p_n\}</span><script type="math/tex">P=\{p_0, \dots, p_n\}</script></span> be a set of processes, then <span class="arithmatex"><span class="MathJax_Preview">V_i \subseteq P</span><script type="math/tex">V_i \subseteq P</script></span> is a voting set for <span class="arithmatex"><span class="MathJax_Preview">p_i \in P</span><script type="math/tex">p_i \in P</script></span> if</p>
+<ul>
+<li>any <span class="arithmatex"><span class="MathJax_Preview">p_i \in P</span><script type="math/tex">p_i \in P</script></span> has a <span class="arithmatex"><span class="MathJax_Preview">V_i</span><script type="math/tex">V_i</script></span>, and<ul>
+<li><span class="arithmatex"><span class="MathJax_Preview">p_i \in V_i</span><script type="math/tex">p_i \in V_i</script></span>,<ul>
+<li><strong>Every process has a voting set and is member of its own voting set</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>for all <span class="arithmatex"><span class="MathJax_Preview">i,j</span><script type="math/tex">i,j</script></span> we have <span class="arithmatex"><span class="MathJax_Preview">V_i \cap V_j \neq \empty</span><script type="math/tex">V_i \cap V_j \neq \empty</script></span><ul>
+<li><strong>At least one shared process between two voting sets</strong></li>
+</ul>
+</li>
+<li>for any <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span> we have <span class="arithmatex"><span class="MathJax_Preview">|V_i| = K</span><script type="math/tex">|V_i| = K</script></span>,<ul>
+<li><strong>All voting sets have the same size</strong></li>
+</ul>
+</li>
+<li>for any <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span> we have <span class="arithmatex"><span class="MathJax_Preview">|\{V_k \mid p_i \in V_k\}| = M</span><script type="math/tex">|\{V_k \mid p_i \in V_k\}| = M</script></span><ul>
+<li><strong>All processes are members of the same number of voting sets</strong></li>
+</ul>
+</li>
+<li><span class="arithmatex"><span class="MathJax_Preview">M=K</span><script type="math/tex">M=K</script></span> and <span class="arithmatex"><span class="MathJax_Preview">K \geq \sqrt{n-1}</span><script type="math/tex">K \geq \sqrt{n-1}</script></span></li>
+</ul>
+<h4 id="code_2">Code<a class="headerlink" href="#code_2" title="Permanent link">&para;</a></h4>
+<p><img alt="image-20210108095633472" src="../images/03-mutex/image-20210108095633472.png" /></p>
+<h4 id="problem">Problem<a class="headerlink" href="#problem" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Deadlock</strong> can happen with three processes!</li>
+<li>Can be solved by using <strong>Lamport Clocks</strong></li>
+</ul>
+<h4 id="properties_4">Properties<a class="headerlink" href="#properties_4" title="Permanent link">&para;</a></h4>
+<p><strong>Requirements</strong></p>
+<ul>
+<li>Safe: Yes</li>
+<li>Liveness: Yes</li>
+<li>Ordering: Yes</li>
+</ul>
+<p><strong>Properties</strong></p>
+<ul>
+<li>Client delay<ul>
+<li>Entry: 2 (multicast)</li>
+<li>Exit: 1 (multicast)</li>
+</ul>
+</li>
+<li>Synchronization delay<ul>
+<li>2, <em>any two voting sets overlap</em></li>
+</ul>
+</li>
+<li>Bandwidth: <span class="arithmatex"><span class="MathJax_Preview">3 \sqrt n</span><script type="math/tex">3 \sqrt n</script></span> if no hardware multicast</li>
+</ul>
+<p><strong>Fault tolerance</strong></p>
+<ul>
+<li>Deadlock in voting-set if process crashes</li>
+</ul>
+<h3 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Messages Entry/Exit</th>
+<th>Sync Delay</th>
+<th>Problems</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Central</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">3</span><script type="math/tex">3</script></span></td>
+<td><span class="arithmatex"><span class="MathJax_Preview">2</span><script type="math/tex">2</script></span></td>
+<td>Coord. Crash, Client Crash w. mutex</td>
+</tr>
+<tr>
+<td>Token ring</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">1...\infty</span><script type="math/tex">1...\infty</script></span></td>
+<td>avg <span class="arithmatex"><span class="MathJax_Preview">n / 2</span><script type="math/tex">n / 2</script></span></td>
+<td>Lost token, Crash of process</td>
+</tr>
+<tr>
+<td>R &amp; A</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">2(n-1)</span><script type="math/tex">2(n-1)</script></span></td>
+<td><span class="arithmatex"><span class="MathJax_Preview">1</span><script type="math/tex">1</script></span></td>
+<td>Crash of any process</td>
+</tr>
+<tr>
+<td>Maekava</td>
+<td><span class="arithmatex"><span class="MathJax_Preview">3 \sqrt n</span><script type="math/tex">3 \sqrt n</script></span></td>
+<td><span class="arithmatex"><span class="MathJax_Preview">2</span><script type="math/tex">2</script></span></td>
+<td>Crash in voting-set = deadlock</td>
+</tr>
+</tbody>
+</table>
+<h3 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Crashes are bad</li>
+<li>Mitigation is non-trivial</li>
+<li>Detection is hard too</li>
+</ul>
+<h2 id="heartbeat">Heartbeat<a class="headerlink" href="#heartbeat" title="Permanent link">&para;</a></h2>
+<p><strong>For synchronized systems</strong></p>
+<ul>
+<li>Assume transmission delay <span class="arithmatex"><span class="MathJax_Preview">D</span><script type="math/tex">D</script></span></li>
+<li>Send "beat" every <span class="arithmatex"><span class="MathJax_Preview">T</span><script type="math/tex">T</script></span> seconds</li>
+<li>Declared dead if not observed in last <span class="arithmatex"><span class="MathJax_Preview">T+D</span><script type="math/tex">T+D</script></span> seconds</li>
+</ul>
+<p><strong>For asynchronized systems</strong></p>
+<ul>
+<li>Guess a <span class="arithmatex"><span class="MathJax_Preview">D</span><script type="math/tex">D</script></span></li>
+<li>Send "beat" every <span class="arithmatex"><span class="MathJax_Preview">T</span><script type="math/tex">T</script></span> seconds</li>
+<li>Declared dead if not observed in last <span class="arithmatex"><span class="MathJax_Preview">T+D</span><script type="math/tex">T+D</script></span> seconds<ul>
+<li><span class="arithmatex"><span class="MathJax_Preview">D</span><script type="math/tex">D</script></span> too small <span class="arithmatex"><span class="MathJax_Preview">\Longrightarrow</span><script type="math/tex">\Longrightarrow</script></span> Inaccurate<ul>
+<li>alive reported dead</li>
+</ul>
+</li>
+<li><span class="arithmatex"><span class="MathJax_Preview">D</span><script type="math/tex">D</script></span> too large <span class="arithmatex"><span class="MathJax_Preview">\Longrightarrow</span><script type="math/tex">\Longrightarrow</script></span> Incomplete<ul>
+<li>dead reported alive (zombies!)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>We can only suspect a crash!</li>
+</ul>
+<h2 id="leader-election">Leader Election<a class="headerlink" href="#leader-election" title="Permanent link">&para;</a></h2>
+<p><strong>Leader election</strong> algorithms ensure that one, and <strong>only one</strong> process is elected as the <strong>leader</strong> in the event of <strong>lack of a leader</strong>.</p>
+<h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Algorithms with coordinator<ul>
+<li>Mutex?</li>
+</ul>
+</li>
+<li>Distributed replication</li>
+<li>DNS-servers in case of network partition</li>
+<li>Failover mechanism for crashes</li>
+<li>Parliaments?</li>
+</ul>
+<h3 id="requirements_1">Requirements<a class="headerlink" href="#requirements_1" title="Permanent link">&para;</a></h3>
+<p>Let <span class="arithmatex"><span class="MathJax_Preview">P=\{p_1, \dots, p_n\}</span><script type="math/tex">P=\{p_1, \dots, p_n\}</script></span> be a set of processes and let <span class="arithmatex"><span class="MathJax_Preview">L(p_i) \in P \cup \{\bot\}</span><script type="math/tex">L(p_i) \in P \cup \{\bot\}</script></span> be the leader as seen from a process <span class="arithmatex"><span class="MathJax_Preview">p_i</span><script type="math/tex">p_i</script></span></p>
+<ol>
+<li>Safety<ul>
+<li>either <span class="arithmatex"><span class="MathJax_Preview">L(p_i) = \bot</span><script type="math/tex">L(p_i) = \bot</script></span> or <span class="arithmatex"><span class="MathJax_Preview">L(p_i) = p_j</span><script type="math/tex">L(p_i) = p_j</script></span><ul>
+<li><span class="arithmatex"><span class="MathJax_Preview">p_j</span><script type="math/tex">p_j</script></span> is largest non-crashed process (in terms of <span class="arithmatex"><span class="MathJax_Preview">j</span><script type="math/tex">j</script></span>)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Liveness<ul>
+<li>All process participate, and either<ul>
+<li>a process crashes, or</li>
+<li><span class="arithmatex"><span class="MathJax_Preview">L(p_i) \neq \bot</span><script type="math/tex">L(p_i) \neq \bot</script></span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>Note</strong></p>
+<p>Processes can crash during the election</p>
+<h3 id="assumptions_1">Assumptions<a class="headerlink" href="#assumptions_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Processes stay dead</li>
+<li>Crashes are reliably detected</li>
+<li>Identifiers are unique</li>
+</ul>
+<h3 id="chang-roberts">Chang Roberts<a class="headerlink" href="#chang-roberts" title="Permanent link">&para;</a></h3>
+<h4 id="idea">Idea<a class="headerlink" href="#idea" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Pass token of largest ID in a ring</li>
+<li>Basic algorithm in election<ul>
+<li>Forward ID to "next" if higher than own</li>
+<li>Forward own ID to "next" otherwise</li>
+<li>Only one active election</li>
+</ul>
+</li>
+</ul>
+<h4 id="code_3">Code<a class="headerlink" href="#code_3" title="Permanent link">&para;</a></h4>
+<p><img alt="image-20210108152601289" src="../images/03-mutex/image-20210108152601289.png" /></p>
+<h4 id="properties_5">Properties<a class="headerlink" href="#properties_5" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Safe</li>
+<li>Live</li>
+<li><span class="arithmatex"><span class="MathJax_Preview">3N -1</span><script type="math/tex">3N -1</script></span> messages per election</li>
+</ul>
+<p><strong>Crashes?</strong></p>
+<ul>
+<li>Can be overcome if reliably detected</li>
+</ul>
+<h3 id="bully-algorithm">Bully Algorithm<a class="headerlink" href="#bully-algorithm" title="Permanent link">&para;</a></h3>
+<h4 id="idea_1">Idea<a class="headerlink" href="#idea_1" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Bully election requests into silence</li>
+<li>Priority by ID</li>
+<li>Basic algorithm in election<ul>
+<li>Send "shut up" to lower ID's</li>
+<li>Request election requests to higher ID's</li>
+<li>Highest alive ID broadcasts itself</li>
+</ul>
+</li>
+</ul>
+<p><strong>Note</strong></p>
+<ul>
+<li>Depends on Synchronous Behavior! </li>
+</ul>
+<h4 id="code_4">Code<a class="headerlink" href="#code_4" title="Permanent link">&para;</a></h4>
+<p><img alt="image-20210108152803575" src="../images/03-mutex/image-20210108152803575.png" /></p>
+<h4 id="properties_6">Properties<a class="headerlink" href="#properties_6" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Safe and Live, assuming<ul>
+<li>Unique ID's</li>
+<li>Failure detection is reliable</li>
+</ul>
+</li>
+<li>Best-case: <span class="arithmatex"><span class="MathJax_Preview">N-2</span><script type="math/tex">N-2</script></span> messages per election</li>
+<li>Worst-case: <span class="arithmatex"><span class="MathJax_Preview">O(N^2)</span><script type="math/tex">O(N^2)</script></span> messages</li>
+<li>Election-time: 2 rounds<ul>
+<li>assuming hardware multicast</li>
+</ul>
+</li>
+</ul>
+<h4 id="beware">Beware<a class="headerlink" href="#beware" title="Permanent link">&para;</a></h4>
+<p>Safety is broken if</p>
+<ul>
+<li>too tight deadline,</li>
+<li>process ID's reappear, or</li>
+<li>system is not synchronous</li>
+</ul>
+<p>I.e. does not work in Elixir: Requires</p>
+<ul>
+<li>synchronous system**, and</li>
+<li><strong>ordering of messages</strong></li>
+</ul>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 8, 2021</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+        <script src="../../../javascripts/extra.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

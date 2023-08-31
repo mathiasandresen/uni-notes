@@ -1,0 +1,5808 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Mathias Andresen">
+      
+      
+        <link rel="canonical" href="http://notes.mathiasandresen.dk/7-semester/WI/05-recommender-systems/">
+      
+      
+        <link rel="prev" href="../04-structure-based-ranking/">
+      
+      
+        <link rel="next" href="../06-recommender-systems-2/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
+    
+    
+      
+        <title>Recommender Systems - Uni Noter</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Open Sans";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#recommender-systems" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Uni Noter" class="md-header__button md-logo" aria-label="Uni Noter" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Uni Noter
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Recommender Systems
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mathiasandresen/uni-notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mathiasandresen/uni-notes
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Forside
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../3-semester/" class="md-tabs__link">
+        3 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../4-semester/" class="md-tabs__link">
+        4 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../5-semester/" class="md-tabs__link">
+        5 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../6-semester/" class="md-tabs__link">
+        6 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        7 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../8-semester/" class="md-tabs__link">
+        8 semester
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Uni Noter" class="md-nav__button md-logo" aria-label="Uni Noter" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82Z"/></svg>
+
+    </a>
+    Uni Noter
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mathiasandresen/uni-notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mathiasandresen/uni-notes
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Forside
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" tabindex="0" aria-expanded="false">
+          3 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="3 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          3 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" tabindex="0" aria-expanded="false">
+          AD1
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="AD1" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          AD1
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/02-analysing-algorithms/" class="md-nav__link">
+        Analysing Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/03-divide-and-conquer/" class="md-nav__link">
+        Divide-and-Conquer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/04-solving-recurrences/" class="md-nav__link">
+        Solving Recurrences
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/05-sorting-algorithms/" class="md-nav__link">
+        Sorting Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/06-heap-sort/" class="md-nav__link">
+        Heap Sort
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/07-data-structures/" class="md-nav__link">
+        Data Structures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/08a-hash-tables/" class="md-nav__link">
+        Hash Tables
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/08b-binary-search-tree/" class="md-nav__link">
+        Binary Search Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/09-dynamic-programming/" class="md-nav__link">
+        Dynamic Programming
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/10a-graph-theory/" class="md-nav__link">
+        Elementary graph algorithms (A)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/10b-graph-algorithms/" class="md-nav__link">
+        Elementary graph algorithms (B)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/10c-topological-sort/" class="md-nav__link">
+        Elementary graph algorithms (C) - Topological Sort
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/11a-strongly-connected-components/" class="md-nav__link">
+        Strongly Connected Components
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/11b-minimum-spanning-tree/" class="md-nav__link">
+        Minimum Spanning Tree
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/12-finding-shortest-paths/" class="md-nav__link">
+        Finding Shortest Paths
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/extra1-big-o-cheat-sheet/" class="md-nav__link">
+        Big-O Cheat-Sheet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/extra2-standard-notation-and-common-functions/" class="md-nav__link">
+        Standard Notation and Common Functions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/extra3-standard-knowledge/" class="md-nav__link">
+        Earlier Knowledge
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2_3" type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" tabindex="0" aria-expanded="false">
+          DEB
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="DEB" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          DEB
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/03-envisionment/" class="md-nav__link">
+        Envisionment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/04-physical-design/" class="md-nav__link">
+        Physical Design
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/05-physical-design-memory-and-attention/" class="md-nav__link">
+        Physical Design - Memory & Attention
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/06-perception-and-navigation/" class="md-nav__link">
+        Physical Design - Perception & Navigation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/07-evaluation/" class="md-nav__link">
+        Evaluation - What is Usability and Usability Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/08-evaluation-identifying-problems/" class="md-nav__link">
+        Evaluation - Identifying Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/09a-user-experience/" class="md-nav__link">
+        Evaluation - Alternative methods and UX
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/09b-alternative-methods-for-testing-usability/" class="md-nav__link">
+        Evaluation - Alternative methods and UX
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2_4" type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" tabindex="0" aria-expanded="false">
+          SU
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SU" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          SU
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/1-classes-and-objects/" class="md-nav__link">
+        Classes and Objects
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/2-factor/" class="md-nav__link">
+        FACTOR
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/3-structure/" class="md-nav__link">
+        Structure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/4-usage/" class="md-nav__link">
+        Usage
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          4 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="4 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          4 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2" tabindex="0" aria-expanded="false">
+          PSS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="PSS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          PSS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/1-intro/" class="md-nav__link">
+        Introduction to Operating Systems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/5-memory-management/" class="md-nav__link">
+        Memory Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_2_4" type="checkbox" id="__nav_3_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2_4" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/1-processes-and-threads/" class="md-nav__link">
+        1 - Processes and Threads
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/2-scheduler/" class="md-nav__link">
+        2 - Scheduling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/3-memory-management/" class="md-nav__link">
+        3 - Memory Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/4-paged-memory/" class="md-nav__link">
+        4 - Paged Memory
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/5-concurrency/" class="md-nav__link">
+        5 - Concurrency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/6-concurrency-problems/" class="md-nav__link">
+        6 - Concurrency Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/7-io-and-device-drivers/" class="md-nav__link">
+        7 - I/O and Device Drivers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/8-xv6/" class="md-nav__link">
+        8 - XV6 Exercise of Choice
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3" tabindex="0" aria-expanded="false">
+          SPO
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SPO" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          SPO
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/01-programming-languages-and-compilers/" class="md-nav__link">
+        Programming Languages and Compilers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/02-tombstone-diagrams/" class="md-nav__link">
+        Tombstone Diagrams
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/03a-the-phases-of-a-compiler/" class="md-nav__link">
+        The Phases of a Compiler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/03b-the-ac-language-and-compiler/" class="md-nav__link">
+        The 'ac' Language and Compiler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/04-language-specification/" class="md-nav__link">
+        Language Specification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/05a-context-free-grammars/" class="md-nav__link">
+        Context Free Grammars
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/05b-from-tokens-to-parse-trees/" class="md-nav__link">
+        From Tokens to Parse Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/06-lexical-analysis/" class="md-nav__link">
+        Lexical Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_3_10" type="checkbox" id="__nav_3_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3_10" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/1-language-design-and-control-structures/" class="md-nav__link">
+        1 - Language Design and Control Structures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/2-structure-of-the-compiler/" class="md-nav__link">
+        2 - Structure of the Compiler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/3-lexical-analysis/" class="md-nav__link">
+        3 - Lexical Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/4-parsing/" class="md-nav__link">
+        4 - Parsing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/5-semantic-analysis/" class="md-nav__link">
+        5 - Semantic Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/6-runtime-organization/" class="md-nav__link">
+        6 - Runtime Organization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/7-heap-allocation-and-gc/" class="md-nav__link">
+        7 - Heap Allocation and Garbage Collection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/8-code-generation/" class="md-nav__link">
+        8 - Code Generation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_4" type="checkbox" id="__nav_3_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_4" tabindex="0" aria-expanded="false">
+          SS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_4">
+          <span class="md-nav__icon md-icon"></span>
+          SS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/0-eksamen-fremgangsm%C3%A5der/" class="md-nav__link">
+        Eksamen - Fremgangsmåder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/01a-regul%C3%A6re-sprog/" class="md-nav__link">
+        Regulære Sprog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/01b-endelige-automater/" class="md-nav__link">
+        Endelige Automater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/02-nondeterministiske-endelige-automater/" class="md-nav__link">
+        Nondeterministiske Endelige Automater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/03-regul%C3%A6re-udtryk/" class="md-nav__link">
+        Regulære Udtryk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/04-pumping-lemma/" class="md-nav__link">
+        Pumping Lemma
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/05-kontekstfrie-grammatikker/" class="md-nav__link">
+        Kontekstfrie Grammatikker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/06-pushdown-automater/" class="md-nav__link">
+        Pushdown Automater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/07-pumping-lemma-for-kontekstfrie-sprog/" class="md-nav__link">
+        Pumping Lemma for Kontekstfrie Sprog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/15-rekursive-definitioner/" class="md-nav__link">
+        Rekursive Definitioner
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" tabindex="0" aria-expanded="false">
+          5 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="5 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          5 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2" tabindex="0" aria-expanded="false">
+          CC
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="CC" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          CC
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/01-turing-maskiner/" class="md-nav__link">
+        Turing Maskiner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/02-church-turing-tesen/" class="md-nav__link">
+        Church-Turing-Tesen
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/03-acceptproblemet-for-tm/" class="md-nav__link">
+        Acceptproblemet for Turing-maskiner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/04-more-problems-than-algorithms/" class="md-nav__link">
+        Er der Flere Problemer end Algoritmer? Og er Problemer Beslægtede?
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/05-beregningshistorier/" class="md-nav__link">
+        Uafgørbare Problemer om Beregningshistorier
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/06-posts-korrespondanceproblem/" class="md-nav__link">
+        Posts Korrospondanceproblem ; Teorien for Reduktioner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/07-rice/" class="md-nav__link">
+        Rice's Sætning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/09-tidskompleksitet/" class="md-nav__link">
+        Tidskompleksitet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/10-np-fuldstaendighed/" class="md-nav__link">
+        NP og NP-fuldstændighed
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/12-np-complete-sprog/" class="md-nav__link">
+        Flere NP-fuldstændige Sprog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/13-pladskompleksitet/" class="md-nav__link">
+        Pladskompleksitet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/99-sprog-i-pensum/" class="md-nav__link">
+        Sprogproblemer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3" tabindex="0" aria-expanded="false">
+          MI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="MI" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          MI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-04-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-09-problem-solving-as-search/" class="md-nav__link">
+        Problem Solving as Search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-16-constrains-satisfaction-problems/" class="md-nav__link">
+        Constraints Satisfaction Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-16appendix/" class="md-nav__link">
+        Constraints Satisfaction Problems - Appendix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-23-reasoning-under-certainty/" class="md-nav__link">
+        Reasoning Under Uncertainty
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-07-bayesian-networks/" class="md-nav__link">
+        Bayesian Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-14-inference-in-bayesian-networks/" class="md-nav__link">
+        Inference in Bayesian Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-21-decision-trees/" class="md-nav__link">
+        Learning: Introduction and Decision Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-28-neural-networks/" class="md-nav__link">
+        Learning: Neural Network
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-28appendix/" class="md-nav__link">
+        Learning: Neural Network - Appendix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-04-methods-and-issues/" class="md-nav__link">
+        Learning: Methods and Issues
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-11-clustering/" class="md-nav__link">
+        Learning: Clustering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-18-planning-uncertainty/" class="md-nav__link">
+        Planning under Uncertainty
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-25-multi-agent/" class="md-nav__link">
+        Multi-Agent Systems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/99_exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/probability-calculus-cheatsheet/" class="md-nav__link">
+        Cheat Sheet for Probability Calculus
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_4" type="checkbox" id="__nav_4_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4" tabindex="0" aria-expanded="false">
+          SOE
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SOE" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          SOE
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/01-introduction/" class="md-nav__link">
+        Software Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/02-agile-xp-and-scrum/" class="md-nav__link">
+        Agile, XP, and Scrum
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/04a-rup/" class="md-nav__link">
+        (R)UP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/05-planning/" class="md-nav__link">
+        Project Planning and Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/06-risk-management/" class="md-nav__link">
+        Risk Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/07-quality/" class="md-nav__link">
+        Quality Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/9ba-test/" class="md-nav__link">
+        Test
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_4_9" type="checkbox" id="__nav_4_4_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4_9" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_4_9">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/" class="md-nav__link">
+        Exam Questions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/01-waterfall/" class="md-nav__link">
+        1. Software process models: waterfall
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/02-incremental-iterative/" class="md-nav__link">
+        2. Software process model: incremental and iterative
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/03-integration-configuration/" class="md-nav__link">
+        3. Software process model: integration & configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/04-plandriven-vs-agile/" class="md-nav__link">
+        4. Comparison of plan-driven and agile SOE processes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/05-scrum/" class="md-nav__link">
+        5. Key features of Scrum
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/06-rup/" class="md-nav__link">
+        6. Key features of RUP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/07-requirements/" class="md-nav__link">
+        7. Requirements Elicitation and Managing change to requirements
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/08-quality-control/" class="md-nav__link">
+        8. Quality Control: Verification and Validation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/09-risk-management/" class="md-nav__link">
+        9. Risk Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/10-project-planning-management/" class="md-nav__link">
+        10. Project Planning and Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/11-quality-management/" class="md-nav__link">
+        11. Quality Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/12-configuration-management/" class="md-nav__link">
+        12. Configuration Management
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="false">
+          6 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="6 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          6 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2" tabindex="0" aria-expanded="false">
+          AALG
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="AALG" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          AALG
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/01-dc/" class="md-nav__link">
+        Dynamic Programming
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/02-dp-all-pairs-shortest-paths/" class="md-nav__link">
+        All-pairs Shortest Paths (Dynamic Programming)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/03-flow-networks/" class="md-nav__link">
+        Flow Networks and Maximum Flow
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/04-greedy-algorithms/" class="md-nav__link">
+        Greedy Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/05-amortized-analysis/" class="md-nav__link">
+        Amortized Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/06-computational-geometry-sweeping/" class="md-nav__link">
+        Computational Geometry Algorithms: Sweeping Techniques
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/08-computational-geometry-range-searching/" class="md-nav__link">
+        Computational Geometry Data Structures: Range Searching
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/10-multithreaded-algorithms/" class="md-nav__link">
+        Multithreaded Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/11-approximation/" class="md-nav__link">
+        Approximation for NP-complete Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/12-backtracking/" class="md-nav__link">
+        Backtracking and Branch-and-Bound
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2_12" type="checkbox" id="__nav_5_2_12" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2_12" tabindex="0" aria-expanded="false">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Guides" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_2_12">
+          <span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/amortized-analysis/" class="md-nav__link">
+        Amortized Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/approx-and-parallel/" class="md-nav__link">
+        Approximation and Parallelism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/flow-networks/" class="md-nav__link">
+        Flow Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/graphs/" class="md-nav__link">
+        Graphs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/others/" class="md-nav__link">
+        Others
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/range-queries/" class="md-nav__link">
+        Range Queries and Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/sweeping/" class="md-nav__link">
+        Sweeping
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2_12_8" type="checkbox" id="__nav_5_2_12_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2_12_8" tabindex="0" aria-expanded="false">
+          Year based old
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Year based old" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_2_12_8">
+          <span class="md-nav__icon md-icon"></span>
+          Year based old
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/year-based-old/2015/" class="md-nav__link">
+        2015
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/year-based-old/2016/" class="md-nav__link">
+        2016
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/year-based-old/2017/" class="md-nav__link">
+        2017
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3" tabindex="0" aria-expanded="false">
+          DBS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="DBS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          DBS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/02-relational-model-and-relational-algebra/" class="md-nav__link">
+        Relational Model and Relational Algebra
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/03-entity-relationship-model/" class="md-nav__link">
+        The Entity Relationship Model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/04-relational-database-theory/" class="md-nav__link">
+        Relational Database Design Theory
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/05-sql/" class="md-nav__link">
+        SQL
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/06-transactions/" class="md-nav__link">
+        Transactions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/07-physical-dbs/" class="md-nav__link">
+        Physical Design
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/08-query-optimization/" class="md-nav__link">
+        Query Processing and Optimization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_3_10" type="checkbox" id="__nav_5_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3_10" tabindex="0" aria-expanded="false">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Guides" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/logical-query-optimization/" class="md-nav__link">
+        Logical (Heuristic) Query Optimization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/lossless-decomposition-and-dependency-preservation/" class="md-nav__link">
+        Lossless Decomposition and Dependency Preservation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/mapping-er-to-relations/" class="md-nav__link">
+        Mapping ER to Relations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/minimal-cover/" class="md-nav__link">
+        Calculate Minimal Cover (Canonical Cover)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/normal-form/" class="md-nav__link">
+        Determine Relational Schema Normal Form
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" tabindex="0" aria-expanded="true">
+          7 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="7 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          7 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_2" type="checkbox" id="__nav_6_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_2" tabindex="0" aria-expanded="false">
+          DS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="DS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_2">
+          <span class="md-nav__icon md-icon"></span>
+          DS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/02-os-and-networking-fundamentals/" class="md-nav__link">
+        OS and Networking Fundamentals
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/03-mutex/" class="md-nav__link">
+        Mutual Exclusion (Mutex) and Election
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/04-multicast/" class="md-nav__link">
+        Multicast
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/05-consensus/" class="md-nav__link">
+        Consensus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/06a-replication/" class="md-nav__link">
+        Replication and Consistency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/06b-transactions/" class="md-nav__link">
+        Transactions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/07-wireless/" class="md-nav__link">
+        Wireless Sensor Networks and Internet of Things
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/08-peer-to-peer/" class="md-nav__link">
+        Peer to Peer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/09-cluster-storage/" class="md-nav__link">
+        Cluster Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/10-blockchain/" class="md-nav__link">
+        Blockchain
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/11-big-data-analytics/" class="md-nav__link">
+        Big Data Analytics
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/12-soa/" class="md-nav__link">
+        Service-oriented Architectures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_2_15" type="checkbox" id="__nav_6_2_15" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_2_15" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_2_15">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/exam/1-distributed-mutex/" class="md-nav__link">
+        Question 1 - Distributed Mutual Exclusion
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/exam/2-multicast/" class="md-nav__link">
+        Question 2 - Multicast
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/exam/3-replication-and-consistency/" class="md-nav__link">
+        Question 3 - Replication and Consistency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/exam/4-consensus/" class="md-nav__link">
+        Question 4: Consensus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/exam/5-clustered-storage/" class="md-nav__link">
+        Question 5 - Clustered Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/exam/6-big-data-processing/" class="md-nav__link">
+        Question 6 - Big Data Processing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/exam/7-iot-routing/" class="md-nav__link">
+        Question 7 - Internet of Things Routing (Directed Diffusion, Tree Routing in ZigBee, AODV, DSR)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/exam/8-peer-to-peer/" class="md-nav__link">
+        Question 8 - Peer to Peer (Gnutella, Chord)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../DS/exam/9-blockchain/" class="md-nav__link">
+        Question 9 - Blockchain (Tamper-free linked lists, Nakamoto Consensus, proof of work, transactions in Merkle trees)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3" type="checkbox" id="__nav_6_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3" tabindex="0" aria-expanded="false">
+          PP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="PP" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_3">
+          <span class="md-nav__icon md-icon"></span>
+          PP
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3_2" type="checkbox" id="__nav_6_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3_2" tabindex="0" aria-expanded="false">
+          Logic
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Logic" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Logic
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/Logic/semantics/" class="md-nav__link">
+        Semantics of Datalog / Prolog
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3_3" type="checkbox" id="__nav_6_3_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3_3" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/" class="md-nav__link">
+        PP Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/datalog-and-prolog/" class="md-nav__link">
+        Datalog and Prolog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/haskell/" class="md-nav__link">
+        Haskell
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/scheme/" class="md-nav__link">
+        Scheme
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3_3_5" type="checkbox" id="__nav_6_3_3_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3_3_5" tabindex="0" aria-expanded="false">
+          Solutions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Solutions" data-md-level="4">
+        <label class="md-nav__title" for="__nav_6_3_3_5">
+          <span class="md-nav__icon md-icon"></span>
+          Solutions
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/solutions/01-scheme/" class="md-nav__link">
+        Scheme Exercises
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/solutions/02-haskell/" class="md-nav__link">
+        Haskell Exercises
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/solutions/03-datalog-prolog/" class="md-nav__link">
+        Datalog and Prolog Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4" tabindex="0" aria-expanded="true">
+          WI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="WI" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          WI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-introduction-and-crawlers/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-index-construction/" class="md-nav__link">
+        Index Construction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-content-based-ranking/" class="md-nav__link">
+        Content-based Ranking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-structure-based-ranking/" class="md-nav__link">
+        Structure-based Ranking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Recommender Systems
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Recommender Systems
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-scenarios" class="md-nav__link">
+    Data Scenarios
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problem-dimensions" class="md-nav__link">
+    Problem Dimensions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#challenges" class="md-nav__link">
+    Challenges
+  </a>
+  
+    <nav class="md-nav" aria-label="Challenges">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cold-start" class="md-nav__link">
+    Cold Start
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serendipity" class="md-nav__link">
+    Serendipity
+  </a>
+  
+    <nav class="md-nav" aria-label="Serendipity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problem-boring-recommendations" class="md-nav__link">
+    Problem: Boring Recommendations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problem-information-filter-bubbles" class="md-nav__link">
+    Problem: Information Filter Bubbles
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#netflix-prize" class="md-nav__link">
+    Netflix Prize
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#content-based-recommendation" class="md-nav__link">
+    Content-based Recommendation
+  </a>
+  
+    <nav class="md-nav" aria-label="Content-based Recommendation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#item-content-explicit-feedback" class="md-nav__link">
+    Item Content, Explicit Feedback
+  </a>
+  
+    <nav class="md-nav" aria-label="Item Content, Explicit Feedback">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-classifier" class="md-nav__link">
+    User Classifier
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#naive-bayes-classifier" class="md-nav__link">
+    Naive Bayes Classifier
+  </a>
+  
+    <nav class="md-nav" aria-label="Naive Bayes Classifier">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notation" class="md-nav__link">
+    Notation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bayesian-classification" class="md-nav__link">
+    Bayesian Classification
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-classifier-pros-and-cons" class="md-nav__link">
+    User Classifier Pros and Cons
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#item-content-implicit-feedback" class="md-nav__link">
+    Item Content, Implicit Feedback
+  </a>
+  
+    <nav class="md-nav" aria-label="Item Content, Implicit Feedback">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-profile" class="md-nav__link">
+    User Profile
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evaluation" class="md-nav__link">
+    Evaluation
+  </a>
+  
+    <nav class="md-nav" aria-label="Evaluation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#explicit-feedback" class="md-nav__link">
+    Explicit Feedback
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implicit-feedback" class="md-nav__link">
+    Implicit Feedback
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#collaborative-filtering" class="md-nav__link">
+    Collaborative Filtering
+  </a>
+  
+    <nav class="md-nav" aria-label="Collaborative Filtering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#neighborhood-methods" class="md-nav__link">
+    Neighborhood Methods
+  </a>
+  
+    <nav class="md-nav" aria-label="Neighborhood Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-based" class="md-nav__link">
+    User Based
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#item-based" class="md-nav__link">
+    Item Based
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-vs-item-based" class="md-nav__link">
+    User vs Item Based
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#normalization" class="md-nav__link">
+    Normalization
+  </a>
+  
+    <nav class="md-nav" aria-label="Normalization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mean-centering" class="md-nav__link">
+    Mean Centering
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#similarity" class="md-nav__link">
+    Similarity
+  </a>
+  
+    <nav class="md-nav" aria-label="Similarity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-user-similarity" class="md-nav__link">
+    User-User Similarity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#significance" class="md-nav__link">
+    Significance
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#putting-things-together" class="md-nav__link">
+    Putting Things Together
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-recommender-systems-2/" class="md-nav__link">
+        Recommender Systems 2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-network-structure-and-communities/" class="md-nav__link">
+        Network Structure and Communities
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-communities-and-information-diffusion/" class="md-nav__link">
+        Communities and Information Diffusion
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09%2B10-node-classification/" class="md-nav__link">
+        Node Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_4_11" type="checkbox" id="__nav_6_4_11" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4_11" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/" class="md-nav__link">
+        WI Exam
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" tabindex="0" aria-expanded="false">
+          8 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="8 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          8 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" tabindex="0" aria-expanded="false">
+          MDLS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="MDLS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          MDLS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/MDLS/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_3" type="checkbox" id="__nav_7_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_3" tabindex="0" aria-expanded="false">
+          mHCI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="mHCI" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          mHCI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/01-introduction/" class="md-nav__link">
+        mHCI Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/02-concepts-and-context/" class="md-nav__link">
+        MCHI Concepts and Understanding Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/08-introduction-to-quantitive-studies/" class="md-nav__link">
+        	Introduction to Quantitative Studies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/09-lab-experiments/" class="md-nav__link">
+        Lab Experiments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/10-field-experiments/" class="md-nav__link">
+        Field Experiments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/99-exam/" class="md-nav__link">
+        Exam Questions
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" tabindex="0" aria-expanded="false">
+          sP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="sP" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          sP
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/02-fundamentals/" class="md-nav__link">
+        Fundamentals
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/03-initialization/" class="md-nav__link">
+        Initialization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/04-raii/" class="md-nav__link">
+        Classes Continued
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/05-pimpl/" class="md-nav__link">
+        PIMPL Idiom and Dynamic Polymorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/06-double-dispatch/" class="md-nav__link">
+        Double Dispatch
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/07-generic-programming/" class="md-nav__link">
+        Generic Programming
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/10-lambda/" class="md-nav__link">
+        Lambda Expressions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/10-rval-and-forward/" class="md-nav__link">
+        Rvalue and Forwarding References
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/11-concurrency/" class="md-nav__link">
+        Concurrency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/99-exam/" class="md-nav__link">
+        Exam Notes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-scenarios" class="md-nav__link">
+    Data Scenarios
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problem-dimensions" class="md-nav__link">
+    Problem Dimensions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#challenges" class="md-nav__link">
+    Challenges
+  </a>
+  
+    <nav class="md-nav" aria-label="Challenges">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cold-start" class="md-nav__link">
+    Cold Start
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#serendipity" class="md-nav__link">
+    Serendipity
+  </a>
+  
+    <nav class="md-nav" aria-label="Serendipity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problem-boring-recommendations" class="md-nav__link">
+    Problem: Boring Recommendations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problem-information-filter-bubbles" class="md-nav__link">
+    Problem: Information Filter Bubbles
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#netflix-prize" class="md-nav__link">
+    Netflix Prize
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#content-based-recommendation" class="md-nav__link">
+    Content-based Recommendation
+  </a>
+  
+    <nav class="md-nav" aria-label="Content-based Recommendation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#item-content-explicit-feedback" class="md-nav__link">
+    Item Content, Explicit Feedback
+  </a>
+  
+    <nav class="md-nav" aria-label="Item Content, Explicit Feedback">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-classifier" class="md-nav__link">
+    User Classifier
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#naive-bayes-classifier" class="md-nav__link">
+    Naive Bayes Classifier
+  </a>
+  
+    <nav class="md-nav" aria-label="Naive Bayes Classifier">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#notation" class="md-nav__link">
+    Notation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bayesian-classification" class="md-nav__link">
+    Bayesian Classification
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-classifier-pros-and-cons" class="md-nav__link">
+    User Classifier Pros and Cons
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#item-content-implicit-feedback" class="md-nav__link">
+    Item Content, Implicit Feedback
+  </a>
+  
+    <nav class="md-nav" aria-label="Item Content, Implicit Feedback">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-profile" class="md-nav__link">
+    User Profile
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evaluation" class="md-nav__link">
+    Evaluation
+  </a>
+  
+    <nav class="md-nav" aria-label="Evaluation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#explicit-feedback" class="md-nav__link">
+    Explicit Feedback
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implicit-feedback" class="md-nav__link">
+    Implicit Feedback
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#collaborative-filtering" class="md-nav__link">
+    Collaborative Filtering
+  </a>
+  
+    <nav class="md-nav" aria-label="Collaborative Filtering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#neighborhood-methods" class="md-nav__link">
+    Neighborhood Methods
+  </a>
+  
+    <nav class="md-nav" aria-label="Neighborhood Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-based" class="md-nav__link">
+    User Based
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#item-based" class="md-nav__link">
+    Item Based
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-vs-item-based" class="md-nav__link">
+    User vs Item Based
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#normalization" class="md-nav__link">
+    Normalization
+  </a>
+  
+    <nav class="md-nav" aria-label="Normalization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mean-centering" class="md-nav__link">
+    Mean Centering
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#similarity" class="md-nav__link">
+    Similarity
+  </a>
+  
+    <nav class="md-nav" aria-label="Similarity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-user-similarity" class="md-nav__link">
+    User-User Similarity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#significance" class="md-nav__link">
+    Significance
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#putting-things-together" class="md-nav__link">
+    Putting Things Together
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+<h1 id="recommender-systems">Recommender Systems<a class="headerlink" href="#recommender-systems" title="Permanent link">&para;</a></h1>
+<ul>
+<li><a href="https://www.moodle.aau.dk/pluginfile.php/2134534/mod_resource/content/2/wi_20_05.pdf">Slides</a></li>
+<li><a href="https://docs.google.com/document/d/1ZXyItz3hHcNA6sAY12_FbViZClMm4tMMECQZzv20LpQ/edit">Exercises</a></li>
+</ul>
+<h2 id="data-scenarios">Data Scenarios<a class="headerlink" href="#data-scenarios" title="Permanent link">&para;</a></h2>
+<p><img alt="image-20201012143433509" src="../images/05-recommender-systems/image-20201012143433509.png" /></p>
+<ul>
+<li>Rich user data</li>
+<li>Rich item data</li>
+<li>Explicit rating data</li>
+</ul>
+<hr />
+<p><img alt="image-20201012143512346" src="../images/05-recommender-systems/image-20201012143512346.png" /></p>
+<ul>
+<li>Rich item data</li>
+<li>Explicit rating data</li>
+</ul>
+<hr />
+<p><img alt="image-20201012143528919" src="../images/05-recommender-systems/image-20201012143528919.png" /></p>
+<ul>
+<li>Explicit rating data</li>
+</ul>
+<hr />
+<p><img alt="image-20201012143543746" src="../images/05-recommender-systems/image-20201012143543746.png" /></p>
+<h2 id="problem-dimensions">Problem Dimensions<a class="headerlink" href="#problem-dimensions" title="Permanent link">&para;</a></h2>
+<p><strong>Problem Settings</strong></p>
+<ul>
+<li><strong>Users</strong><ul>
+<li>with/without features<ul>
+<li>context information</li>
+<li>attributes</li>
+<li>metadata</li>
+<li>...</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Items</strong><ul>
+<li>with/without features<ul>
+<li>context information</li>
+<li>attributes</li>
+<li>metadata</li>
+<li>...</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Interaction</strong><ul>
+<li>Explicit feedback (ratings)</li>
+<li>Implicit feedback (positive only)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Problem Statement</strong></p>
+<p>Given a user <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span>, what new items <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span> (not previously rated, bought, seen, ... by <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span>) should be recommended to <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span>, so that <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span> is likely to interact (buy, view, rate, ...) with <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span></p>
+<h2 id="challenges">Challenges<a class="headerlink" href="#challenges" title="Permanent link">&para;</a></h2>
+<h3 id="cold-start"><strong>Cold Start</strong><a class="headerlink" href="#cold-start" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>User cold start</strong><ul>
+<li>what to recommend to a new user, for whom there is no (feature, feedback) data?</li>
+</ul>
+</li>
+<li><strong>Item cold start</strong><ul>
+<li>to whom to recommend a new item that no one has bought before?</li>
+</ul>
+</li>
+</ul>
+<h3 id="serendipity">Serendipity<a class="headerlink" href="#serendipity" title="Permanent link">&para;</a></h3>
+<p>From Oxford English Dictionary:</p>
+<blockquote>
+<p>The faculty of making happy and unexpected discoveries by accident. Also, the fact or an instance of such a discovery</p>
+</blockquote>
+<p>Example Usage:</p>
+<blockquote>
+<p><em>”Columbus and Cabot..(by the greatest serendipity of history) discovered America instead of reaching the Indies.”</em></p>
+</blockquote>
+<p>It is hard for recommender systems to recommend something unexpected</p>
+<h4 id="problem-boring-recommendations">Problem: Boring Recommendations<a class="headerlink" href="#problem-boring-recommendations" title="Permanent link">&para;</a></h4>
+<p><img alt="image-20201012144348650" src="../images/05-recommender-systems/image-20201012144348650.png" /></p>
+<h4 id="problem-information-filter-bubbles">Problem: Information Filter Bubbles<a class="headerlink" href="#problem-information-filter-bubbles" title="Permanent link">&para;</a></h4>
+<p>Wikipedia:</p>
+<blockquote>
+<p>A filter bubble [...] is a state of intellectual isolation that allegedly can result from personalized searches when a website algorithm selectively guesses what information a user would like to see based on information about the user, such as location, past click-behavior and search history. As a result, users become separated from information that disagrees with their viewpoints, effectively isolating them in their own cultural or ideological bubbles. . . .</p>
+</blockquote>
+<p><img alt="image-20201012144523847" src="../images/05-recommender-systems/image-20201012144523847.png" /></p>
+<p>From <a href="https://en.wikipedia.org/wiki/Filter_bubble">https://en.wikipedia.org/wiki/Filter_bubble</a></p>
+<h2 id="netflix-prize">Netflix Prize<a class="headerlink" href="#netflix-prize" title="Permanent link">&para;</a></h2>
+<p><img alt="image-20201012144738557" src="../images/05-recommender-systems/image-20201012144738557.png" /></p>
+<p><a href="https://www.netflixprize.com/rules.html">https://www.netflixprize.com/rules.html</a></p>
+<ul>
+<li>A big driver for research in recommender technology</li>
+</ul>
+<h2 id="content-based-recommendation">Content-based Recommendation<a class="headerlink" href="#content-based-recommendation" title="Permanent link">&para;</a></h2>
+<p>We assume that we have some content</p>
+<ul>
+<li>Here on items</li>
+</ul>
+<h3 id="item-content-explicit-feedback">Item Content, Explicit Feedback<a class="headerlink" href="#item-content-explicit-feedback" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20201012145224926" src="../images/05-recommender-systems/image-20201012145224926.png" /></p>
+<p>Scenario:</p>
+<ul>
+<li>Item features available</li>
+<li>No user features</li>
+<li>Explicit feedback</li>
+</ul>
+<p>Note: picture only shows one user; there still are many users, but we treat them one at at time!</p>
+<h4 id="user-classifier">User Classifier<a class="headerlink" href="#user-classifier" title="Permanent link">&para;</a></h4>
+<p>Items rated by user <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span> described by feature vectors:</p>
+<p><img alt="image-20201012145357238" src="../images/05-recommender-systems/image-20201012145357238.png" /></p>
+<p>Recommendation: predict ratings of new items based on the item feature vector.</p>
+<ul>
+<li>Standard machine learning <strong>regression</strong> (numeric label) or <strong>classification</strong> (categorical label) task</li>
+<li>Can build standard prediction model (Naive Bayes, Decision tree, ...) <em>for each user</em></li>
+</ul>
+<h4 id="naive-bayes-classifier">Naive Bayes Classifier<a class="headerlink" href="#naive-bayes-classifier" title="Permanent link">&para;</a></h4>
+<h5 id="notation">Notation<a class="headerlink" href="#notation" title="Permanent link">&para;</a></h5>
+<ul>
+<li>Assume qualitative rating labels: rating of user user <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span> for item <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span>: <span class="arithmatex"><span class="MathJax_Preview">r_{u,i} \in \{+,-\}</span><script type="math/tex">r_{u,i} \in \{+,-\}</script></span></li>
+<li><span class="arithmatex"><span class="MathJax_Preview">f_i</span><script type="math/tex">f_i</script></span> denotes the feature vector of item <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span>, and <span class="arithmatex"><span class="MathJax_Preview">\bold f</span><script type="math/tex">\bold f</script></span> a particular value for this feature vector</li>
+</ul>
+<p>In example from previous table:</p>
+<p><img alt="image-20201012150803765" src="../images/05-recommender-systems/image-20201012150803765.png" /></p>
+<h5 id="bayesian-classification">Bayesian Classification<a class="headerlink" href="#bayesian-classification" title="Permanent link">&para;</a></h5>
+<p><strong>Bayes Rule:</strong></p>
+<p><img alt="image-20201012150822997" src="../images/05-recommender-systems/image-20201012150822997.png" /></p>
+<p>Same for <span class="arithmatex"><span class="MathJax_Preview">P_u(r_{u,i}= - \mid f_i=\bold f)</span><script type="math/tex">P_u(r_{u,i}= - \mid f_i=\bold f)</script></span></p>
+<p>Both conditional probabilities have the factor <span class="arithmatex"><span class="MathJax_Preview">1/P_u(f_i=\bold f)</span><script type="math/tex">1/P_u(f_i=\bold f)</script></span> in common</p>
+<ul>
+<li>For classification can ignore this factor and can write:</li>
+</ul>
+<p><img alt="image-20201012150931754" src="../images/05-recommender-systems/image-20201012150931754.png" /></p>
+<p>(“<span class="arithmatex"><span class="MathJax_Preview">=</span><script type="math/tex">=</script></span>” in equation (4.6) in Ch.4 of Rec.Sys. Handbook should also be “<span class="arithmatex"><span class="MathJax_Preview">\approx</span><script type="math/tex">\approx</script></span>”)</p>
+<p><strong>Key Question</strong></p>
+<p>What is:</p>
+<p><img alt="image-20201012151444242" src="../images/05-recommender-systems/image-20201012151444242.png" /></p>
+<p>Naive Bayes assumption:</p>
+<p><img alt="image-20201012151502095" src="../images/05-recommender-systems/image-20201012151502095.png" /></p>
+<p>where <span class="arithmatex"><span class="MathJax_Preview">M</span><script type="math/tex">M</script></span> is the number of components in <span class="arithmatex"><span class="MathJax_Preview">f_i</span><script type="math/tex">f_i</script></span></p>
+<p><strong>Example</strong></p>
+<p><img alt="image-20201012151536989" src="../images/05-recommender-systems/image-20201012151536989.png" /></p>
+<ul>
+<li>Large number of term feature factors (= size of vocabulary) may dominate this product</li>
+<li>mitigated by: for most terms <span class="arithmatex"><span class="MathJax_Preview">t: P_u(t=0 \mid r_{u,i}=+)</span><script type="math/tex">t: P_u(t=0 \mid r_{u,i}=+)</script></span> and <span class="arithmatex"><span class="MathJax_Preview">P_u(t=0 \mid r_{u,i}=-)</span><script type="math/tex">P_u(t=0 \mid r_{u,i}=-)</script></span> will be very similar, and therefore have little impact on <span class="arithmatex"><span class="MathJax_Preview">P_u(t=\bold f \mid r_{u,i}=+)/P_u(t= \bold f \mid r_{u,i}=-)</span><script type="math/tex">P_u(t=\bold f \mid r_{u,i}=+)/P_u(t= \bold f \mid r_{u,i}=-)</script></span></li>
+<li>May need to make some adjustments to handle "hybrid" item feature data as in this example</li>
+</ul>
+<p><strong>Still to determine</strong></p>
+<p>For a single term <span class="arithmatex"><span class="MathJax_Preview">t</span><script type="math/tex">t</script></span> what is:</p>
+<p><img alt="image-20201012151914338" src="../images/05-recommender-systems/image-20201012151914338.png" /></p>
+<p><strong>Bernouli model</strong></p>
+<ul>
+<li>Use term occurrence features: <span class="arithmatex"><span class="MathJax_Preview">k \in \{0,1\}</span><script type="math/tex">k \in \{0,1\}</script></span></li>
+<li><span class="arithmatex"><span class="MathJax_Preview">P_u(\text{t}=1 \mid r_{u,i} = +)</span><script type="math/tex">P_u(\text{t}=1 \mid r_{u,i} = +)</script></span>: probability that term t occurs in the text (review) for an item <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span> that <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span> has rated positively<ul>
+<li>= relative <em>document frequency</em> of term t in the "corpus" of items rated positively by <em>u</em> (cf. slide 3.9)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Multinomial model</strong></p>
+<ul>
+<li>Use term frequency features (bag of words): <span class="arithmatex"><span class="MathJax_Preview">k= F[i,t] \in \N</span><script type="math/tex">k= F[i,t] \in \N</script></span></li>
+<li><span class="arithmatex"><span class="MathJax_Preview">P_u(t=k \mid r_{u,i} = +) = P_u(t \mid r_{u,i} = +)^k</span><script type="math/tex">P_u(t=k \mid r_{u,i} = +) = P_u(t \mid r_{u,i} = +)^k</script></span>, where<ul>
+<li><span class="arithmatex"><span class="MathJax_Preview">P_u(t \mid r_{u,i} = +)</span><script type="math/tex">P_u(t \mid r_{u,i} = +)</script></span> is the relative frequency of the term t in items rated positively by <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span>.<ul>
+<li>= relative <em>collection frequency</em> of term t in the "corpus" of items rated positively by <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span> (cf. slide 3.9)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="user-classifier-pros-and-cons">User Classifier Pros and Cons<a class="headerlink" href="#user-classifier-pros-and-cons" title="Permanent link">&para;</a></h4>
+<p>Pros</p>
+<ul>
+<li>Makes use of item features</li>
+<li>Can handle item cold start (assuming features of new items known)</li>
+</ul>
+<p>Cons</p>
+<ul>
+<li>Requires explicit feedback</li>
+<li>Does not handle user cold start<ul>
+<li>... or even users with relatively small data set</li>
+</ul>
+</li>
+</ul>
+<h3 id="item-content-implicit-feedback">Item Content, Implicit Feedback<a class="headerlink" href="#item-content-implicit-feedback" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20201012152614761" src="../images/05-recommender-systems/image-20201012152614761.png" /></p>
+<p>Scenario</p>
+<ul>
+<li>Item features available</li>
+<li>No user features</li>
+<li>Implicit feedback</li>
+</ul>
+<p>A partial analogy to Information Retrieval (IR):</p>
+<p><img alt="image-20201012152748504" src="../images/05-recommender-systems/image-20201012152748504.png" /></p>
+<h4 id="user-profile">User Profile<a class="headerlink" href="#user-profile" title="Permanent link">&para;</a></h4>
+<p><strong>Idea</strong></p>
+<p>Represent user by a vector in the same space as the item feature vectors by <em>summarizing the feature vectors of items for which there is implicit feedback.</em></p>
+<p><strong>Example</strong></p>
+<p><img alt="image-20201012152904343" src="../images/05-recommender-systems/image-20201012152904343.png" /></p>
+<p>Then: rank candidate items according to similarity with user profile. Similarity can be defined as (weighted) sum of component-specific similarity measures:</p>
+<p><img alt="image-20201012152946375" src="../images/05-recommender-systems/image-20201012152946375.png" /></p>
+<p><strong>Illustration</strong></p>
+<p><img alt="image-20201012153552426" src="../images/05-recommender-systems/image-20201012153552426.png" /></p>
+<p>All items</p>
+<hr />
+<p><img alt="image-20201012153616286" src="../images/05-recommender-systems/image-20201012153616286.png" /></p>
+<p>Items with implicit rating by user <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span></p>
+<hr />
+<p><img alt="image-20201012153633727" src="../images/05-recommender-systems/image-20201012153633727.png" /></p>
+<p>User profile of <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span> (= item prototype)</p>
+<hr />
+<p><img alt="image-20201012153654689" src="../images/05-recommender-systems/image-20201012153654689.png" /></p>
+<p>Ranking of new (gray) items for recommendation</p>
+<h2 id="evaluation">Evaluation<a class="headerlink" href="#evaluation" title="Permanent link">&para;</a></h2>
+<p><img alt="image-20201012154743505" src="../images/05-recommender-systems/image-20201012154743505.png" /></p>
+<p>How good is the recommender we have designed?</p>
+<h3 id="explicit-feedback">Explicit Feedback<a class="headerlink" href="#explicit-feedback" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Split data into <span style='color:blue'>training</span> and <span style='color:red'>test</span> set:</li>
+</ul>
+<p><img alt="image-20201012154957745" src="../images/05-recommender-systems/image-20201012154957745.png" /></p>
+<ul>
+<li>Design/learn/configure recommender using the training data</li>
+<li>Compare true and predicted ratings on test cases:</li>
+</ul>
+<p><img alt="image-20201012155026199" src="../images/05-recommender-systems/image-20201012155026199.png" /></p>
+<p>Quantify performance using e.g. <span class="arithmatex"><span class="MathJax_Preview">\text{accuracy}:{\text{#correct predictions} \over \text{#all predictions}}</span><script type="math/tex">\text{accuracy}:{\text{#correct predictions} \over \text{#all predictions}}</script></span> (or root mean squared error RMSE for numeric predictions).</p>
+<h3 id="implicit-feedback">Implicit Feedback<a class="headerlink" href="#implicit-feedback" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Split data into <span style='color:blue'>training</span> and <span style='color:red'>test</span> set:</li>
+</ul>
+<p><img alt="image-20201012155156786" src="../images/05-recommender-systems/image-20201012155156786.png" /></p>
+<ul>
+<li>Build/learn/configure recommender using the training data</li>
+<li>Determine positions of test items in ranked list of all items (or: test items plus random selection of some other items):</li>
+</ul>
+<p><img alt="image-20201012155217602" src="../images/05-recommender-systems/image-20201012155217602.png" /></p>
+<ul>
+<li>Quantify performance</li>
+</ul>
+<p><strong>Mean reciprocal rank:</strong></p>
+<p><img alt="image-20201012155248467" src="../images/05-recommender-systems/image-20201012155248467.png" /></p>
+<p>where <span class="arithmatex"><span class="MathJax_Preview">K</span><script type="math/tex">K</script></span>: number of test items; <span class="arithmatex"><span class="MathJax_Preview">rank(i)</span><script type="math/tex">rank(i)</script></span>: the rank of the <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span>th test item.</p>
+<p><img alt="image-20201012155319532" src="../images/05-recommender-systems/image-20201012155319532.png" /></p>
+<ul>
+<li>All metrics make the implicit assumption that non-test items are not relevant for the user</li>
+<li>To go beyond the limitations of this implicit assumption: need <strong>user studies</strong></li>
+</ul>
+<h2 id="collaborative-filtering">Collaborative Filtering<a class="headerlink" href="#collaborative-filtering" title="Permanent link">&para;</a></h2>
+<p><strong>Pure interaction data</strong></p>
+<p><img alt="image-20201012160000039" src="../images/05-recommender-systems/image-20201012160000039.png" /></p>
+<p><img alt="image-20201012160009201" src="../images/05-recommender-systems/image-20201012160009201.png" /></p>
+<ul>
+<li>Very sparse matrices</li>
+</ul>
+<p>Some key techniques</p>
+<ul>
+<li>Neighborhood methods (this session)</li>
+<li>Random walk based (next session)</li>
+<li>Matrix factorization (next session)</li>
+</ul>
+<h3 id="neighborhood-methods">Neighborhood Methods<a class="headerlink" href="#neighborhood-methods" title="Permanent link">&para;</a></h3>
+<p><strong>Scenario</strong></p>
+<ul>
+<li>No item features</li>
+<li>No user features</li>
+<li>Explicit feedback</li>
+</ul>
+<p><strong>Example</strong></p>
+<p><img alt="image-20210102114752139" src="../images/05-recommender-systems/image-20210102114752139.png" /></p>
+<p>Here: explicit numeric feedback; could also be explicit categorical (+, −) feedback</p>
+<h4 id="user-based">User Based<a class="headerlink" href="#user-based" title="Permanent link">&para;</a></h4>
+<p>To predict Eric's rating for Titanic:</p>
+<ul>
+<li>Find users similar to Eric who have rated Titanic</li>
+<li>Predict by taking average of similar users’ ratings</li>
+</ul>
+<h4 id="item-based">Item Based<a class="headerlink" href="#item-based" title="Permanent link">&para;</a></h4>
+<p>To predict Eric's rating for Titanic:</p>
+<ul>
+<li>Find items that Eric has rated which are similar to Titanic</li>
+<li>Predict by taking average of Eric’s ratings for similar items</li>
+</ul>
+<h4 id="user-vs-item-based">User vs Item Based<a class="headerlink" href="#user-vs-item-based" title="Permanent link">&para;</a></h4>
+<p>User- and item-based completely analogous: just transpose the matrix.</p>
+<p>Differences due to rating distribution in matrix:</p>
+<p><strong>User cold start:</strong>  for a user <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span> with very few ratings (suppose exactly one rating):</p>
+<ul>
+<li><em>User-based</em><ul>
+<li>Many equally (and highly similar) other users.</li>
+<li>Prediction for <span class="arithmatex"><span class="MathJax_Preview">r_{u,i}</span><script type="math/tex">r_{u,i}</script></span> for item <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span> close to global average of ratings for <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span></li>
+</ul>
+</li>
+<li><em>Item-based</em><ul>
+<li>Only one candidate similar item.</li>
+<li>Prediction for <span class="arithmatex"><span class="MathJax_Preview">r_{u,i}</span><script type="math/tex">r_{u,i}</script></span> for item <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span> equal to the only previous rating of <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span></li>
+</ul>
+</li>
+</ul>
+<p>Similarly for <strong>item cold start</strong> (everything transposed ...)</p>
+<h4 id="normalization">Normalization<a class="headerlink" href="#normalization" title="Permanent link">&para;</a></h4>
+<p>Suppose</p>
+<p><img alt="image-20210102115619373" src="../images/05-recommender-systems/image-20210102115619373.png" /></p>
+<p>are user vectors.</p>
+<p>Two different users may use somewhat different semantics for their ratings: user 1 gives 5 stars whenever he likes a movie, user 2 gives 5 stars only once in a lifetime.</p>
+<h5 id="mean-centering">Mean Centering<a class="headerlink" href="#mean-centering" title="Permanent link">&para;</a></h5>
+<p>Let <span class="arithmatex"><span class="MathJax_Preview">\overline r_u</span><script type="math/tex">\overline r_u</script></span> denote the mean value of all ratings of user <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span>.</p>
+<p>Define the <em>user mean centered</em> ratings as</p>
+<div class="arithmatex">
+<div class="MathJax_Preview">
+h(r_{u,i})=r_{u,i} - \overline r_u
+</div>
+<script type="math/tex; mode=display">
+h(r_{u,i})=r_{u,i} - \overline r_u
+</script>
+</div>
+<p>Example:</p>
+<ul>
+<li><span class="arithmatex"><span class="MathJax_Preview">\overline r_u = 3, \quad \overline r_v = 2.25</span><script type="math/tex">\overline r_u = 3, \quad \overline r_v = 2.25</script></span></li>
+</ul>
+<p><img alt="image-20210102115840642" src="../images/05-recommender-systems/image-20210102115840642.png" /></p>
+<p>(note the 0s!)</p>
+<h4 id="similarity">Similarity<a class="headerlink" href="#similarity" title="Permanent link">&para;</a></h4>
+<p><strong>Problem</strong>: measure similarity between two partial integer vectors:</p>
+<p><img alt="image-20210102115328699" src="../images/05-recommender-systems/image-20210102115328699.png" /></p>
+<ul>
+<li>these can be either a <em>user</em> (column) or <em>item</em> (row) vectors.</li>
+<li>in a sparse vector, the “blank” entries would be equal to 0.</li>
+</ul>
+<p>Only consider the components that are <span style="color: red">present in both vectors:</span></p>
+<p><img alt="image-20210102115437792" src="../images/05-recommender-systems/image-20210102115437792.png" /></p>
+<ul>
+<li><span class="arithmatex"><span class="MathJax_Preview">(1, 5, 4, 3, 2) \quad (1, 4, 4, 1, 1)</span><script type="math/tex">(1, 5, 4, 3, 2) \quad (1, 4, 4, 1, 1)</script></span></li>
+</ul>
+<p>Then what...</p>
+<ul>
+<li>Dot product?</li>
+<li>Cosine similarity?</li>
+</ul>
+<h5 id="user-user-similarity">User-User Similarity<a class="headerlink" href="#user-user-similarity" title="Permanent link">&para;</a></h5>
+<ul>
+<li>Center full user vectors</li>
+</ul>
+<p><img alt="image-20210102120125107" src="../images/05-recommender-systems/image-20210102120125107.png" /></p>
+<ul>
+<li>Calculate similarity <span class="arithmatex"><span class="MathJax_Preview">w_{u,v}</span><script type="math/tex">w_{u,v}</script></span> as the cosine of the sub-vectors of commonly rated items:</li>
+</ul>
+<div class="arithmatex">
+<div class="MathJax_Preview">
+\cos((−2, 2, 1, 0, −1), (−1.25, 1.75, 1.75, −1.25, −1.25))
+</div>
+<script type="math/tex; mode=display">
+\cos((−2, 2, 1, 0, −1), (−1.25, 1.75, 1.75, −1.25, −1.25))
+</script>
+</div>
+<blockquote>
+<p>(this is equivalent to Equation (2.19) in Rec. Sys. Handbook, Ch. 2)</p>
+</blockquote>
+<h5 id="significance">Significance<a class="headerlink" href="#significance" title="Permanent link">&para;</a></h5>
+<p>Problem with <span class="arithmatex"><span class="MathJax_Preview">w_{u,v}</span><script type="math/tex">w_{u,v}</script></span>: may obtain large similarity values from very small sets of common ratings:</p>
+<ul>
+<li><span class="arithmatex"><span class="MathJax_Preview">\cos((1),(1)) = 1</span><script type="math/tex">\cos((1),(1)) = 1</script></span></li>
+<li><span class="arithmatex"><span class="MathJax_Preview">\cos((1, −1, 0, 2, 2, 0, −1, −2), (1, −1, 0, 1, 2, 0, −1, −2)) &lt; 1</span><script type="math/tex">\cos((1, −1, 0, 2, 2, 0, −1, −2), (1, −1, 0, 1, 2, 0, −1, −2)) < 1</script></span></li>
+</ul>
+<p>We can apply a penalty for 'short vectors':</p>
+<div class="arithmatex">
+<div class="MathJax_Preview">
+w'_{u,v} = \frac {\min(\text{#common ratings}, \gamma)} {\gamma} w_{u,v}
+</div>
+<script type="math/tex; mode=display">
+w'_{u,v} = \frac {\min(\text{#common ratings}, \gamma)} {\gamma} w_{u,v}
+</script>
+</div>
+<ul>
+<li>e.g. <span class="arithmatex"><span class="MathJax_Preview">\gamma =25</span><script type="math/tex">\gamma =25</script></span></li>
+</ul>
+<h4 id="putting-things-together">Putting Things Together<a class="headerlink" href="#putting-things-together" title="Permanent link">&para;</a></h4>
+<p>User-based prediction of <span class="arithmatex"><span class="MathJax_Preview">r_{u,i}</span><script type="math/tex">r_{u,i}</script></span>:</p>
+<ul>
+<li>Let <span class="arithmatex"><span class="MathJax_Preview">\mathcal N_i</span><script type="math/tex">\mathcal N_i</script></span> be the set of users that have rated <span class="arithmatex"><span class="MathJax_Preview">i</span><script type="math/tex">i</script></span></li>
+<li>Predict</li>
+</ul>
+<p><img alt="image-20210102120637576" src="../images/05-recommender-systems/image-20210102120637576.png" /></p>
+<ul>
+<li>Or use <span class="arithmatex"><span class="MathJax_Preview">w'_{u,v}</span><script type="math/tex">w'_{u,v}</script></span></li>
+<li>Instead of summing over all users in <span class="arithmatex"><span class="MathJax_Preview">\mathcal N_i</span><script type="math/tex">\mathcal N_i</script></span>, may only sum over the <span class="arithmatex"><span class="MathJax_Preview">k</span><script type="math/tex">k</script></span> users that are most similar to <span class="arithmatex"><span class="MathJax_Preview">u</span><script type="math/tex">u</script></span> denoted <span class="arithmatex"><span class="MathJax_Preview">\mathcal N_i(u)</span><script type="math/tex">\mathcal N_i(u)</script></span></li>
+</ul>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 2, 2021</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+        <script src="../../../javascripts/extra.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

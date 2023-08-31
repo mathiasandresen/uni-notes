@@ -1,0 +1,6410 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Mathias Andresen">
+      
+      
+        <link rel="canonical" href="http://notes.mathiasandresen.dk/6-semester/DBS/06-transactions/">
+      
+      
+        <link rel="prev" href="../05-sql/">
+      
+      
+        <link rel="next" href="../07-physical-dbs/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
+    
+    
+      
+        <title>Transactions - Uni Noter</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Open Sans";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#transactions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Uni Noter" class="md-header__button md-logo" aria-label="Uni Noter" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Uni Noter
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Transactions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mathiasandresen/uni-notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mathiasandresen/uni-notes
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Forside
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../3-semester/" class="md-tabs__link">
+        3 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../4-semester/" class="md-tabs__link">
+        4 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../5-semester/" class="md-tabs__link">
+        5 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        6 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../7-semester/" class="md-tabs__link">
+        7 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../8-semester/" class="md-tabs__link">
+        8 semester
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Uni Noter" class="md-nav__button md-logo" aria-label="Uni Noter" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82Z"/></svg>
+
+    </a>
+    Uni Noter
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mathiasandresen/uni-notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mathiasandresen/uni-notes
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Forside
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" tabindex="0" aria-expanded="false">
+          3 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="3 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          3 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" tabindex="0" aria-expanded="false">
+          AD1
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="AD1" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          AD1
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/02-analysing-algorithms/" class="md-nav__link">
+        Analysing Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/03-divide-and-conquer/" class="md-nav__link">
+        Divide-and-Conquer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/04-solving-recurrences/" class="md-nav__link">
+        Solving Recurrences
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/05-sorting-algorithms/" class="md-nav__link">
+        Sorting Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/06-heap-sort/" class="md-nav__link">
+        Heap Sort
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/07-data-structures/" class="md-nav__link">
+        Data Structures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/08a-hash-tables/" class="md-nav__link">
+        Hash Tables
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/08b-binary-search-tree/" class="md-nav__link">
+        Binary Search Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/09-dynamic-programming/" class="md-nav__link">
+        Dynamic Programming
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/10a-graph-theory/" class="md-nav__link">
+        Elementary graph algorithms (A)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/10b-graph-algorithms/" class="md-nav__link">
+        Elementary graph algorithms (B)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/10c-topological-sort/" class="md-nav__link">
+        Elementary graph algorithms (C) - Topological Sort
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/11a-strongly-connected-components/" class="md-nav__link">
+        Strongly Connected Components
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/11b-minimum-spanning-tree/" class="md-nav__link">
+        Minimum Spanning Tree
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/12-finding-shortest-paths/" class="md-nav__link">
+        Finding Shortest Paths
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/extra1-big-o-cheat-sheet/" class="md-nav__link">
+        Big-O Cheat-Sheet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/extra2-standard-notation-and-common-functions/" class="md-nav__link">
+        Standard Notation and Common Functions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/extra3-standard-knowledge/" class="md-nav__link">
+        Earlier Knowledge
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2_3" type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" tabindex="0" aria-expanded="false">
+          DEB
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="DEB" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          DEB
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/03-envisionment/" class="md-nav__link">
+        Envisionment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/04-physical-design/" class="md-nav__link">
+        Physical Design
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/05-physical-design-memory-and-attention/" class="md-nav__link">
+        Physical Design - Memory & Attention
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/06-perception-and-navigation/" class="md-nav__link">
+        Physical Design - Perception & Navigation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/07-evaluation/" class="md-nav__link">
+        Evaluation - What is Usability and Usability Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/08-evaluation-identifying-problems/" class="md-nav__link">
+        Evaluation - Identifying Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/09a-user-experience/" class="md-nav__link">
+        Evaluation - Alternative methods and UX
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/09b-alternative-methods-for-testing-usability/" class="md-nav__link">
+        Evaluation - Alternative methods and UX
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2_4" type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" tabindex="0" aria-expanded="false">
+          SU
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SU" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          SU
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/1-classes-and-objects/" class="md-nav__link">
+        Classes and Objects
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/2-factor/" class="md-nav__link">
+        FACTOR
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/3-structure/" class="md-nav__link">
+        Structure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/4-usage/" class="md-nav__link">
+        Usage
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          4 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="4 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          4 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2" tabindex="0" aria-expanded="false">
+          PSS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="PSS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          PSS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/1-intro/" class="md-nav__link">
+        Introduction to Operating Systems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/5-memory-management/" class="md-nav__link">
+        Memory Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_2_4" type="checkbox" id="__nav_3_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2_4" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/1-processes-and-threads/" class="md-nav__link">
+        1 - Processes and Threads
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/2-scheduler/" class="md-nav__link">
+        2 - Scheduling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/3-memory-management/" class="md-nav__link">
+        3 - Memory Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/4-paged-memory/" class="md-nav__link">
+        4 - Paged Memory
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/5-concurrency/" class="md-nav__link">
+        5 - Concurrency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/6-concurrency-problems/" class="md-nav__link">
+        6 - Concurrency Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/7-io-and-device-drivers/" class="md-nav__link">
+        7 - I/O and Device Drivers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/8-xv6/" class="md-nav__link">
+        8 - XV6 Exercise of Choice
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3" tabindex="0" aria-expanded="false">
+          SPO
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SPO" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          SPO
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/01-programming-languages-and-compilers/" class="md-nav__link">
+        Programming Languages and Compilers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/02-tombstone-diagrams/" class="md-nav__link">
+        Tombstone Diagrams
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/03a-the-phases-of-a-compiler/" class="md-nav__link">
+        The Phases of a Compiler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/03b-the-ac-language-and-compiler/" class="md-nav__link">
+        The 'ac' Language and Compiler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/04-language-specification/" class="md-nav__link">
+        Language Specification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/05a-context-free-grammars/" class="md-nav__link">
+        Context Free Grammars
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/05b-from-tokens-to-parse-trees/" class="md-nav__link">
+        From Tokens to Parse Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/06-lexical-analysis/" class="md-nav__link">
+        Lexical Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_3_10" type="checkbox" id="__nav_3_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3_10" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/1-language-design-and-control-structures/" class="md-nav__link">
+        1 - Language Design and Control Structures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/2-structure-of-the-compiler/" class="md-nav__link">
+        2 - Structure of the Compiler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/3-lexical-analysis/" class="md-nav__link">
+        3 - Lexical Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/4-parsing/" class="md-nav__link">
+        4 - Parsing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/5-semantic-analysis/" class="md-nav__link">
+        5 - Semantic Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/6-runtime-organization/" class="md-nav__link">
+        6 - Runtime Organization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/7-heap-allocation-and-gc/" class="md-nav__link">
+        7 - Heap Allocation and Garbage Collection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/8-code-generation/" class="md-nav__link">
+        8 - Code Generation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_4" type="checkbox" id="__nav_3_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_4" tabindex="0" aria-expanded="false">
+          SS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_4">
+          <span class="md-nav__icon md-icon"></span>
+          SS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/0-eksamen-fremgangsm%C3%A5der/" class="md-nav__link">
+        Eksamen - Fremgangsmåder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/01a-regul%C3%A6re-sprog/" class="md-nav__link">
+        Regulære Sprog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/01b-endelige-automater/" class="md-nav__link">
+        Endelige Automater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/02-nondeterministiske-endelige-automater/" class="md-nav__link">
+        Nondeterministiske Endelige Automater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/03-regul%C3%A6re-udtryk/" class="md-nav__link">
+        Regulære Udtryk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/04-pumping-lemma/" class="md-nav__link">
+        Pumping Lemma
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/05-kontekstfrie-grammatikker/" class="md-nav__link">
+        Kontekstfrie Grammatikker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/06-pushdown-automater/" class="md-nav__link">
+        Pushdown Automater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/07-pumping-lemma-for-kontekstfrie-sprog/" class="md-nav__link">
+        Pumping Lemma for Kontekstfrie Sprog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/15-rekursive-definitioner/" class="md-nav__link">
+        Rekursive Definitioner
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" tabindex="0" aria-expanded="false">
+          5 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="5 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          5 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2" tabindex="0" aria-expanded="false">
+          CC
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="CC" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          CC
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/01-turing-maskiner/" class="md-nav__link">
+        Turing Maskiner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/02-church-turing-tesen/" class="md-nav__link">
+        Church-Turing-Tesen
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/03-acceptproblemet-for-tm/" class="md-nav__link">
+        Acceptproblemet for Turing-maskiner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/04-more-problems-than-algorithms/" class="md-nav__link">
+        Er der Flere Problemer end Algoritmer? Og er Problemer Beslægtede?
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/05-beregningshistorier/" class="md-nav__link">
+        Uafgørbare Problemer om Beregningshistorier
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/06-posts-korrespondanceproblem/" class="md-nav__link">
+        Posts Korrospondanceproblem ; Teorien for Reduktioner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/07-rice/" class="md-nav__link">
+        Rice's Sætning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/09-tidskompleksitet/" class="md-nav__link">
+        Tidskompleksitet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/10-np-fuldstaendighed/" class="md-nav__link">
+        NP og NP-fuldstændighed
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/12-np-complete-sprog/" class="md-nav__link">
+        Flere NP-fuldstændige Sprog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/13-pladskompleksitet/" class="md-nav__link">
+        Pladskompleksitet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/99-sprog-i-pensum/" class="md-nav__link">
+        Sprogproblemer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3" tabindex="0" aria-expanded="false">
+          MI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="MI" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          MI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-04-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-09-problem-solving-as-search/" class="md-nav__link">
+        Problem Solving as Search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-16-constrains-satisfaction-problems/" class="md-nav__link">
+        Constraints Satisfaction Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-16appendix/" class="md-nav__link">
+        Constraints Satisfaction Problems - Appendix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-23-reasoning-under-certainty/" class="md-nav__link">
+        Reasoning Under Uncertainty
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-07-bayesian-networks/" class="md-nav__link">
+        Bayesian Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-14-inference-in-bayesian-networks/" class="md-nav__link">
+        Inference in Bayesian Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-21-decision-trees/" class="md-nav__link">
+        Learning: Introduction and Decision Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-28-neural-networks/" class="md-nav__link">
+        Learning: Neural Network
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-28appendix/" class="md-nav__link">
+        Learning: Neural Network - Appendix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-04-methods-and-issues/" class="md-nav__link">
+        Learning: Methods and Issues
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-11-clustering/" class="md-nav__link">
+        Learning: Clustering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-18-planning-uncertainty/" class="md-nav__link">
+        Planning under Uncertainty
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-25-multi-agent/" class="md-nav__link">
+        Multi-Agent Systems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/99_exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/probability-calculus-cheatsheet/" class="md-nav__link">
+        Cheat Sheet for Probability Calculus
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_4" type="checkbox" id="__nav_4_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4" tabindex="0" aria-expanded="false">
+          SOE
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SOE" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          SOE
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/01-introduction/" class="md-nav__link">
+        Software Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/02-agile-xp-and-scrum/" class="md-nav__link">
+        Agile, XP, and Scrum
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/04a-rup/" class="md-nav__link">
+        (R)UP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/05-planning/" class="md-nav__link">
+        Project Planning and Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/06-risk-management/" class="md-nav__link">
+        Risk Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/07-quality/" class="md-nav__link">
+        Quality Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/9ba-test/" class="md-nav__link">
+        Test
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_4_9" type="checkbox" id="__nav_4_4_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4_9" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_4_9">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/" class="md-nav__link">
+        Exam Questions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/01-waterfall/" class="md-nav__link">
+        1. Software process models: waterfall
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/02-incremental-iterative/" class="md-nav__link">
+        2. Software process model: incremental and iterative
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/03-integration-configuration/" class="md-nav__link">
+        3. Software process model: integration & configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/04-plandriven-vs-agile/" class="md-nav__link">
+        4. Comparison of plan-driven and agile SOE processes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/05-scrum/" class="md-nav__link">
+        5. Key features of Scrum
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/06-rup/" class="md-nav__link">
+        6. Key features of RUP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/07-requirements/" class="md-nav__link">
+        7. Requirements Elicitation and Managing change to requirements
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/08-quality-control/" class="md-nav__link">
+        8. Quality Control: Verification and Validation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/09-risk-management/" class="md-nav__link">
+        9. Risk Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/10-project-planning-management/" class="md-nav__link">
+        10. Project Planning and Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/11-quality-management/" class="md-nav__link">
+        11. Quality Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/12-configuration-management/" class="md-nav__link">
+        12. Configuration Management
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="true">
+          6 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="6 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          6 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2" tabindex="0" aria-expanded="false">
+          AALG
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="AALG" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          AALG
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/01-dc/" class="md-nav__link">
+        Dynamic Programming
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/02-dp-all-pairs-shortest-paths/" class="md-nav__link">
+        All-pairs Shortest Paths (Dynamic Programming)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/03-flow-networks/" class="md-nav__link">
+        Flow Networks and Maximum Flow
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/04-greedy-algorithms/" class="md-nav__link">
+        Greedy Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/05-amortized-analysis/" class="md-nav__link">
+        Amortized Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/06-computational-geometry-sweeping/" class="md-nav__link">
+        Computational Geometry Algorithms: Sweeping Techniques
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/08-computational-geometry-range-searching/" class="md-nav__link">
+        Computational Geometry Data Structures: Range Searching
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/10-multithreaded-algorithms/" class="md-nav__link">
+        Multithreaded Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/11-approximation/" class="md-nav__link">
+        Approximation for NP-complete Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/12-backtracking/" class="md-nav__link">
+        Backtracking and Branch-and-Bound
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2_12" type="checkbox" id="__nav_5_2_12" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2_12" tabindex="0" aria-expanded="false">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Guides" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_2_12">
+          <span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/guides/amortized-analysis/" class="md-nav__link">
+        Amortized Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/guides/approx-and-parallel/" class="md-nav__link">
+        Approximation and Parallelism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/guides/flow-networks/" class="md-nav__link">
+        Flow Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/guides/graphs/" class="md-nav__link">
+        Graphs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/guides/others/" class="md-nav__link">
+        Others
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/guides/range-queries/" class="md-nav__link">
+        Range Queries and Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/guides/sweeping/" class="md-nav__link">
+        Sweeping
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2_12_8" type="checkbox" id="__nav_5_2_12_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2_12_8" tabindex="0" aria-expanded="false">
+          Year based old
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Year based old" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_2_12_8">
+          <span class="md-nav__icon md-icon"></span>
+          Year based old
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/guides/year-based-old/2015/" class="md-nav__link">
+        2015
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/guides/year-based-old/2016/" class="md-nav__link">
+        2016
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../AALG/guides/year-based-old/2017/" class="md-nav__link">
+        2017
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3" tabindex="0" aria-expanded="true">
+          DBS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="DBS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          DBS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-relational-model-and-relational-algebra/" class="md-nav__link">
+        Relational Model and Relational Algebra
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-entity-relationship-model/" class="md-nav__link">
+        The Entity Relationship Model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-relational-database-theory/" class="md-nav__link">
+        Relational Database Design Theory
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-sql/" class="md-nav__link">
+        SQL
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Transactions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Transactions
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#transactions_1" class="md-nav__link">
+    Transactions
+  </a>
+  
+    <nav class="md-nav" aria-label="Transactions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#acid-properties" class="md-nav__link">
+    ACID Properties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operations-on-transactions" class="md-nav__link">
+    Operations on Transactions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transaction-states" class="md-nav__link">
+    Transaction States
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-dbmss-support-transactions" class="md-nav__link">
+    How do DBMSs Support Transactions?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schedules-and-serializability" class="md-nav__link">
+    Schedules and Serializability
+  </a>
+  
+    <nav class="md-nav" aria-label="Schedules and Serializability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#concurrency" class="md-nav__link">
+    Concurrency
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schedules" class="md-nav__link">
+    Schedules
+  </a>
+  
+    <nav class="md-nav" aria-label="Schedules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-schedules" class="md-nav__link">
+    Example Schedules
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#correctness" class="md-nav__link">
+    Correctness
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conflicts" class="md-nav__link">
+    Conflicts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conflict-graph" class="md-nav__link">
+    Conflict Graph
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#draw-a-conflict-graph" class="md-nav__link">
+    Draw a Conflict Graph
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#determining-serializability" class="md-nav__link">
+    Determining Serializability
+  </a>
+  
+    <nav class="md-nav" aria-label="Determining Serializability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relationship-among-schedules" class="md-nav__link">
+    Relationship Among Schedules
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recoverable-and-cascadeless-schedules" class="md-nav__link">
+    Recoverable and Cascadeless Schedules
+  </a>
+  
+    <nav class="md-nav" aria-label="Recoverable and Cascadeless Schedules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recoverable" class="md-nav__link">
+    Recoverable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cascadeless" class="md-nav__link">
+    Cascadeless
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concurrency-control" class="md-nav__link">
+    Concurrency Control
+  </a>
+  
+    <nav class="md-nav" aria-label="Concurrency Control">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scheduler" class="md-nav__link">
+    Scheduler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lock-based-synchronization" class="md-nav__link">
+    Lock-based Synchronization
+  </a>
+  
+    <nav class="md-nav" aria-label="Lock-based Synchronization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lock-privileges" class="md-nav__link">
+    Lock Privileges
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problems-with-early-unlocking" class="md-nav__link">
+    Problems with Early Unlocking
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problems-with-late-unlocking" class="md-nav__link">
+    Problems with Late Unlocking
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-phase-locking-2pl" class="md-nav__link">
+    Two-Phase Locking (2PL)
+  </a>
+  
+    <nav class="md-nav" aria-label="Two-Phase Locking (2PL)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#characteristics-of-2pl" class="md-nav__link">
+    Characteristics of 2PL
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variations-of-2pl" class="md-nav__link">
+    Variations of 2PL
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lock-conversion" class="md-nav__link">
+    Lock Conversion
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#more-examples" class="md-nav__link">
+    More Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deadlocks" class="md-nav__link">
+    Deadlocks
+  </a>
+  
+    <nav class="md-nav" aria-label="Deadlocks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deadlock-detection" class="md-nav__link">
+    Deadlock Detection
+  </a>
+  
+    <nav class="md-nav" aria-label="Deadlock Detection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rollback-candidates" class="md-nav__link">
+    Rollback Candidates
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deadlock-prevention" class="md-nav__link">
+    Deadlock Prevention
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary-concurrency-control" class="md-nav__link">
+    Summary: Concurrency Control
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recovery" class="md-nav__link">
+    Recovery
+  </a>
+  
+    <nav class="md-nav" aria-label="Recovery">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#durability" class="md-nav__link">
+    Durability
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-classification" class="md-nav__link">
+    Failure Classification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-storage" class="md-nav__link">
+    Data Storage
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Storage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#movement-of-values" class="md-nav__link">
+    Movement of Values
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#storage-operations" class="md-nav__link">
+    Storage Operations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging" class="md-nav__link">
+    Logging
+  </a>
+  
+    <nav class="md-nav" aria-label="Logging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#log-entries" class="md-nav__link">
+    Log Entries
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_2" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#log-based-recovery" class="md-nav__link">
+    Log-based Recovery
+  </a>
+  
+    <nav class="md-nav" aria-label="Log-based Recovery">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recovery-algorithm" class="md-nav__link">
+    Recovery Algorithm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phases-of-recovery" class="md-nav__link">
+    Phases of Recovery
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compensating-log-records" class="md-nav__link">
+    Compensating Log Records
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_3" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-physical-dbs/" class="md-nav__link">
+        Physical Design
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-query-optimization/" class="md-nav__link">
+        Query Processing and Optimization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_3_10" type="checkbox" id="__nav_5_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3_10" tabindex="0" aria-expanded="false">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Guides" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/logical-query-optimization/" class="md-nav__link">
+        Logical (Heuristic) Query Optimization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/lossless-decomposition-and-dependency-preservation/" class="md-nav__link">
+        Lossless Decomposition and Dependency Preservation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/mapping-er-to-relations/" class="md-nav__link">
+        Mapping ER to Relations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/minimal-cover/" class="md-nav__link">
+        Calculate Minimal Cover (Canonical Cover)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/normal-form/" class="md-nav__link">
+        Determine Relational Schema Normal Form
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" tabindex="0" aria-expanded="false">
+          7 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="7 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          7 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_2" type="checkbox" id="__nav_6_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_2" tabindex="0" aria-expanded="false">
+          DS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="DS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_2">
+          <span class="md-nav__icon md-icon"></span>
+          DS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/02-os-and-networking-fundamentals/" class="md-nav__link">
+        OS and Networking Fundamentals
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/03-mutex/" class="md-nav__link">
+        Mutual Exclusion (Mutex) and Election
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/04-multicast/" class="md-nav__link">
+        Multicast
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/05-consensus/" class="md-nav__link">
+        Consensus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/06a-replication/" class="md-nav__link">
+        Replication and Consistency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/06b-transactions/" class="md-nav__link">
+        Transactions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/07-wireless/" class="md-nav__link">
+        Wireless Sensor Networks and Internet of Things
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/08-peer-to-peer/" class="md-nav__link">
+        Peer to Peer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/09-cluster-storage/" class="md-nav__link">
+        Cluster Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/10-blockchain/" class="md-nav__link">
+        Blockchain
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/11-big-data-analytics/" class="md-nav__link">
+        Big Data Analytics
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/12-soa/" class="md-nav__link">
+        Service-oriented Architectures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_2_15" type="checkbox" id="__nav_6_2_15" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_2_15" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_2_15">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/exam/1-distributed-mutex/" class="md-nav__link">
+        Question 1 - Distributed Mutual Exclusion
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/exam/2-multicast/" class="md-nav__link">
+        Question 2 - Multicast
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/exam/3-replication-and-consistency/" class="md-nav__link">
+        Question 3 - Replication and Consistency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/exam/4-consensus/" class="md-nav__link">
+        Question 4: Consensus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/exam/5-clustered-storage/" class="md-nav__link">
+        Question 5 - Clustered Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/exam/6-big-data-processing/" class="md-nav__link">
+        Question 6 - Big Data Processing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/exam/7-iot-routing/" class="md-nav__link">
+        Question 7 - Internet of Things Routing (Directed Diffusion, Tree Routing in ZigBee, AODV, DSR)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/exam/8-peer-to-peer/" class="md-nav__link">
+        Question 8 - Peer to Peer (Gnutella, Chord)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/DS/exam/9-blockchain/" class="md-nav__link">
+        Question 9 - Blockchain (Tamper-free linked lists, Nakamoto Consensus, proof of work, transactions in Merkle trees)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3" type="checkbox" id="__nav_6_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3" tabindex="0" aria-expanded="false">
+          PP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="PP" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_3">
+          <span class="md-nav__icon md-icon"></span>
+          PP
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/PP/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3_2" type="checkbox" id="__nav_6_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3_2" tabindex="0" aria-expanded="false">
+          Logic
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Logic" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Logic
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/PP/Logic/semantics/" class="md-nav__link">
+        Semantics of Datalog / Prolog
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3_3" type="checkbox" id="__nav_6_3_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3_3" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/PP/exam/" class="md-nav__link">
+        PP Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/PP/exam/datalog-and-prolog/" class="md-nav__link">
+        Datalog and Prolog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/PP/exam/haskell/" class="md-nav__link">
+        Haskell
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/PP/exam/scheme/" class="md-nav__link">
+        Scheme
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3_3_5" type="checkbox" id="__nav_6_3_3_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3_3_5" tabindex="0" aria-expanded="false">
+          Solutions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Solutions" data-md-level="4">
+        <label class="md-nav__title" for="__nav_6_3_3_5">
+          <span class="md-nav__icon md-icon"></span>
+          Solutions
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/PP/exam/solutions/01-scheme/" class="md-nav__link">
+        Scheme Exercises
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/PP/exam/solutions/02-haskell/" class="md-nav__link">
+        Haskell Exercises
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/PP/exam/solutions/03-datalog-prolog/" class="md-nav__link">
+        Datalog and Prolog Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4" tabindex="0" aria-expanded="false">
+          WI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="WI" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          WI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/WI/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/WI/01-introduction-and-crawlers/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/WI/02-index-construction/" class="md-nav__link">
+        Index Construction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/WI/03-content-based-ranking/" class="md-nav__link">
+        Content-based Ranking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/WI/04-structure-based-ranking/" class="md-nav__link">
+        Structure-based Ranking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/WI/05-recommender-systems/" class="md-nav__link">
+        Recommender Systems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/WI/06-recommender-systems-2/" class="md-nav__link">
+        Recommender Systems 2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/WI/07-network-structure-and-communities/" class="md-nav__link">
+        Network Structure and Communities
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/WI/08-communities-and-information-diffusion/" class="md-nav__link">
+        Communities and Information Diffusion
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/WI/09%2B10-node-classification/" class="md-nav__link">
+        Node Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_4_11" type="checkbox" id="__nav_6_4_11" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4_11" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../7-semester/WI/exam/" class="md-nav__link">
+        WI Exam
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" tabindex="0" aria-expanded="false">
+          8 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="8 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          8 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" tabindex="0" aria-expanded="false">
+          MDLS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="MDLS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          MDLS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/MDLS/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_3" type="checkbox" id="__nav_7_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_3" tabindex="0" aria-expanded="false">
+          mHCI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="mHCI" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          mHCI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/01-introduction/" class="md-nav__link">
+        mHCI Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/02-concepts-and-context/" class="md-nav__link">
+        MCHI Concepts and Understanding Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/08-introduction-to-quantitive-studies/" class="md-nav__link">
+        	Introduction to Quantitative Studies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/09-lab-experiments/" class="md-nav__link">
+        Lab Experiments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/10-field-experiments/" class="md-nav__link">
+        Field Experiments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/99-exam/" class="md-nav__link">
+        Exam Questions
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" tabindex="0" aria-expanded="false">
+          sP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="sP" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          sP
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/02-fundamentals/" class="md-nav__link">
+        Fundamentals
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/03-initialization/" class="md-nav__link">
+        Initialization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/04-raii/" class="md-nav__link">
+        Classes Continued
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/05-pimpl/" class="md-nav__link">
+        PIMPL Idiom and Dynamic Polymorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/06-double-dispatch/" class="md-nav__link">
+        Double Dispatch
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/07-generic-programming/" class="md-nav__link">
+        Generic Programming
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/10-lambda/" class="md-nav__link">
+        Lambda Expressions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/10-rval-and-forward/" class="md-nav__link">
+        Rvalue and Forwarding References
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/11-concurrency/" class="md-nav__link">
+        Concurrency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/99-exam/" class="md-nav__link">
+        Exam Notes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#transactions_1" class="md-nav__link">
+    Transactions
+  </a>
+  
+    <nav class="md-nav" aria-label="Transactions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#acid-properties" class="md-nav__link">
+    ACID Properties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operations-on-transactions" class="md-nav__link">
+    Operations on Transactions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transaction-states" class="md-nav__link">
+    Transaction States
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-dbmss-support-transactions" class="md-nav__link">
+    How do DBMSs Support Transactions?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schedules-and-serializability" class="md-nav__link">
+    Schedules and Serializability
+  </a>
+  
+    <nav class="md-nav" aria-label="Schedules and Serializability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#concurrency" class="md-nav__link">
+    Concurrency
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schedules" class="md-nav__link">
+    Schedules
+  </a>
+  
+    <nav class="md-nav" aria-label="Schedules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-schedules" class="md-nav__link">
+    Example Schedules
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#correctness" class="md-nav__link">
+    Correctness
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conflicts" class="md-nav__link">
+    Conflicts
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conflict-graph" class="md-nav__link">
+    Conflict Graph
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#draw-a-conflict-graph" class="md-nav__link">
+    Draw a Conflict Graph
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#determining-serializability" class="md-nav__link">
+    Determining Serializability
+  </a>
+  
+    <nav class="md-nav" aria-label="Determining Serializability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relationship-among-schedules" class="md-nav__link">
+    Relationship Among Schedules
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recoverable-and-cascadeless-schedules" class="md-nav__link">
+    Recoverable and Cascadeless Schedules
+  </a>
+  
+    <nav class="md-nav" aria-label="Recoverable and Cascadeless Schedules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recoverable" class="md-nav__link">
+    Recoverable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cascadeless" class="md-nav__link">
+    Cascadeless
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concurrency-control" class="md-nav__link">
+    Concurrency Control
+  </a>
+  
+    <nav class="md-nav" aria-label="Concurrency Control">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scheduler" class="md-nav__link">
+    Scheduler
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lock-based-synchronization" class="md-nav__link">
+    Lock-based Synchronization
+  </a>
+  
+    <nav class="md-nav" aria-label="Lock-based Synchronization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lock-privileges" class="md-nav__link">
+    Lock Privileges
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problems-with-early-unlocking" class="md-nav__link">
+    Problems with Early Unlocking
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problems-with-late-unlocking" class="md-nav__link">
+    Problems with Late Unlocking
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#two-phase-locking-2pl" class="md-nav__link">
+    Two-Phase Locking (2PL)
+  </a>
+  
+    <nav class="md-nav" aria-label="Two-Phase Locking (2PL)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#characteristics-of-2pl" class="md-nav__link">
+    Characteristics of 2PL
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#variations-of-2pl" class="md-nav__link">
+    Variations of 2PL
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lock-conversion" class="md-nav__link">
+    Lock Conversion
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#more-examples" class="md-nav__link">
+    More Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deadlocks" class="md-nav__link">
+    Deadlocks
+  </a>
+  
+    <nav class="md-nav" aria-label="Deadlocks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deadlock-detection" class="md-nav__link">
+    Deadlock Detection
+  </a>
+  
+    <nav class="md-nav" aria-label="Deadlock Detection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rollback-candidates" class="md-nav__link">
+    Rollback Candidates
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deadlock-prevention" class="md-nav__link">
+    Deadlock Prevention
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summary-concurrency-control" class="md-nav__link">
+    Summary: Concurrency Control
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recovery" class="md-nav__link">
+    Recovery
+  </a>
+  
+    <nav class="md-nav" aria-label="Recovery">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#durability" class="md-nav__link">
+    Durability
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-classification" class="md-nav__link">
+    Failure Classification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-storage" class="md-nav__link">
+    Data Storage
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Storage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#movement-of-values" class="md-nav__link">
+    Movement of Values
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#storage-operations" class="md-nav__link">
+    Storage Operations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging" class="md-nav__link">
+    Logging
+  </a>
+  
+    <nav class="md-nav" aria-label="Logging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#log-entries" class="md-nav__link">
+    Log Entries
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_2" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#log-based-recovery" class="md-nav__link">
+    Log-based Recovery
+  </a>
+  
+    <nav class="md-nav" aria-label="Log-based Recovery">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recovery-algorithm" class="md-nav__link">
+    Recovery Algorithm
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phases-of-recovery" class="md-nav__link">
+    Phases of Recovery
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compensating-log-records" class="md-nav__link">
+    Compensating Log Records
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_3" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+<h1 id="transactions">Transactions<a class="headerlink" href="#transactions" title="Permanent link">&para;</a></h1>
+<p><strong>Learning Goals</strong></p>
+<ul>
+<li>Understanding the transaction concept</li>
+<li>Understanding the ACID properties</li>
+<li>Understanding the schedule concept</li>
+<li>Understanding serializability</li>
+<li>Understanding recoverable and cascadeless schedules</li>
+</ul>
+<p><strong>Concurrency Control</strong></p>
+<ul>
+<li>Understand and use lock-based concurrency control</li>
+<li>Understand and use two-phase locking</li>
+</ul>
+<p><strong>Recovery</strong></p>
+<ul>
+<li>Understanding basic logging algorithms</li>
+<li>Understanding the importance of atomicity and durability</li>
+</ul>
+<h2 id="transactions_1">Transactions<a class="headerlink" href="#transactions_1" title="Permanent link">&para;</a></h2>
+<p>A <strong>transaction</strong> is a collection of operations that forms a <strong>logical unit</strong> of work, during which various data items are accessed and possibly updated.</p>
+<p>Transaction boundaries are user-defined!</p>
+<h3 id="acid-properties">ACID Properties<a class="headerlink" href="#acid-properties" title="Permanent link">&para;</a></h3>
+<p><strong>Atomicity</strong></p>
+<ul>
+<li>Either all operations of the transaction are properly reflected in the database or none are.</li>
+<li>Often implemented via logs</li>
+</ul>
+<p><strong>Consistency</strong></p>
+<ul>
+<li>Execution of a transaction in isolation preserves the consistency of the database.</li>
+<li>According to constraints, checks, assertions</li>
+<li>In addition, consistency is defined by the application, e.g., fund transfers should not generate or destroy money – the overall sum is the same before and afterwards</li>
+</ul>
+<p><strong>Isolation</strong></p>
+<ul>
+<li>Each transaction appears to have the DB exclusively on its own.</li>
+<li>Intermediate results must be hidden for other transactions.</li>
+<li>Often implemented via locks</li>
+</ul>
+<p><strong>Durability</strong></p>
+<ul>
+<li>Updates of successfully completed transactions must not get lost despite system failures</li>
+<li>Often implemented via logs</li>
+</ul>
+<h3 id="operations-on-transactions">Operations on Transactions<a class="headerlink" href="#operations-on-transactions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>BEGIN</code> <ul>
+<li>Starts a transaction</li>
+</ul>
+</li>
+<li><code>COMMIT</code><ul>
+<li>Ends a transaction</li>
+</ul>
+</li>
+<li><code>ROLLBACK</code><ul>
+<li>All changes are undone/discarded</li>
+</ul>
+</li>
+</ul>
+<p><strong>SAVEPOINT</strong></p>
+<ul>
+<li><code>SAVEPOINT &lt;savepoint_name&gt;;</code><ul>
+<li>Defines a point/state within a transaction</li>
+<li>A transaction can be <strong>rolled back partially</strong> back up to the savepoint</li>
+</ul>
+</li>
+<li><code>ROLLBACK TO &lt;savepoint_name&gt;</code><ul>
+<li>Rolls the active transaction back to the savepoint <code>&lt;savepoint_name&gt;</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="transaction-states">Transaction States<a class="headerlink" href="#transaction-states" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20200320094505647" src="../images/06-transactions/image-20200320094505647.png" /></p>
+<h3 id="how-do-dbmss-support-transactions">How do DBMSs Support Transactions?<a class="headerlink" href="#how-do-dbmss-support-transactions" title="Permanent link">&para;</a></h3>
+<p>The two most important components of transaction management are:</p>
+<p><strong>Multi-user Synchronization (isolation)</strong></p>
+<ul>
+<li>Semantic correctness despite concurrency 
+    Concurrency allows for high throughput</li>
+<li>Serializability</li>
+<li>Weaker isolation levels</li>
+</ul>
+<p><strong>Recovery (atomicity and durability)</strong></p>
+<ul>
+<li>Roll back partially executed transactions</li>
+<li>Re-executing transactions after failures</li>
+<li>Guaranteeing persistence of transactional updates</li>
+</ul>
+<h2 id="schedules-and-serializability">Schedules and Serializability<a class="headerlink" href="#schedules-and-serializability" title="Permanent link">&para;</a></h2>
+<h3 id="concurrency">Concurrency<a class="headerlink" href="#concurrency" title="Permanent link">&para;</a></h3>
+<p>Affects the <strong>I</strong> in <strong>ACID</strong></p>
+<p><strong>Problems</strong></p>
+<ul>
+<li><strong>Lost Updates</strong><ul>
+<li>Overwriting updates</li>
+<li><img alt="image-20200320095006994" src="../images/06-transactions/image-20200320095006994.png" /></li>
+</ul>
+</li>
+<li><strong>Dirty Read</strong><ul>
+<li>Dependency on non-committed updates</li>
+<li><img alt="image-20200320095036965" src="../images/06-transactions/image-20200320095036965.png" /></li>
+</ul>
+</li>
+<li><strong>Non-repeatable Read</strong><ul>
+<li>Dependency on other updates</li>
+<li>T2 loses the illusion that it is alone in the database</li>
+<li><img alt="image-20200320095144395" src="../images/06-transactions/image-20200320095144395.png" /></li>
+</ul>
+</li>
+<li><strong>Phantom Problem</strong><ul>
+<li>Dependency on new/deleted tuples</li>
+<li><img alt="image-20200320095310588" src="../images/06-transactions/image-20200320095310588.png" /></li>
+</ul>
+</li>
+</ul>
+<h3 id="schedules">Schedules<a class="headerlink" href="#schedules" title="Permanent link">&para;</a></h3>
+<p>A <strong>schedule</strong> is a <strong>sequence of operations</strong> from one ore more transactions.
+For concurrent transactions, the operations are interleaved.</p>
+<p><strong>Operations</strong></p>
+<ul>
+<li><code>read(Q,q)</code><ul>
+<li>Read the value of database item Q and store it in the local variable q.</li>
+</ul>
+</li>
+<li><code>write(Q,q)</code><ul>
+<li>Store the value of the local variable q in the database item Q</li>
+</ul>
+</li>
+<li>Arithmetic operations</li>
+<li><code>commit</code></li>
+<li><code>abort</code></li>
+</ul>
+<p><strong>Serial Schedule</strong>
+The operations of the transactions are executed sequentially with no overlap in time</p>
+<p><strong>Concurrent Schedule</strong>
+The operations of the transactions are executed with overlap in time</p>
+<p><strong>Valid Schedule</strong>
+A schedule is valid if the result of its executions is "correct"</p>
+<h4 id="example-schedules">Example Schedules<a class="headerlink" href="#example-schedules" title="Permanent link">&para;</a></h4>
+<p><img alt="image-20200320100146715" src="../images/06-transactions/image-20200320100146715.png" /></p>
+<h4 id="correctness">Correctness<a class="headerlink" href="#correctness" title="Permanent link">&para;</a></h4>
+<p><strong>Definition 1 (D1)</strong>
+A concurrent execution of transactions must leave the database in a consistent state</p>
+<p><strong>Definition 2 (D2)</strong>
+Concurrent execution of transactions must be (result) equivalent to some serial execution of the transactions</p>
+<ul>
+<li>We use <strong>Definition 2</strong></li>
+</ul>
+<p><strong>Simplifying assumptions</strong></p>
+<ul>
+<li><strong>Only reads and writes</strong> are used to determine correctness</li>
+<li>This assumption is stronger than definition D2, as even fewer schedules are considered correct. </li>
+</ul>
+<h4 id="conflicts">Conflicts<a class="headerlink" href="#conflicts" title="Permanent link">&para;</a></h4>
+<p><strong>Definition 4 (D4)</strong>[^1]</p>
+<p>A schedule is <strong>conflict serializable</strong> if it is <strong>conflict equivalent</strong> to <u>a</u> serial schedule</p>
+<ul>
+<li>It ensures that after execution the database is in a consistent state.</li>
+</ul>
+<p>[^1]: Third definition D3 is view serializability, and is not covered in the course</p>
+<p><strong>Alternative Definition from Web</strong></p>
+<p>A schedule is called <strong>conflict serializable</strong> if it can be transformed into a <strong>serial</strong> schedule by <strong>swapping non-conflicting operations.</strong></p>
+<p>There is a conflict if there is a read and a write on the same data unit. Also if there is a write on the same data unit.</p>
+<p><img alt="image-20200320101311773" src="../images/06-transactions/image-20200320101311773.png" /></p>
+<p>Let I and J be consecutive instructions of a schedule S of multiple transactions</p>
+<ul>
+<li>
+<p>If I and J do not conflict, we can swap their order to produce a new schedule S'</p>
+</li>
+<li>
+<p>The instructions appear in the same order in S and S', except for I and J, whose order does not matter</p>
+</li>
+<li>
+<p>S and S' are termed <strong>conflict equivalent schedules</strong></p>
+</li>
+</ul>
+<h4 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h4>
+<p><img alt="image-20200320101628433" src="../images/06-transactions/image-20200320101628433.png" /></p>
+<p><img alt="image-20200320101942077" src="../images/06-transactions/image-20200320101942077.png" /></p>
+<h4 id="conflict-graph">Conflict Graph<a class="headerlink" href="#conflict-graph" title="Permanent link">&para;</a></h4>
+<p>AKA <strong>Precedence graph</strong></p>
+<p>Directed graph</p>
+<p><strong>Assumption</strong>:</p>
+<ul>
+<li>A transaction will always read an item before it writes that item</li>
+</ul>
+<p>Given a schedule for a set of transactions <span class="arithmatex"><span class="MathJax_Preview">T_1,T_2,\dots,T_n</span><script type="math/tex">T_1,T_2,\dots,T_n</script></span></p>
+<ul>
+<li>The vertices of the conflict graph are the transactions identifiers</li>
+<li>An edge from <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> to <span class="arithmatex"><span class="MathJax_Preview">T_j</span><script type="math/tex">T_j</script></span> denotes that the two transactions are conflicting, with <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> making the relevant access earlier</li>
+<li>Sometimes the edge is labeled with the item involved in the conflict</li>
+</ul>
+<h4 id="draw-a-conflict-graph">Draw a Conflict Graph<a class="headerlink" href="#draw-a-conflict-graph" title="Permanent link">&para;</a></h4>
+<ol>
+<li>For each transaction <span class="arithmatex"><span class="MathJax_Preview">T_x</span><script type="math/tex">T_x</script></span> participating in schedule <span class="arithmatex"><span class="MathJax_Preview">S</span><script type="math/tex">S</script></span>, create a node labeled <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> in the precedence graph. </li>
+<li>For each case in <span class="arithmatex"><span class="MathJax_Preview">S</span><script type="math/tex">S</script></span> where <span class="arithmatex"><span class="MathJax_Preview">T_j</span><script type="math/tex">T_j</script></span> executes a <code>read(X)</code> <strong>after</strong> <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> executes a <code>write(X)</code>, create an edge (<span class="arithmatex"><span class="MathJax_Preview">T_i \to T_j</span><script type="math/tex">T_i \to T_j</script></span>) in the precedence graph. </li>
+<li>For each case in <span class="arithmatex"><span class="MathJax_Preview">S</span><script type="math/tex">S</script></span> where <span class="arithmatex"><span class="MathJax_Preview">T_j</span><script type="math/tex">T_j</script></span> executes a <code>write(X)</code> <strong>after</strong> <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> executes a <code>read(X)</code>, create an edge (<span class="arithmatex"><span class="MathJax_Preview">T_i \to T_j</span><script type="math/tex">T_i \to T_j</script></span>) in the precedence graph.</li>
+<li>For each case in S where <span class="arithmatex"><span class="MathJax_Preview">T_j</span><script type="math/tex">T_j</script></span> executes a <code>write(X)</code> <strong>after</strong> <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> executes a <code>write(X)</code>, create an edge (<span class="arithmatex"><span class="MathJax_Preview">T_i \to T_j</span><script type="math/tex">T_i \to T_j</script></span>) in the precedence graph.</li>
+</ol>
+<h4 id="determining-serializability">Determining Serializability<a class="headerlink" href="#determining-serializability" title="Permanent link">&para;</a></h4>
+<p>Given a schedule S and a conflict graph</p>
+<ul>
+<li>A schedule is <strong>conflict serializable</strong> if its conflict graph is <strong>acyclic</strong> (<strong>no cycles</strong>)</li>
+<li>Intuitively, a conflict between two transactions forces an execution order between them (topological sorting)</li>
+</ul>
+<h5 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h5>
+<p><img alt="image-20200320102532105" src="../images/06-transactions/image-20200320102532105.png" /></p>
+<p>Which of the following are conflict serial schedules?</p>
+<p><img alt="image-20200529113653558" src="../images/06-transactions/image-20200529113653558.png" /></p>
+<h4 id="relationship-among-schedules">Relationship Among Schedules<a class="headerlink" href="#relationship-among-schedules" title="Permanent link">&para;</a></h4>
+<p><img alt="image-20200320102749551" src="../images/06-transactions/image-20200320102749551.png" /></p>
+<h3 id="recoverable-and-cascadeless-schedules">Recoverable and Cascadeless Schedules<a class="headerlink" href="#recoverable-and-cascadeless-schedules" title="Permanent link">&para;</a></h3>
+<p><strong>Transactions can fail!</strong></p>
+<ul>
+<li>
+<p>If <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> fails, it must be rolled back to retain the <strong>atomicity</strong> property of transactions</p>
+</li>
+<li>
+<p>If another transaction <span class="arithmatex"><span class="MathJax_Preview">T_j</span><script type="math/tex">T_j</script></span> has read a data item written by <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span>, then <span class="arithmatex"><span class="MathJax_Preview">T_j</span><script type="math/tex">T_j</script></span> must also be rolled back</p>
+<p><span class="arithmatex"><span class="MathJax_Preview">\Rightarrow</span><script type="math/tex">\Rightarrow</script></span> database systems must ensure that schedules are recoverable</p>
+</li>
+</ul>
+<p>This schedule is not recoverable:</p>
+<p><img alt="image-20200529113950922" src="../images/06-transactions/image-20200529113950922.png" /></p>
+<h4 id="recoverable">Recoverable<a class="headerlink" href="#recoverable" title="Permanent link">&para;</a></h4>
+<p>A schedule is <strong>recoverable</strong> if for each pair of transactions <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> and <span class="arithmatex"><span class="MathJax_Preview">T_j</span><script type="math/tex">T_j</script></span> 
+    where <span class="arithmatex"><span class="MathJax_Preview">T_j</span><script type="math/tex">T_j</script></span> reads data items written by  <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span>, 
+    then <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> must <strong>commit</strong> before <span class="arithmatex"><span class="MathJax_Preview">T_j</span><script type="math/tex">T_j</script></span> <strong>commits</strong>.</p>
+<p><img alt="image-20200320103122260" src="../images/06-transactions/image-20200320103122260.png" /></p>
+<h4 id="cascadeless">Cascadeless<a class="headerlink" href="#cascadeless" title="Permanent link">&para;</a></h4>
+<p>A schedule is <strong>cascadeless</strong> if for each pair of transactions <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> and <span class="arithmatex"><span class="MathJax_Preview">T_j</span><script type="math/tex">T_j</script></span>, 
+    where <span class="arithmatex"><span class="MathJax_Preview">T_j</span><script type="math/tex">T_j</script></span> reads data items written by <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span>, 
+    the <strong>commit</strong> operation of <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> must appear before the <strong>read</strong> by <span class="arithmatex"><span class="MathJax_Preview">T_j</span><script type="math/tex">T_j</script></span> </p>
+<ul>
+<li>In other words, if you only read committed data</li>
+<li>Every cascadeless schedule is also recoverable.</li>
+</ul>
+<p>Cascading rollbacks can easily become expensive.</p>
+<p>It is desirable to restrict the schedules to those that are cascadeless.</p>
+<h2 id="concurrency-control">Concurrency Control<a class="headerlink" href="#concurrency-control" title="Permanent link">&para;</a></h2>
+<h3 id="scheduler">Scheduler<a class="headerlink" href="#scheduler" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20200529114519755" src="../images/06-transactions/image-20200529114519755.png" /></p>
+<p>Task of the scheduler:</p>
+<ul>
+<li>produce serializable schedules of instructions (transactions <span class="arithmatex"><span class="MathJax_Preview">T_1, \dots, T_n</span><script type="math/tex">T_1, \dots, T_n</script></span>) that avoid cascading rollbacks</li>
+</ul>
+<p>Realized by <strong>synchronization</strong> strategies</p>
+<ul>
+<li>pessimistic<ul>
+<li>lock-based synchronization</li>
+<li>timestamp-based synchronization</li>
+</ul>
+</li>
+<li>optimistic</li>
+</ul>
+<h3 id="lock-based-synchronization">Lock-based Synchronization<a class="headerlink" href="#lock-based-synchronization" title="Permanent link">&para;</a></h3>
+<p><strong>Ensuring (conflict) serializable schedules</strong> by <strong>delaying</strong> transactions that could violate serializability.</p>
+<p>Two types of locks can be held on a data item Q</p>
+<ul>
+<li>S (shared, read lock)</li>
+<li>X (exclusive, write lock)</li>
+</ul>
+<p>Operations on locks:</p>
+<ul>
+<li><code>lock_S(Q)</code><ul>
+<li>set shared lock on data item Q</li>
+</ul>
+</li>
+<li><code>lock_X(Q)</code><ul>
+<li>set exclusive lock on data item Q</li>
+</ul>
+</li>
+<li><code>unlock(Q)</code><ul>
+<li>release lock on data item Q</li>
+</ul>
+</li>
+</ul>
+<h4 id="lock-privileges">Lock Privileges<a class="headerlink" href="#lock-privileges" title="Permanent link">&para;</a></h4>
+<p>A transaction holding</p>
+<ul>
+<li>an exclusive lock may issue a write or read access request on the item</li>
+<li>a shared lock may issue a read access request on the item</li>
+</ul>
+<p><strong>Compatibility Matrix</strong></p>
+<p><img alt="image-20200529114819205" src="../images/06-transactions/image-20200529114819205.png" /></p>
+<p>NL - no lock</p>
+<ul>
+<li>Concurrent transactions can only be granted compatible locks</li>
+<li>A transaction might have to wait until a requested lock can be granted!</li>
+</ul>
+<h4 id="problems-with-early-unlocking">Problems with Early Unlocking<a class="headerlink" href="#problems-with-early-unlocking" title="Permanent link">&para;</a></h4>
+<p><strong>Early unlocking</strong> can cause <strong>incorrect</strong> results (non-serializable schedules) but allows for a higher degree of concurrency.</p>
+<p><img alt="image-20200529115015298" src="../images/06-transactions/image-20200529115015298.png" /></p>
+<ul>
+<li>Initially A = 100 and B = 200</li>
+<li>serial schedule <span class="arithmatex"><span class="MathJax_Preview">T_{15};T_{16}</span><script type="math/tex">T_{15};T_{16}</script></span> prints 300</li>
+<li>serial schedule <span class="arithmatex"><span class="MathJax_Preview">T_{16};T_{15}</span><script type="math/tex">T_{16};T_{15}</script></span> prints 300</li>
+<li><span class="arithmatex"><span class="MathJax_Preview">S_7</span><script type="math/tex">S_7</script></span> prints 250</li>
+</ul>
+<h4 id="problems-with-late-unlocking">Problems with Late Unlocking<a class="headerlink" href="#problems-with-late-unlocking" title="Permanent link">&para;</a></h4>
+<p>Late unlocking avoids non-serializable schedules. But it increases the chances of <strong>deadlocks</strong>.</p>
+<p>Learn to live with it!</p>
+<p><img alt="image-20200529115221255" src="../images/06-transactions/image-20200529115221255.png" /></p>
+<h3 id="two-phase-locking-2pl">Two-Phase Locking (2PL)<a class="headerlink" href="#two-phase-locking-2pl" title="Permanent link">&para;</a></h3>
+<p>Is a protocol</p>
+<ul>
+<li>First phase (growing phase):<ul>
+<li>Transactions <strong>may request</strong> locks</li>
+<li>Transactions <strong>may not release</strong> locks</li>
+</ul>
+</li>
+<li>Second phase (shrinking phase):<ul>
+<li>Transactions <strong>may not</strong> <strong>request</strong> locks</li>
+<li>Transactions <strong>may release</strong> locks</li>
+</ul>
+</li>
+</ul>
+<p><img alt="image-20200330083508346" src="../images/06-transactions/image-20200330083508346.png" /></p>
+<p>When the first lock is release, the we move from first to second phase.</p>
+<h4 id="examples_1">Examples<a class="headerlink" href="#examples_1" title="Permanent link">&para;</a></h4>
+<p>Remember that we look at transactions <strong>indi</strong></p>
+<p><img alt="image-20200330083658288" src="../images/06-transactions/image-20200330083658288.png" /></p>
+<h4 id="characteristics-of-2pl">Characteristics of 2PL<a class="headerlink" href="#characteristics-of-2pl" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Produces only serializable schedules<ul>
+<li>Insures conflict serializability</li>
+<li>Produces a subset of all possible serializable schedules</li>
+</ul>
+</li>
+<li>Does <strong>not</strong> prevent deadlocks</li>
+<li>Does <strong>not</strong> prevent cascading rollbacks<ul>
+<li>"Dirty" reads are possible (reading from non-committed transactions)</li>
+</ul>
+</li>
+</ul>
+<h4 id="variations-of-2pl">Variations of 2PL<a class="headerlink" href="#variations-of-2pl" title="Permanent link">&para;</a></h4>
+<p><strong>Strict 2PL</strong></p>
+<ul>
+<li><strong>Exclusive</strong> locks are not released before the transaction commits</li>
+<li>Prevents "dirty reads"</li>
+</ul>
+<p><strong>Rigorous 2PL</strong></p>
+<ul>
+<li><strong>All</strong> locks are released after commit time</li>
+<li>Transactions can be serialized in the order they commit</li>
+</ul>
+<p><strong>Advantage</strong></p>
+<ul>
+<li>No cascading rollbacks</li>
+</ul>
+<p><strong>Disadvantage</strong></p>
+<ul>
+<li>Loss of potential concurrency</li>
+</ul>
+<p><img alt="image-20200330084351622" src="../images/06-transactions/image-20200330084351622.png" /></p>
+<h3 id="lock-conversion">Lock Conversion<a class="headerlink" href="#lock-conversion" title="Permanent link">&para;</a></h3>
+<p><strong>Goal:</strong> apply 2PL but allow for a higher degree of concurrency</p>
+<p><strong>First phase</strong></p>
+<ul>
+<li>Acquire an S-lock on a data item</li>
+<li>Acquire an X-lock on a data item</li>
+<li>Convert (upgrade) an S-lock to an X-lock</li>
+</ul>
+<p><strong>Second phase</strong></p>
+<ul>
+<li>Release S-, and X-locks</li>
+<li>Convert (downgrade) an X-lock to an S-lock</li>
+</ul>
+<p>This protocol still ensures serializability. 
+It relies on the application programmer to insert the appropriate locks.</p>
+<h3 id="more-examples">More Examples<a class="headerlink" href="#more-examples" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20200330084821089" src="../images/06-transactions/image-20200330084821089.png" /></p>
+<h3 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20200330084840603" src="../images/06-transactions/image-20200330084840603.png" /></p>
+<h3 id="deadlocks">Deadlocks<a class="headerlink" href="#deadlocks" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20200330084946125" src="../images/06-transactions/image-20200330084946125.png" /></p>
+<p><strong>Solutions</strong></p>
+<ul>
+<li>detection and recovery</li>
+<li>prevention</li>
+<li><em>timeout</em> (not covered in presentation)</li>
+</ul>
+<h4 id="deadlock-detection">Deadlock Detection<a class="headerlink" href="#deadlock-detection" title="Permanent link">&para;</a></h4>
+<p>Create a "<strong>Wait-for graph</strong>" and check for cycles</p>
+<ul>
+<li>One node for each active transaction <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span></li>
+<li>Edge <span class="arithmatex"><span class="MathJax_Preview">T_i\to T_j</span><script type="math/tex">T_i\to T_j</script></span> if <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> waits for the release of locks by <span class="arithmatex"><span class="MathJax_Preview">T_j</span><script type="math/tex">T_j</script></span></li>
+</ul>
+<p><em>A deadlock exists if the wait-for graph has a cycle</em></p>
+<p>If a deadlock is detected:</p>
+<ul>
+<li>Select an appropriate victim</li>
+<li>Abort the victim and release its locks</li>
+</ul>
+<h5 id="example_1">Example<a class="headerlink" href="#example_1" title="Permanent link">&para;</a></h5>
+<p><img alt="image-20200330085413521" src="../images/06-transactions/image-20200330085413521.png" /></p>
+<h5 id="rollback-candidates">Rollback Candidates<a class="headerlink" href="#rollback-candidates" title="Permanent link">&para;</a></h5>
+<p>Choosing a good victim transaction</p>
+<p>Rollback of one or more transactions that are involved in the cycle</p>
+<ul>
+<li><strong>The latest</strong> (minimization of rollback effort)</li>
+<li><strong>The one holding the most locks</strong> (maximization of released resources)</li>
+</ul>
+<p>Prevent that always the same victim is chosen (starvation)</p>
+<ul>
+<li><strong>"rollback counter"</strong><ul>
+<li>if above a certain threshold: no more rollbacks to break deadlocks</li>
+</ul>
+</li>
+</ul>
+<h4 id="deadlock-prevention">Deadlock Prevention<a class="headerlink" href="#deadlock-prevention" title="Permanent link">&para;</a></h4>
+<p><strong>Conservative 2PL</strong></p>
+<ul>
+<li>2PL as well as strict and rigorous 2PL do not prevent deadlocks</li>
+<li>Additional requirement:<ul>
+<li>All locks (shared and exclusive) are obtained right in the beginning of a transaction</li>
+</ul>
+</li>
+</ul>
+<p><img alt="image-20200330085847379" src="../images/06-transactions/image-20200330085847379.png" /></p>
+<h3 id="summary-concurrency-control">Summary: Concurrency Control<a class="headerlink" href="#summary-concurrency-control" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Many concurrency control protocols have been developed<ul>
+<li>Main goal: allowing only serializable, recoverable and cascadeless schedules</li>
+<li>Two-phase locking (2PL)<ul>
+<li>Most relational DBMS's use rigorous two-phase locking</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Deadlock detection (wait-for graph) and prevention (conservative 2PL)</li>
+<li>Serializability vs. concurrency</li>
+</ul>
+<h2 id="recovery">Recovery<a class="headerlink" href="#recovery" title="Permanent link">&para;</a></h2>
+<p>"Problems" with transactions</p>
+<ul>
+<li>Atomicity<ul>
+<li>Transactions may abort (rollback)</li>
+</ul>
+</li>
+<li>Durability<ul>
+<li>What if a DBMS crashes?</li>
+</ul>
+</li>
+</ul>
+<p>The role of the <strong>recovery</strong> component is to ensure atomicity and durability of transactions in the presence of system failures.</p>
+<h3 id="durability">Durability<a class="headerlink" href="#durability" title="Permanent link">&para;</a></h3>
+<p><a href="https://www.moodle.aau.dk/pluginfile.php/1987452/mod_resource/content/1/DBS-transactions.pdf#159">How can durability be guaranteed (DBS6 Slides p. 159)</a></p>
+<p>Durability is <strong>relative</strong> and depends on the number of copies and the geographical location</p>
+<p>Guarantees only possible if</p>
+<ul>
+<li>we first update the copies and</li>
+<li>notify the user afterwards that a transaction's commit was successful</li>
+</ul>
+<p>We hence assume that the <strong>WAL (Write Ahead Logging)</strong> rule is satisfied</p>
+<p><strong>Variations of applying the WAL rule:</strong></p>
+<ul>
+<li><strong>Log-based recovery</strong></li>
+<li>Full redundancy:  mirroring/shadowing all data on multiple computers (disks, computing centers) that redundantly do the same<ul>
+<li>Not covered in course</li>
+</ul>
+</li>
+</ul>
+<h3 id="failure-classification">Failure Classification<a class="headerlink" href="#failure-classification" title="Permanent link">&para;</a></h3>
+<p><strong>Transaction failure</strong> (failure of a not yet committed transaction)</p>
+<ul>
+<li>Undo the changes of the transaction</li>
+</ul>
+<p><strong>System crash</strong> (failure with main memory loss)</p>
+<ul>
+<li>Changes of committed transactions must be preserved</li>
+<li>Changes of all non-committed transactions need to be undone</li>
+</ul>
+<p><strong>Disk failure</strong> (failure with hard disk loss)</p>
+<ul>
+<li>Recovery based on archives/dumps</li>
+</ul>
+<h3 id="data-storage">Data Storage<a class="headerlink" href="#data-storage" title="Permanent link">&para;</a></h3>
+<p>Two-level storage hierarchy</p>
+<p>Data is organized in pages and blocks</p>
+<p><img alt="image-20200330091945727" src="../images/06-transactions/image-20200330091945727.png" /></p>
+<ul>
+<li><strong>Volatile storage</strong> (main memory buffer)</li>
+<li><strong>Non-volatile storage</strong> (hard disk)</li>
+<li>Stable storage (RAIDS, remote backups, ... )<ul>
+<li>not covered in course</li>
+</ul>
+</li>
+</ul>
+<h4 id="movement-of-values">Movement of Values<a class="headerlink" href="#movement-of-values" title="Permanent link">&para;</a></h4>
+<p><img alt="image-20200330092127877" src="../images/06-transactions/image-20200330092127877.png" /></p>
+<h4 id="storage-operations">Storage Operations<a class="headerlink" href="#storage-operations" title="Permanent link">&para;</a></h4>
+<p>Transactions access and update the database</p>
+<ul>
+<li>Operations for moving blocks with data items between disk and main memory (system buffer)<ul>
+<li><strong>Input(Q)</strong><ul>
+<li>Transfer block containing data item Q to main memory</li>
+</ul>
+</li>
+<li><strong>Output(Q)</strong><ul>
+<li>Transfer block containing Q to disk and replace</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Operations for moving values between data items and application variables<ul>
+<li><strong>read(Q,q)</strong><ul>
+<li>Assign the value of data item Q to variable q</li>
+</ul>
+</li>
+<li><strong>write(Q,q)</strong><ul>
+<li>Assign the value of variable q to data item Q</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="logging">Logging<a class="headerlink" href="#logging" title="Permanent link">&para;</a></h3>
+<p><strong>WAL (Write Ahead Logging)</strong></p>
+<ul>
+<li>Before a transaction enters the <strong>commit</strong> state, “all its” log entries have to be written to stable storage, including the commit log entry</li>
+<li>Before a modified page (or block) in main memory can be written to the database (non-volatile storage), “all its” log entries have to be written to stable storage</li>
+</ul>
+<p>During normal operation</p>
+<ul>
+<li>
+<p>When starting, a transaction <span class="arithmatex"><span class="MathJax_Preview">T</span><script type="math/tex">T</script></span> registers itself in the <strong>log</strong>: [T start]</p>
+</li>
+<li>
+<p>When modifying data item X by write(X,x)</p>
+<ol>
+<li>Add log entry with<ul>
+<li>[<span class="arithmatex"><span class="MathJax_Preview">T</span><script type="math/tex">T</script></span>, X, V-old, V-new]<ul>
+<li><span class="arithmatex"><span class="MathJax_Preview">T</span><script type="math/tex">T</script></span>: transaction's ID</li>
+<li>X: data item name</li>
+<li>old value of item</li>
+<li>new value of item</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Write the new value of X</li>
+</ol>
+<p><em>The buffer manager asynchronously outputs the value to disk later</em></p>
+</li>
+<li>
+<p>When finishing, a transaction <span class="arithmatex"><span class="MathJax_Preview">T</span><script type="math/tex">T</script></span> appends [T commit] to the log, <span class="arithmatex"><span class="MathJax_Preview">T</span><script type="math/tex">T</script></span> then commits</p>
+<p><em>The transaction commits precisely when the commit entry (after all previous entries for this transaction) is output to the log!</em></p>
+</li>
+</ul>
+<h4 id="log-entries">Log Entries<a class="headerlink" href="#log-entries" title="Permanent link">&para;</a></h4>
+<p>Structure of a log entry (log record)</p>
+<p><center><code>[TID. DID. old, new]</code></center></p>
+<ul>
+<li><code>TID</code><ul>
+<li>identifier of the transaction that caused the update</li>
+</ul>
+</li>
+<li><code>DID</code><ul>
+<li>data item identifier
+    location on disk (page, block, offset)</li>
+</ul>
+</li>
+<li><code>old</code><ul>
+<li>value of the data item before the update</li>
+</ul>
+</li>
+<li><code>new</code><ul>
+<li>value of the data item after the update</li>
+</ul>
+</li>
+</ul>
+<p>Additional entries</p>
+<ul>
+<li><code>start</code><ul>
+<li><code>[TID start]</code></li>
+<li>Transaction TID has started</li>
+</ul>
+</li>
+<li><code>commit</code><ul>
+<li><code>[TID commit]</code></li>
+<li>Transaction TID has committed</li>
+</ul>
+</li>
+<li><code>abort</code><ul>
+<li><code>[TID abort]</code></li>
+<li>Transaction TID has aborted</li>
+</ul>
+</li>
+</ul>
+<h4 id="example_2">Example<a class="headerlink" href="#example_2" title="Permanent link">&para;</a></h4>
+<p><img alt="image-20200330093713367" src="../images/06-transactions/image-20200330093713367.png" /></p>
+<h3 id="log-based-recovery">Log-based Recovery<a class="headerlink" href="#log-based-recovery" title="Permanent link">&para;</a></h3>
+<p>Operations to recover from failures</p>
+<ul>
+<li><strong>Redo</strong>: perform the changes to the database again</li>
+<li><strong>Undo</strong>: restore database to state prior to execution</li>
+</ul>
+<p><img alt="image-20200330094014994" src="../images/06-transactions/image-20200330094014994.png" /></p>
+<h4 id="recovery-algorithm">Recovery Algorithm<a class="headerlink" href="#recovery-algorithm" title="Permanent link">&para;</a></h4>
+<p>To recover from a failure</p>
+<ul>
+<li>Reproduce (<strong>redo</strong>) results for committed transactions</li>
+<li><strong>Undo</strong> changes of transactions that did not commit</li>
+</ul>
+<p>Remarks</p>
+<ul>
+<li>In a multitasking system, more than one transaction may need to be undone.</li>
+<li>If a system crashes during the recovery stage, the new recovery must still give correct results (<strong>idempotence</strong>).</li>
+</ul>
+<h4 id="phases-of-recovery">Phases of Recovery<a class="headerlink" href="#phases-of-recovery" title="Permanent link">&para;</a></h4>
+<ol>
+<li>Redo (repeat history)<ul>
+<li>Forward scan through the log</li>
+<li>Repeat <strong>all</strong> updates in the same order as in the log file</li>
+<li>Determine "undo" transactions<ul>
+<li>[<span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> start] add <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> to the "undo list"</li>
+<li>[<span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> abort] or [<span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> commit] remove <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> from the "undo list"</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Undo (rollback) all transactions in the "undo list"<ul>
+<li>Backwards scan through the log</li>
+<li>Undo all updates of transactions in the "undo list"<ul>
+<li>create a compensating log record</li>
+</ul>
+</li>
+<li>For a [<span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> start] record of a transaction <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> in the "undo list", add a [<span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> abort] record to the log file, remove <span class="arithmatex"><span class="MathJax_Preview">T_i</span><script type="math/tex">T_i</script></span> from the "undo list"</li>
+<li>Stop when "undo list" is empty</li>
+</ul>
+</li>
+</ol>
+<h4 id="compensating-log-records">Compensating Log Records<a class="headerlink" href="#compensating-log-records" title="Permanent link">&para;</a></h4>
+<p><code>[TID, DID, value]</code></p>
+<ul>
+<li>Created to undo (compensate) the changes of <code>[TID, DID, value, newValue]</code></li>
+<li>Redo-only log record</li>
+<li>Can also be used to rollback a transaction during normal o</li>
+</ul>
+<h4 id="example_3">Example<a class="headerlink" href="#example_3" title="Permanent link">&para;</a></h4>
+<p>Example can be seen in slides: <a href="../extra/DBS-transactions.pdf#page=202">DBS6 - Transactions - Slide 85 - p. 202</a></p>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 1, 2020</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+        <script src="../../../javascripts/extra.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

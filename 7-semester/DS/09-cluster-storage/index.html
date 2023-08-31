@@ -1,0 +1,5961 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Mathias Andresen">
+      
+      
+        <link rel="canonical" href="http://notes.mathiasandresen.dk/7-semester/DS/09-cluster-storage/">
+      
+      
+        <link rel="prev" href="../08-peer-to-peer/">
+      
+      
+        <link rel="next" href="../10-blockchain/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
+    
+    
+      
+        <title>Cluster Data Storage - Uni Noter</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Open Sans";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cluster-data-storage" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Uni Noter" class="md-header__button md-logo" aria-label="Uni Noter" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Uni Noter
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cluster Data Storage
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mathiasandresen/uni-notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mathiasandresen/uni-notes
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Forside
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../3-semester/" class="md-tabs__link">
+        3 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../4-semester/" class="md-tabs__link">
+        4 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../5-semester/" class="md-tabs__link">
+        5 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../6-semester/" class="md-tabs__link">
+        6 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        7 semester
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../8-semester/" class="md-tabs__link">
+        8 semester
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Uni Noter" class="md-nav__button md-logo" aria-label="Uni Noter" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82Z"/></svg>
+
+    </a>
+    Uni Noter
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mathiasandresen/uni-notes" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mathiasandresen/uni-notes
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Forside
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" tabindex="0" aria-expanded="false">
+          3 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="3 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          3 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" tabindex="0" aria-expanded="false">
+          AD1
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="AD1" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          AD1
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/02-analysing-algorithms/" class="md-nav__link">
+        Analysing Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/03-divide-and-conquer/" class="md-nav__link">
+        Divide-and-Conquer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/04-solving-recurrences/" class="md-nav__link">
+        Solving Recurrences
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/05-sorting-algorithms/" class="md-nav__link">
+        Sorting Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/06-heap-sort/" class="md-nav__link">
+        Heap Sort
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/07-data-structures/" class="md-nav__link">
+        Data Structures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/08a-hash-tables/" class="md-nav__link">
+        Hash Tables
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/08b-binary-search-tree/" class="md-nav__link">
+        Binary Search Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/09-dynamic-programming/" class="md-nav__link">
+        Dynamic Programming
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/10a-graph-theory/" class="md-nav__link">
+        Elementary graph algorithms (A)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/10b-graph-algorithms/" class="md-nav__link">
+        Elementary graph algorithms (B)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/10c-topological-sort/" class="md-nav__link">
+        Elementary graph algorithms (C) - Topological Sort
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/11a-strongly-connected-components/" class="md-nav__link">
+        Strongly Connected Components
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/11b-minimum-spanning-tree/" class="md-nav__link">
+        Minimum Spanning Tree
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/12-finding-shortest-paths/" class="md-nav__link">
+        Finding Shortest Paths
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/extra1-big-o-cheat-sheet/" class="md-nav__link">
+        Big-O Cheat-Sheet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/extra2-standard-notation-and-common-functions/" class="md-nav__link">
+        Standard Notation and Common Functions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/AD1/extra3-standard-knowledge/" class="md-nav__link">
+        Earlier Knowledge
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2_3" type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" tabindex="0" aria-expanded="false">
+          DEB
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="DEB" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          DEB
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/03-envisionment/" class="md-nav__link">
+        Envisionment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/04-physical-design/" class="md-nav__link">
+        Physical Design
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/05-physical-design-memory-and-attention/" class="md-nav__link">
+        Physical Design - Memory & Attention
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/06-perception-and-navigation/" class="md-nav__link">
+        Physical Design - Perception & Navigation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/07-evaluation/" class="md-nav__link">
+        Evaluation - What is Usability and Usability Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/08-evaluation-identifying-problems/" class="md-nav__link">
+        Evaluation - Identifying Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/09a-user-experience/" class="md-nav__link">
+        Evaluation - Alternative methods and UX
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/DEB/09b-alternative-methods-for-testing-usability/" class="md-nav__link">
+        Evaluation - Alternative methods and UX
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2_4" type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" tabindex="0" aria-expanded="false">
+          SU
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SU" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          SU
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/1-classes-and-objects/" class="md-nav__link">
+        Classes and Objects
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/2-factor/" class="md-nav__link">
+        FACTOR
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/3-structure/" class="md-nav__link">
+        Structure
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../3-semester/SU/4-usage/" class="md-nav__link">
+        Usage
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          4 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="4 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          4 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2" tabindex="0" aria-expanded="false">
+          PSS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="PSS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          PSS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/1-intro/" class="md-nav__link">
+        Introduction to Operating Systems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/5-memory-management/" class="md-nav__link">
+        Memory Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_2_4" type="checkbox" id="__nav_3_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2_4" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/1-processes-and-threads/" class="md-nav__link">
+        1 - Processes and Threads
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/2-scheduler/" class="md-nav__link">
+        2 - Scheduling
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/3-memory-management/" class="md-nav__link">
+        3 - Memory Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/4-paged-memory/" class="md-nav__link">
+        4 - Paged Memory
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/5-concurrency/" class="md-nav__link">
+        5 - Concurrency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/6-concurrency-problems/" class="md-nav__link">
+        6 - Concurrency Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/7-io-and-device-drivers/" class="md-nav__link">
+        7 - I/O and Device Drivers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/PSS/exam/8-xv6/" class="md-nav__link">
+        8 - XV6 Exercise of Choice
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3" tabindex="0" aria-expanded="false">
+          SPO
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SPO" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          SPO
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/01-programming-languages-and-compilers/" class="md-nav__link">
+        Programming Languages and Compilers
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/02-tombstone-diagrams/" class="md-nav__link">
+        Tombstone Diagrams
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/03a-the-phases-of-a-compiler/" class="md-nav__link">
+        The Phases of a Compiler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/03b-the-ac-language-and-compiler/" class="md-nav__link">
+        The 'ac' Language and Compiler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/04-language-specification/" class="md-nav__link">
+        Language Specification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/05a-context-free-grammars/" class="md-nav__link">
+        Context Free Grammars
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/05b-from-tokens-to-parse-trees/" class="md-nav__link">
+        From Tokens to Parse Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/06-lexical-analysis/" class="md-nav__link">
+        Lexical Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_3_10" type="checkbox" id="__nav_3_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_3_10" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_3_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/1-language-design-and-control-structures/" class="md-nav__link">
+        1 - Language Design and Control Structures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/2-structure-of-the-compiler/" class="md-nav__link">
+        2 - Structure of the Compiler
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/3-lexical-analysis/" class="md-nav__link">
+        3 - Lexical Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/4-parsing/" class="md-nav__link">
+        4 - Parsing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/5-semantic-analysis/" class="md-nav__link">
+        5 - Semantic Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/6-runtime-organization/" class="md-nav__link">
+        6 - Runtime Organization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/7-heap-allocation-and-gc/" class="md-nav__link">
+        7 - Heap Allocation and Garbage Collection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SPO/exam/8-code-generation/" class="md-nav__link">
+        8 - Code Generation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3_4" type="checkbox" id="__nav_3_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_4" tabindex="0" aria-expanded="false">
+          SS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_4">
+          <span class="md-nav__icon md-icon"></span>
+          SS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/0-eksamen-fremgangsm%C3%A5der/" class="md-nav__link">
+        Eksamen - Fremgangsmåder
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/01a-regul%C3%A6re-sprog/" class="md-nav__link">
+        Regulære Sprog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/01b-endelige-automater/" class="md-nav__link">
+        Endelige Automater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/02-nondeterministiske-endelige-automater/" class="md-nav__link">
+        Nondeterministiske Endelige Automater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/03-regul%C3%A6re-udtryk/" class="md-nav__link">
+        Regulære Udtryk
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/04-pumping-lemma/" class="md-nav__link">
+        Pumping Lemma
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/05-kontekstfrie-grammatikker/" class="md-nav__link">
+        Kontekstfrie Grammatikker
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/06-pushdown-automater/" class="md-nav__link">
+        Pushdown Automater
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/07-pumping-lemma-for-kontekstfrie-sprog/" class="md-nav__link">
+        Pumping Lemma for Kontekstfrie Sprog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../4-semester/SS/15-rekursive-definitioner/" class="md-nav__link">
+        Rekursive Definitioner
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" tabindex="0" aria-expanded="false">
+          5 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="5 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          5 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2" tabindex="0" aria-expanded="false">
+          CC
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="CC" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          CC
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/01-turing-maskiner/" class="md-nav__link">
+        Turing Maskiner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/02-church-turing-tesen/" class="md-nav__link">
+        Church-Turing-Tesen
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/03-acceptproblemet-for-tm/" class="md-nav__link">
+        Acceptproblemet for Turing-maskiner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/04-more-problems-than-algorithms/" class="md-nav__link">
+        Er der Flere Problemer end Algoritmer? Og er Problemer Beslægtede?
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/05-beregningshistorier/" class="md-nav__link">
+        Uafgørbare Problemer om Beregningshistorier
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/06-posts-korrespondanceproblem/" class="md-nav__link">
+        Posts Korrospondanceproblem ; Teorien for Reduktioner
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/07-rice/" class="md-nav__link">
+        Rice's Sætning
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/09-tidskompleksitet/" class="md-nav__link">
+        Tidskompleksitet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/10-np-fuldstaendighed/" class="md-nav__link">
+        NP og NP-fuldstændighed
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/12-np-complete-sprog/" class="md-nav__link">
+        Flere NP-fuldstændige Sprog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/13-pladskompleksitet/" class="md-nav__link">
+        Pladskompleksitet
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/CC/99-sprog-i-pensum/" class="md-nav__link">
+        Sprogproblemer
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3" tabindex="0" aria-expanded="false">
+          MI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="MI" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          MI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-04-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-09-problem-solving-as-search/" class="md-nav__link">
+        Problem Solving as Search
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-16-constrains-satisfaction-problems/" class="md-nav__link">
+        Constraints Satisfaction Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-16appendix/" class="md-nav__link">
+        Constraints Satisfaction Problems - Appendix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/09-23-reasoning-under-certainty/" class="md-nav__link">
+        Reasoning Under Uncertainty
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-07-bayesian-networks/" class="md-nav__link">
+        Bayesian Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-14-inference-in-bayesian-networks/" class="md-nav__link">
+        Inference in Bayesian Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-21-decision-trees/" class="md-nav__link">
+        Learning: Introduction and Decision Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-28-neural-networks/" class="md-nav__link">
+        Learning: Neural Network
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/10-28appendix/" class="md-nav__link">
+        Learning: Neural Network - Appendix
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-04-methods-and-issues/" class="md-nav__link">
+        Learning: Methods and Issues
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-11-clustering/" class="md-nav__link">
+        Learning: Clustering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-18-planning-uncertainty/" class="md-nav__link">
+        Planning under Uncertainty
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/11-25-multi-agent/" class="md-nav__link">
+        Multi-Agent Systems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/99_exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/MI/probability-calculus-cheatsheet/" class="md-nav__link">
+        Cheat Sheet for Probability Calculus
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_4" type="checkbox" id="__nav_4_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4" tabindex="0" aria-expanded="false">
+          SOE
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="SOE" data-md-level="2">
+        <label class="md-nav__title" for="__nav_4_4">
+          <span class="md-nav__icon md-icon"></span>
+          SOE
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/01-introduction/" class="md-nav__link">
+        Software Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/02-agile-xp-and-scrum/" class="md-nav__link">
+        Agile, XP, and Scrum
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/04a-rup/" class="md-nav__link">
+        (R)UP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/05-planning/" class="md-nav__link">
+        Project Planning and Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/06-risk-management/" class="md-nav__link">
+        Risk Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/07-quality/" class="md-nav__link">
+        Quality Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/9ba-test/" class="md-nav__link">
+        Test
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4_4_9" type="checkbox" id="__nav_4_4_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_4_9" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_4_4_9">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/" class="md-nav__link">
+        Exam Questions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/01-waterfall/" class="md-nav__link">
+        1. Software process models: waterfall
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/02-incremental-iterative/" class="md-nav__link">
+        2. Software process model: incremental and iterative
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/03-integration-configuration/" class="md-nav__link">
+        3. Software process model: integration & configuration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/04-plandriven-vs-agile/" class="md-nav__link">
+        4. Comparison of plan-driven and agile SOE processes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/05-scrum/" class="md-nav__link">
+        5. Key features of Scrum
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/06-rup/" class="md-nav__link">
+        6. Key features of RUP
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/07-requirements/" class="md-nav__link">
+        7. Requirements Elicitation and Managing change to requirements
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/08-quality-control/" class="md-nav__link">
+        8. Quality Control: Verification and Validation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/09-risk-management/" class="md-nav__link">
+        9. Risk Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/10-project-planning-management/" class="md-nav__link">
+        10. Project Planning and Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/11-quality-management/" class="md-nav__link">
+        11. Quality Management
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../5-semester/SOE/exam/12-configuration-management/" class="md-nav__link">
+        12. Configuration Management
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="false">
+          6 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="6 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          6 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2" type="checkbox" id="__nav_5_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2" tabindex="0" aria-expanded="false">
+          AALG
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="AALG" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_2">
+          <span class="md-nav__icon md-icon"></span>
+          AALG
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/01-dc/" class="md-nav__link">
+        Dynamic Programming
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/02-dp-all-pairs-shortest-paths/" class="md-nav__link">
+        All-pairs Shortest Paths (Dynamic Programming)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/03-flow-networks/" class="md-nav__link">
+        Flow Networks and Maximum Flow
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/04-greedy-algorithms/" class="md-nav__link">
+        Greedy Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/05-amortized-analysis/" class="md-nav__link">
+        Amortized Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/06-computational-geometry-sweeping/" class="md-nav__link">
+        Computational Geometry Algorithms: Sweeping Techniques
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/08-computational-geometry-range-searching/" class="md-nav__link">
+        Computational Geometry Data Structures: Range Searching
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/10-multithreaded-algorithms/" class="md-nav__link">
+        Multithreaded Algorithms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/11-approximation/" class="md-nav__link">
+        Approximation for NP-complete Problems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/12-backtracking/" class="md-nav__link">
+        Backtracking and Branch-and-Bound
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2_12" type="checkbox" id="__nav_5_2_12" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2_12" tabindex="0" aria-expanded="false">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Guides" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_2_12">
+          <span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/amortized-analysis/" class="md-nav__link">
+        Amortized Analysis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/approx-and-parallel/" class="md-nav__link">
+        Approximation and Parallelism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/flow-networks/" class="md-nav__link">
+        Flow Networks
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/graphs/" class="md-nav__link">
+        Graphs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/others/" class="md-nav__link">
+        Others
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/range-queries/" class="md-nav__link">
+        Range Queries and Trees
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/sweeping/" class="md-nav__link">
+        Sweeping
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_2_12_8" type="checkbox" id="__nav_5_2_12_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_2_12_8" tabindex="0" aria-expanded="false">
+          Year based old
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Year based old" data-md-level="4">
+        <label class="md-nav__title" for="__nav_5_2_12_8">
+          <span class="md-nav__icon md-icon"></span>
+          Year based old
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/year-based-old/2015/" class="md-nav__link">
+        2015
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/year-based-old/2016/" class="md-nav__link">
+        2016
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/AALG/guides/year-based-old/2017/" class="md-nav__link">
+        2017
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_3" type="checkbox" id="__nav_5_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3" tabindex="0" aria-expanded="false">
+          DBS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="DBS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_3">
+          <span class="md-nav__icon md-icon"></span>
+          DBS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/02-relational-model-and-relational-algebra/" class="md-nav__link">
+        Relational Model and Relational Algebra
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/03-entity-relationship-model/" class="md-nav__link">
+        The Entity Relationship Model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/04-relational-database-theory/" class="md-nav__link">
+        Relational Database Design Theory
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/05-sql/" class="md-nav__link">
+        SQL
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/06-transactions/" class="md-nav__link">
+        Transactions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/07-physical-dbs/" class="md-nav__link">
+        Physical Design
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/08-query-optimization/" class="md-nav__link">
+        Query Processing and Optimization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5_3_10" type="checkbox" id="__nav_5_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_3_10" tabindex="0" aria-expanded="false">
+          Guides
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Guides" data-md-level="3">
+        <label class="md-nav__title" for="__nav_5_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Guides
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/logical-query-optimization/" class="md-nav__link">
+        Logical (Heuristic) Query Optimization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/lossless-decomposition-and-dependency-preservation/" class="md-nav__link">
+        Lossless Decomposition and Dependency Preservation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/mapping-er-to-relations/" class="md-nav__link">
+        Mapping ER to Relations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/minimal-cover/" class="md-nav__link">
+        Calculate Minimal Cover (Canonical Cover)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../6-semester/DBS/guides/normal-form/" class="md-nav__link">
+        Determine Relational Schema Normal Form
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" tabindex="0" aria-expanded="true">
+          7 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="7 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          7 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_2" type="checkbox" id="__nav_6_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_2" tabindex="0" aria-expanded="true">
+          DS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="DS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_2">
+          <span class="md-nav__icon md-icon"></span>
+          DS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-os-and-networking-fundamentals/" class="md-nav__link">
+        OS and Networking Fundamentals
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-mutex/" class="md-nav__link">
+        Mutual Exclusion (Mutex) and Election
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-multicast/" class="md-nav__link">
+        Multicast
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-consensus/" class="md-nav__link">
+        Consensus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06a-replication/" class="md-nav__link">
+        Replication and Consistency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06b-transactions/" class="md-nav__link">
+        Transactions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-wireless/" class="md-nav__link">
+        Wireless Sensor Networks and Internet of Things
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-peer-to-peer/" class="md-nav__link">
+        Peer to Peer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Cluster Data Storage
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Cluster Data Storage
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#google-application" class="md-nav__link">
+    Google Application
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#original-search-engine" class="md-nav__link">
+    Original Search Engine
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#applications-workload" class="md-nav__link">
+    Applications / Workload
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cluster-architecture" class="md-nav__link">
+    Cluster Architecture
+  </a>
+  
+    <nav class="md-nav" aria-label="Cluster Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#normal-events-in-large-clusters" class="md-nav__link">
+    Normal Events in Large Clusters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#original-cluster-philosophy" class="md-nav__link">
+    Original Cluster Philosophy
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#google-infrastructure" class="md-nav__link">
+    Google Infrastructure
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cluster-services" class="md-nav__link">
+    Cluster Services
+  </a>
+  
+    <nav class="md-nav" aria-label="Cluster Services">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#googles-borg" class="md-nav__link">
+    Google's Borg
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gfs-a-distributed-filesystem" class="md-nav__link">
+    GFS - A Distributed Filesystem
+  </a>
+  
+    <nav class="md-nav" aria-label="GFS - A Distributed Filesystem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#design-assumptions" class="md-nav__link">
+    Design Assumptions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    Architecture
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passive-replication-write" class="md-nav__link">
+    Passive Replication - Write
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consistency-model" class="md-nav__link">
+    Consistency Model
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replica-management-master" class="md-nav__link">
+    Replica Management (Master)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fault-tolerance-of-master" class="md-nav__link">
+    Fault Tolerance of Master
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-2003" class="md-nav__link">
+    Performance (2003)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusions" class="md-nav__link">
+    Conclusions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chubby-a-distributed-lock-service" class="md-nav__link">
+    Chubby - A Distributed Lock Service
+  </a>
+  
+    <nav class="md-nav" aria-label="Chubby - A Distributed Lock Service">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples-of-use" class="md-nav__link">
+    Examples of Use
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architecture_1" class="md-nav__link">
+    Architecture
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#locks-and-files" class="md-nav__link">
+    Locks and Files
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#client-to-master-communication" class="md-nav__link">
+    Client to Master Communication
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-and-write" class="md-nav__link">
+    Read and Write
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#client-sessions" class="md-nav__link">
+    Client Sessions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cache-consistency" class="md-nav__link">
+    Cache Consistency
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#master-re-election" class="md-nav__link">
+    Master Re-Election
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusions_1" class="md-nav__link">
+    Conclusions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bigtable-a-high-performance-storage-system" class="md-nav__link">
+    BigTable - A High-Performance Storage System
+  </a>
+  
+    <nav class="md-nav" aria-label="BigTable - A High-Performance Storage System">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-web-table" class="md-nav__link">
+    Example: "Web-table"
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bigtable-applications-2006" class="md-nav__link">
+    BigTable Applications (2006)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tablets" class="md-nav__link">
+    Tablets
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system-structure" class="md-nav__link">
+    System Structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tablet-localization" class="md-nav__link">
+    Tablet Localization
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tablet-serving" class="md-nav__link">
+    Tablet Serving
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bigtable-features" class="md-nav__link">
+    BigTable Features
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance" class="md-nav__link">
+    Performance
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-2009" class="md-nav__link">
+    Status (2009)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-blockchain/" class="md-nav__link">
+        Blockchain
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-big-data-analytics/" class="md-nav__link">
+        Big Data Analytics
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12-soa/" class="md-nav__link">
+        Service-oriented Architectures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_2_15" type="checkbox" id="__nav_6_2_15" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_2_15" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_2_15">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/" class="md-nav__link">
+        Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/1-distributed-mutex/" class="md-nav__link">
+        Question 1 - Distributed Mutual Exclusion
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/2-multicast/" class="md-nav__link">
+        Question 2 - Multicast
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/3-replication-and-consistency/" class="md-nav__link">
+        Question 3 - Replication and Consistency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/4-consensus/" class="md-nav__link">
+        Question 4: Consensus
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/5-clustered-storage/" class="md-nav__link">
+        Question 5 - Clustered Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/6-big-data-processing/" class="md-nav__link">
+        Question 6 - Big Data Processing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/7-iot-routing/" class="md-nav__link">
+        Question 7 - Internet of Things Routing (Directed Diffusion, Tree Routing in ZigBee, AODV, DSR)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/8-peer-to-peer/" class="md-nav__link">
+        Question 8 - Peer to Peer (Gnutella, Chord)
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exam/9-blockchain/" class="md-nav__link">
+        Question 9 - Blockchain (Tamper-free linked lists, Nakamoto Consensus, proof of work, transactions in Merkle trees)
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3" type="checkbox" id="__nav_6_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3" tabindex="0" aria-expanded="false">
+          PP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="PP" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_3">
+          <span class="md-nav__icon md-icon"></span>
+          PP
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3_2" type="checkbox" id="__nav_6_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3_2" tabindex="0" aria-expanded="false">
+          Logic
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Logic" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Logic
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/Logic/semantics/" class="md-nav__link">
+        Semantics of Datalog / Prolog
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3_3" type="checkbox" id="__nav_6_3_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3_3" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_3_3">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/" class="md-nav__link">
+        PP Exam
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/datalog-and-prolog/" class="md-nav__link">
+        Datalog and Prolog
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/haskell/" class="md-nav__link">
+        Haskell
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/scheme/" class="md-nav__link">
+        Scheme
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_3_3_5" type="checkbox" id="__nav_6_3_3_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_3_3_5" tabindex="0" aria-expanded="false">
+          Solutions
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Solutions" data-md-level="4">
+        <label class="md-nav__title" for="__nav_6_3_3_5">
+          <span class="md-nav__icon md-icon"></span>
+          Solutions
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/solutions/01-scheme/" class="md-nav__link">
+        Scheme Exercises
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/solutions/02-haskell/" class="md-nav__link">
+        Haskell Exercises
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../PP/exam/solutions/03-datalog-prolog/" class="md-nav__link">
+        Datalog and Prolog Exercises
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_4" type="checkbox" id="__nav_6_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4" tabindex="0" aria-expanded="false">
+          WI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="WI" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_4">
+          <span class="md-nav__icon md-icon"></span>
+          WI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/" class="md-nav__link">
+        Course
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/01-introduction-and-crawlers/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/02-index-construction/" class="md-nav__link">
+        Index Construction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/03-content-based-ranking/" class="md-nav__link">
+        Content-based Ranking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/04-structure-based-ranking/" class="md-nav__link">
+        Structure-based Ranking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/05-recommender-systems/" class="md-nav__link">
+        Recommender Systems
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/06-recommender-systems-2/" class="md-nav__link">
+        Recommender Systems 2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/07-network-structure-and-communities/" class="md-nav__link">
+        Network Structure and Communities
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/08-communities-and-information-diffusion/" class="md-nav__link">
+        Communities and Information Diffusion
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/09%2B10-node-classification/" class="md-nav__link">
+        Node Classification
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_6_4_11" type="checkbox" id="__nav_6_4_11" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_4_11" tabindex="0" aria-expanded="false">
+          Exam
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Exam" data-md-level="3">
+        <label class="md-nav__title" for="__nav_6_4_11">
+          <span class="md-nav__icon md-icon"></span>
+          Exam
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../WI/exam/" class="md-nav__link">
+        WI Exam
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7" tabindex="0" aria-expanded="false">
+          8 semester
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="8 semester" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          8 semester
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/" class="md-nav__link">
+        Index
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_2" type="checkbox" id="__nav_7_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_2" tabindex="0" aria-expanded="false">
+          MDLS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="MDLS" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_2">
+          <span class="md-nav__icon md-icon"></span>
+          MDLS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/MDLS/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_3" type="checkbox" id="__nav_7_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_3" tabindex="0" aria-expanded="false">
+          mHCI
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="mHCI" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_3">
+          <span class="md-nav__icon md-icon"></span>
+          mHCI
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/01-introduction/" class="md-nav__link">
+        mHCI Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/02-concepts-and-context/" class="md-nav__link">
+        MCHI Concepts and Understanding Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/08-introduction-to-quantitive-studies/" class="md-nav__link">
+        	Introduction to Quantitative Studies
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/09-lab-experiments/" class="md-nav__link">
+        Lab Experiments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/10-field-experiments/" class="md-nav__link">
+        Field Experiments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/mHCI/99-exam/" class="md-nav__link">
+        Exam Questions
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_7_4" type="checkbox" id="__nav_7_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7_4" tabindex="0" aria-expanded="false">
+          sP
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="sP" data-md-level="2">
+        <label class="md-nav__title" for="__nav_7_4">
+          <span class="md-nav__icon md-icon"></span>
+          sP
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/01-introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/02-fundamentals/" class="md-nav__link">
+        Fundamentals
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/03-initialization/" class="md-nav__link">
+        Initialization
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/04-raii/" class="md-nav__link">
+        Classes Continued
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/05-pimpl/" class="md-nav__link">
+        PIMPL Idiom and Dynamic Polymorphism
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/06-double-dispatch/" class="md-nav__link">
+        Double Dispatch
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/07-generic-programming/" class="md-nav__link">
+        Generic Programming
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/10-lambda/" class="md-nav__link">
+        Lambda Expressions
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/10-rval-and-forward/" class="md-nav__link">
+        Rvalue and Forwarding References
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/11-concurrency/" class="md-nav__link">
+        Concurrency
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../8-semester/sP/99-exam/" class="md-nav__link">
+        Exam Notes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#google-application" class="md-nav__link">
+    Google Application
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#original-search-engine" class="md-nav__link">
+    Original Search Engine
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#applications-workload" class="md-nav__link">
+    Applications / Workload
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cluster-architecture" class="md-nav__link">
+    Cluster Architecture
+  </a>
+  
+    <nav class="md-nav" aria-label="Cluster Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#normal-events-in-large-clusters" class="md-nav__link">
+    Normal Events in Large Clusters
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#original-cluster-philosophy" class="md-nav__link">
+    Original Cluster Philosophy
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#google-infrastructure" class="md-nav__link">
+    Google Infrastructure
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cluster-services" class="md-nav__link">
+    Cluster Services
+  </a>
+  
+    <nav class="md-nav" aria-label="Cluster Services">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#googles-borg" class="md-nav__link">
+    Google's Borg
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gfs-a-distributed-filesystem" class="md-nav__link">
+    GFS - A Distributed Filesystem
+  </a>
+  
+    <nav class="md-nav" aria-label="GFS - A Distributed Filesystem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#design-assumptions" class="md-nav__link">
+    Design Assumptions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    Architecture
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passive-replication-write" class="md-nav__link">
+    Passive Replication - Write
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consistency-model" class="md-nav__link">
+    Consistency Model
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replica-management-master" class="md-nav__link">
+    Replica Management (Master)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fault-tolerance-of-master" class="md-nav__link">
+    Fault Tolerance of Master
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-2003" class="md-nav__link">
+    Performance (2003)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusions" class="md-nav__link">
+    Conclusions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chubby-a-distributed-lock-service" class="md-nav__link">
+    Chubby - A Distributed Lock Service
+  </a>
+  
+    <nav class="md-nav" aria-label="Chubby - A Distributed Lock Service">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#examples-of-use" class="md-nav__link">
+    Examples of Use
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architecture_1" class="md-nav__link">
+    Architecture
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#locks-and-files" class="md-nav__link">
+    Locks and Files
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#client-to-master-communication" class="md-nav__link">
+    Client to Master Communication
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-and-write" class="md-nav__link">
+    Read and Write
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#client-sessions" class="md-nav__link">
+    Client Sessions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cache-consistency" class="md-nav__link">
+    Cache Consistency
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#master-re-election" class="md-nav__link">
+    Master Re-Election
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusions_1" class="md-nav__link">
+    Conclusions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bigtable-a-high-performance-storage-system" class="md-nav__link">
+    BigTable - A High-Performance Storage System
+  </a>
+  
+    <nav class="md-nav" aria-label="BigTable - A High-Performance Storage System">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-web-table" class="md-nav__link">
+    Example: "Web-table"
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bigtable-applications-2006" class="md-nav__link">
+    BigTable Applications (2006)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tablets" class="md-nav__link">
+    Tablets
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system-structure" class="md-nav__link">
+    System Structure
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tablet-localization" class="md-nav__link">
+    Tablet Localization
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tablet-serving" class="md-nav__link">
+    Tablet Serving
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bigtable-features" class="md-nav__link">
+    BigTable Features
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance" class="md-nav__link">
+    Performance
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-2009" class="md-nav__link">
+    Status (2009)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+<h1 id="cluster-data-storage">Cluster Data Storage<a class="headerlink" href="#cluster-data-storage" title="Permanent link">&para;</a></h1>
+<h2 id="google-application">Google Application<a class="headerlink" href="#google-application" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Search engine</li>
+<li>Cloud Applications: Gmail, Gdrive, messaging (Google Talk), Calendar, Docs, Maps, Earth, YouTube, …</li>
+<li>PaaS</li>
+</ul>
+<p><img alt="image-20201105124534688" src="../images/09-cluster-storage/image-20201105124534688.png" /></p>
+<h2 id="original-search-engine">Original Search Engine<a class="headerlink" href="#original-search-engine" title="Permanent link">&para;</a></h2>
+<p><img alt="image-20201105124632908" src="../images/09-cluster-storage/image-20201105124632908.png" /></p>
+<h2 id="applications-workload">Applications / Workload<a class="headerlink" href="#applications-workload" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Offline batch jobs<ul>
+<li>Large datasets (PBs), bulk reads/writes (MB chunks)</li>
+<li>Short outages acceptable</li>
+<li>Web indexing, log processing, satellite imagery, etc.</li>
+</ul>
+</li>
+<li>Online applications<ul>
+<li>Smaller datasets (TBs), small reads/writes (KBs)</li>
+<li>Outages immediately visible to users, low latency vital</li>
+<li>Web search, GMail, Google Docs, etc.</li>
+</ul>
+</li>
+<li>Many areas:<ul>
+<li>Information retrieval</li>
+<li>Machine learning</li>
+<li>Image/video processing</li>
+<li>Natural language processing</li>
+<li>Machine translation</li>
+<li>...</li>
+</ul>
+</li>
+</ul>
+<h2 id="cluster-architecture">Cluster Architecture<a class="headerlink" href="#cluster-architecture" title="Permanent link">&para;</a></h2>
+<p><img alt="image-20201105125307238" src="../images/09-cluster-storage/image-20201105125307238.png" /></p>
+<p><a href="http://www.google.com/about/datacenters/index.html">http://www.google.com/about/datacenters/index.html</a> 
+<a href="https://www.youtube.com/watch?v=XZmGGAbHqa0">https://www.youtube.com/watch?v=XZmGGAbHqa0</a></p>
+<ul>
+<li>Groups of clusters stored in different places in the world</li>
+</ul>
+<p><img alt="image-20201105125423928" src="../images/09-cluster-storage/image-20201105125423928.png" /></p>
+<h3 id="normal-events-in-large-clusters">Normal Events in Large Clusters<a class="headerlink" href="#normal-events-in-large-clusters" title="Permanent link">&para;</a></h3>
+<p>Typical first year for a new cluster:</p>
+<ul>
+<li>~0.5 <strong>overheating</strong> (power down most machines in &lt;5 mins, ~1-2 days to recover)</li>
+<li>~1 <strong>PDU failure</strong> (~500-1000 machines suddenly disappear, ~6 hours to come back)</li>
+<li>~1 <strong>rack-move</strong> (plenty of warning, ~500-1000 machines powered down, ~6 hours)</li>
+<li>~1 <strong>network rewiring</strong> (rolling ~5% of machines down over 2-day span)</li>
+<li>~20 <strong>rack failures</strong> (40-80 machines instantly disappear, 1-6 hours to get back)</li>
+<li>~5 <strong>racks go wonky</strong> (40-80 machines see 50% packet loss)</li>
+<li>~8 <strong>network maintenances</strong> (4 might cause ~30-minute random connectivity losses)</li>
+<li>~12 <strong>router reloads</strong> (takes out DNS and external vips for a couple minutes)</li>
+<li>~3 <strong>router failures</strong> (have to immediately pull traffic for an hour)</li>
+<li>~dozens of minor 30-second blips for dns</li>
+<li>~1000 individual <strong>machine failures (eg DRAM)</strong></li>
+<li>
+<p>~thousands of <strong>hard drive failures</strong></p>
+</li>
+<li>
+<p>slow disks, bad memory, mis-configured machines, flaky machines, etc.</p>
+</li>
+<li>Long distance links: wild dogs, sharks, drunken hunters, etc.</li>
+</ul>
+<p>Large variety of Software bugs, crashes</p>
+<h3 id="original-cluster-philosophy">Original Cluster Philosophy<a class="headerlink" href="#original-cluster-philosophy" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Use software techniques for fault tolerance</li>
+<li>Use replication and parallelism for throughput and availability</li>
+<li>Buy HW with best price/performance ratio, not absolute performance</li>
+<li>“Unreliable”, low-performance commodity HW<ul>
+<li><span class="arithmatex"><span class="MathJax_Preview">\Rightarrow</span><script type="math/tex">\Rightarrow</script></span> minimize cost (incl. depreciation, operation costs) per query</li>
+</ul>
+</li>
+</ul>
+<h2 id="google-infrastructure">Google Infrastructure<a class="headerlink" href="#google-infrastructure" title="Permanent link">&para;</a></h2>
+<p><img alt="image-20201105125953496" src="../images/09-cluster-storage/image-20201105125953496.png" /></p>
+<p><img alt="image-20201105130414042" src="../images/09-cluster-storage/image-20201105130414042.png" /></p>
+<h2 id="cluster-services">Cluster Services<a class="headerlink" href="#cluster-services" title="Permanent link">&para;</a></h2>
+<p><img alt="image-20201105130433471" src="../images/09-cluster-storage/image-20201105130433471.png" /></p>
+<blockquote>
+<p>Jeff Dean (Google)</p>
+</blockquote>
+<h3 id="googles-borg">Google's Borg<a class="headerlink" href="#googles-borg" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Borg: Google’s cluster manager<ul>
+<li>runs &gt;100k jobs, &gt;1k different applications, across 10k machines</li>
+</ul>
+</li>
+<li>Goal: high resource utilization, fast recovery time<ul>
+<li>uses admission control</li>
+<li>efficient task-packing and over-commitment</li>
+<li>scheduling policies that reduce the probability of correlated failures</li>
+<li>machine sharing with process-level performance isolation</li>
+</ul>
+</li>
+</ul>
+<p><img alt="image-20201105130658544" src="../images/09-cluster-storage/image-20201105130658544.png" /></p>
+<h2 id="gfs-a-distributed-filesystem">GFS - A Distributed Filesystem<a class="headerlink" href="#gfs-a-distributed-filesystem" title="Permanent link">&para;</a></h2>
+<p><img alt="🎥" class="emojione" src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.2.7/assets/png/1f3a5.png" title=":movie_camera:" /> <a href="https://www.youtube.com/watch?v=eRgFNW4QFDc">Youtube Video about GFS</a></p>
+<h3 id="design-assumptions">Design Assumptions<a class="headerlink" href="#design-assumptions" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Component failures are normal</li>
+<li>Few very large files</li>
+<li>Optimized towards Google Workload (processing of bulk-data):<ul>
+<li>Large <strong>sequential reads</strong>, few small random reads</li>
+<li>Frequent <strong>(concurrent) append</strong>, rare concurrent random writes; multiple producers/single consumers of data to same file</li>
+<li><strong>High sustained throughput</strong> more important than latency</li>
+</ul>
+</li>
+<li>Non-POSIX API:<ul>
+<li>create, delete, open, close, read, write</li>
+<li>snapshot: fast copy of a file or a directory tree</li>
+<li>record append: multiple clients append data to the same file<ul>
+<li>guaranteed consistency</li>
+<li>location of append not decided by the client</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20201105131241159" src="../images/09-cluster-storage/image-20201105131241159.png" /></p>
+<h3 id="passive-replication-write">Passive Replication - Write<a class="headerlink" href="#passive-replication-write" title="Permanent link">&para;</a></h3>
+<p>s</p>
+<ol>
+<li>Ask master who is primary (leasing) for chunk x</li>
+<li>the identity of the primary and the locations of the other (secondary) replicas.</li>
+<li>The client pushes the data to all the replicas in a forwarding chain</li>
+<li>Once all the replicas have acknowledged receiving the data, the client sends a write request to the primary.</li>
+<li>The primary forwards the write request to all secondary replicas. Each secondary replica applies mutations in the same serial number order assigned by the primary.</li>
+<li>The secondaries all reply to the primary indicating that they have completed the operation.</li>
+<li>The primary replies to the client.<ul>
+<li>Any errors encountered at any of the replicas are reported to the client (a subset of replica’s modified)</li>
+<li>Client retries</li>
+<li>File may be inconsistent</li>
+</ul>
+</li>
+</ol>
+<h3 id="consistency-model">Consistency Model<a class="headerlink" href="#consistency-model" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>File namespace mutations (e.g. file creation) are atomic (handled by master)</p>
+</li>
+<li>
+<p>A file region is</p>
+<ul>
+<li><em>“Consistent”</em> if all clients see same data (from all replicas)</li>
+<li><em>“Defined”</em> if consistent and clients see writes in their entirety</li>
+</ul>
+</li>
+<li>
+<p>Append: record is appended atomically <em>at least once somewhere</em></p>
+<p><img alt="image-20201105132111040" src="../images/09-cluster-storage/image-20201105132111040.png" /></p>
+</li>
+<li>
+<p>Applications can handle inconsistent regions</p>
+</li>
+</ul>
+<h3 id="replica-management-master">Replica Management (Master)<a class="headerlink" href="#replica-management-master" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Replica placement<ul>
+<li>Spread replicas over different racks to optimize availability and bandwidth, but at an increased cost of writes (inter-rack-communication)</li>
+</ul>
+</li>
+<li>New Chunk allocation:<ul>
+<li>consider disk utilization, number of recent allocations to same disk, and placement across racks</li>
+</ul>
+</li>
+<li>Re-replication<ul>
+<li>When too many replica’s are unavailable</li>
+<li>Higher priority when replication factor is low</li>
+</ul>
+</li>
+<li>Re-balancing<ul>
+<li>to ensure uniform load and disk utilization</li>
+</ul>
+</li>
+<li>Garbage Collection<ul>
+<li>delete chunks with outdated version number, deleted files</li>
+</ul>
+</li>
+</ul>
+<h3 id="fault-tolerance-of-master">Fault Tolerance of Master<a class="headerlink" href="#fault-tolerance-of-master" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Master state (Operations-log and its check-points) is replicated and maintained in stable storage</li>
+<li>Relatively easy/fast recovery</li>
+<li>Shadow masters (read-only) provide read-only access</li>
+<li>External failure detection mechanism detects master failure, selects a new master, and restarts it.</li>
+</ul>
+<h3 id="performance-2003">Performance (2003)<a class="headerlink" href="#performance-2003" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Micro-benchmark: performance test of basic functionality / selected aspects (in a reduced controlled setting)</li>
+<li>1 master (2 shadow replicas), 16 chunk servers, 16 clients, 100Mbps network cards (12.5 MB/S) ,1 Gbps link between switches (125 MB/s)</li>
+</ul>
+<p>Example results (anno 2003):</p>
+<p><img alt="image-20201105133214850" src="../images/09-cluster-storage/image-20201105133214850.png" /></p>
+<p>Behavior in real-life workload, real-life setup:</p>
+<p><img alt="image-20201105133254059" src="../images/09-cluster-storage/image-20201105133254059.png" /></p>
+<ul>
+<li>A for R&amp;D</li>
+<li>B is a production cluster</li>
+</ul>
+<p><img alt="image-20201105133314652" src="../images/09-cluster-storage/image-20201105133314652.png" /></p>
+<ul>
+<li>A’s network limit is 750 MB/s</li>
+<li>B’s network limit is 1300 MB/s</li>
+</ul>
+<p>Chunk Recovery</p>
+<ul>
+<li>When a chunk server fails or is killed, some chunks are under-replicated (not enough replica)</li>
+<li>1 (out of 3) chunk server with 15000 chunks (600 GB) killed<ul>
+<li>Restored in ~23 minutes</li>
+</ul>
+</li>
+<li>2 (out of 3) killed<ul>
+<li>Restored to 2x replication in 2 minutes</li>
+<li>Prioritization kicks in</li>
+</ul>
+</li>
+</ul>
+<h3 id="conclusions">Conclusions<a class="headerlink" href="#conclusions" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Apparently successful DFS<ul>
+<li>For commodity clusters</li>
+<li>Dedicated to Google's workload</li>
+</ul>
+</li>
+<li>Key infrastructure enabling many of their services</li>
+<li>Interesting replica management system, but few details / policies provided</li>
+</ul>
+<p><strong>Since 2012: Colossus file system</strong></p>
+<ul>
+<li>“Hölzle calls Colossus "similar to GFS – but done better after ten years of experience.“</li>
+<li><a href="https://www.wired.com/2012/07/google-colossus/">https://www.wired.com/2012/07/google-colossus/</a></li>
+<li><a href="https://cloud.google.com/files/storage_architecture_and_challenges.pdf">https://cloud.google.com/files/storage_architecture_and_challenges.pdf</a></li>
+</ul>
+<h2 id="chubby-a-distributed-lock-service">Chubby - A Distributed Lock Service<a class="headerlink" href="#chubby-a-distributed-lock-service" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>A coarse-grained lock service and file-system</strong></li>
+<li>Lock service: allows clients to synchronize their activities</li>
+<li>Coarse = for hours or days, and</li>
+<li>Reliable (but low-volume) storage</li>
+</ul>
+<p>Example: Master Election</p>
+<ul>
+<li>Nodes try to get a lock</li>
+<li>The nodes who wins writes result into a small file</li>
+</ul>
+<p>Filesystem: Is a well-known mechanism and interface for the programmers</p>
+<p><strong>Chubby</strong></p>
+<ul>
+<li>Intended for “loosely-coupled distributed systems”<ul>
+<li>Nodes run independently - at unpredictable speed</li>
+<li>Nodes may crash – difficult to detect, and recover</li>
+<li>Messages may be lost, delayed, reordered, but not corrupted</li>
+</ul>
+</li>
+<li>A <em>coarse-grained lock service</em><ul>
+<li><em>Highly fault tolerant (consistent)</em></li>
+<li><em>Availability</em></li>
+<li><em>Scalability</em></li>
+<li><em>Throughput and performance less important (coarse!)</em></li>
+</ul>
+</li>
+</ul>
+<h3 id="examples-of-use">Examples of Use<a class="headerlink" href="#examples-of-use" title="Permanent link">&para;</a></h3>
+<ul>
+<li>GFS: Elect a master</li>
+<li>BigTable: master election, client discovery, table service locking</li>
+<li>Well-known location to bootstrap larger systems</li>
+<li>Name Service</li>
+<li>Partition workloads</li>
+<li>Synchronization, but not fine grained locking</li>
+</ul>
+<h3 id="architecture_1">Architecture<a class="headerlink" href="#architecture_1" title="Permanent link">&para;</a></h3>
+<p>Typically</p>
+<ul>
+<li>1 cell per data center</li>
+<li>Serves 90000+ processors</li>
+<li>N=5</li>
+</ul>
+<p><img alt="image-20201105134939271" src="../images/09-cluster-storage/image-20201105134939271.png" /></p>
+<h3 id="locks-and-files">Locks and Files<a class="headerlink" href="#locks-and-files" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Filesystem like interface:</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>fh=Open(“/ls/exampleCell/gfs/master”)
+success=tryAcquire(fh)
+if(success)
+    write(fh,myID)
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>Either Exclusive-Write lock or Shared-Read lock</li>
+<li>Subdirectories and (non-inherited) ACLs supported, but not links</li>
+<li>Locks are advisory (you can ignore the lock)</li>
+<li>“Whole-file” R/W</li>
+</ul>
+<h3 id="client-to-master-communication">Client to Master Communication<a class="headerlink" href="#client-to-master-communication" title="Permanent link">&para;</a></h3>
+<ul>
+<li>All read/write requests go through the master</li>
+<li>Communication via RPC (through the library)</li>
+<li>The other replicas only get updates from the master</li>
+<li>How the client finds the master:<ul>
+<li>Send master location request to all replicas in DNS</li>
+<li>Non-masters redirect to master</li>
+</ul>
+</li>
+<li>Client sends all requests to master until negative answer</li>
+<li>Master notifies clients if files modified, created, deleted, lock status changes (push</li>
+<li>Master notifies clients if files modified, created, deleted, lock status changes (push; saves bandwidth compared to constant polling)<ul>
+<li>Master is stateful</li>
+</ul>
+</li>
+</ul>
+<h3 id="read-and-write">Read and Write<a class="headerlink" href="#read-and-write" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Reads are handled by the master</li>
+<li>Write: Successful if majority of replicas acknowledge receipt of update<ul>
+<li>Usual Prepare – Promise – Accept – Accepted (Paxos)</li>
+</ul>
+</li>
+</ul>
+<p><img alt="image-20201105135702239" src="../images/09-cluster-storage/image-20201105135702239.png" /></p>
+<h3 id="client-sessions">Client Sessions<a class="headerlink" href="#client-sessions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Sessions</strong> maintained between client and server</li>
+<li>Client Failure<ul>
+<li>Master promises service for “lease time”</li>
+<li>Clients make <strong>“Keep-alive”</strong> RPCs to maintain session; master returns extended lease time (eg. 12 sec)</li>
+<li>If session is lost, server releases any client-held handles.</li>
+</ul>
+</li>
+<li>Master failure<ul>
+<li>If client does not get a renewed lease, session is in jeopardy<ul>
+<li>Clear local cache</li>
+<li>Wait for “grace period” (about 45 seconds)</li>
+<li>Continue attempt to contact (possibly new) master</li>
+</ul>
+</li>
+<li>Successful attempt =&gt; ok; jeopardy over</li>
+<li>Failed attempt =&gt; session assumed lost</li>
+</ul>
+</li>
+</ul>
+<h3 id="cache-consistency">Cache Consistency<a class="headerlink" href="#cache-consistency" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Clients cache all file content to reduce read traffic</li>
+<li>Strict consistency<ol>
+<li>A file-modification is blocked until all caches are invalidated</li>
+<li>Invalidation messages are piggybacked on keep-alive messages</li>
+<li>Clients flush cache, and acknowledges (piggybacked on lease-renewal)</li>
+</ol>
+</li>
+</ul>
+<h3 id="master-re-election">Master Re-Election<a class="headerlink" href="#master-re-election" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>If replicas lose contact with master, they wait for grace period (shorter: 4 - 6 seconds)</p>
+</li>
+<li>
+<p>On timeout, hold new election</p>
+</li>
+<li>The new master updates the DNS, gets a recent copy of the database, etc.</li>
+<li>But how do the replicas agree on one (!) new master?</li>
+<li>Paxos algorithm<ul>
+<li>Also used to propagate write updates to the replicas</li>
+</ul>
+</li>
+</ul>
+<h3 id="conclusions_1">Conclusions<a class="headerlink" href="#conclusions_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>An “easy-to-use” file and locking service</li>
+<li>Integration of well-known (but advanced) techniques</li>
+<li>Rarely used code for fail-over contained “a rich collection of interesting bugs”</li>
+<li>Extensive verification/testing necessary</li>
+</ul>
+<p>Google testing motto:</p>
+<ul>
+<li>If it ain’t broke, you are not trying hard enough!</li>
+</ul>
+<h2 id="bigtable-a-high-performance-storage-system">BigTable - A High-Performance Storage System<a class="headerlink" href="#bigtable-a-high-performance-storage-system" title="Permanent link">&para;</a></h2>
+<p>Database used by Google</p>
+<p><img alt="image-20201105140947292" src="../images/09-cluster-storage/image-20201105140947292.png" /></p>
+<ul>
+<li>Distributed storage system: PBs, across 1000s of servers</li>
+<li>Row/Column abstraction for storing data</li>
+<li>Distributed Persistent multi-level sorted map</li>
+</ul>
+<p>(Keys are normally 10-100 bytes, max 64 KB)</p>
+<p><img alt="image-20201105141013070" src="../images/09-cluster-storage/image-20201105141013070.png" /></p>
+<p>(Qualifiers are used to address individual column within family)</p>
+<h3 id="example-web-table">Example: "Web-table"<a class="headerlink" href="#example-web-table" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20201105141153113" src="../images/09-cluster-storage/image-20201105141153113.png" /></p>
+<p>Rows are lexicographically sorted: </p>
+<ul>
+<li>Webtable domain names are reversed so we group related pages. </li>
+<li>Efficient domain analysis: related information likely stored in same tablet!</li>
+</ul>
+<p>All row accesses are atomic!</p>
+<h3 id="bigtable-applications-2006">BigTable Applications (2006)<a class="headerlink" href="#bigtable-applications-2006" title="Permanent link">&para;</a></h3>
+<p>Example: Google Analytics stores information on raw clicks associated with users in one table and summarizes analyzed information in a second table.</p>
+<p><img alt="image-20201105141343615" src="../images/09-cluster-storage/image-20201105141343615.png" /></p>
+<ul>
+<li>Analytics: row = user session (sitename, starttime)</li>
+<li>Earth: row = geographical segment, column family = sources of data</li>
+<li>Personalized Search: row = userid, column family = type of action (search, webaccess)</li>
+</ul>
+<h3 id="tablets">Tablets<a class="headerlink" href="#tablets" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20201105141702367" src="../images/09-cluster-storage/image-20201105141702367.png" /></p>
+<ul>
+<li>Tablet = consecutive set of rows</li>
+<li>Size ~ 200MB</li>
+<li>Tablets can be split/merged if too large/small</li>
+<li>Each tablet is served by one Tablet Server (similar to a GFS chunkserver)</li>
+<li>Stored in “Sorted Strings Table” SSTables (indexed keyvalue maps) file format in GFS<ul>
+<li>immutable</li>
+</ul>
+</li>
+<li>Row access is atomic</li>
+</ul>
+<h3 id="system-structure">System Structure<a class="headerlink" href="#system-structure" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20201105141803473" src="../images/09-cluster-storage/image-20201105141803473.png" /></p>
+<p><img alt="image-20201105141829651" src="../images/09-cluster-storage/image-20201105141829651.png" /></p>
+<ul>
+<li>Main goal of the BigTable infrastructure: (1) manage tablets and access and change associated data…</li>
+<li>… and (2) map tablet structure into the underlying file system.</li>
+<li>BigTable Master is stateless: all data in Chubby!</li>
+<li>Live set of servers detected via Chubby.</li>
+<li>BigTable Master: <ul>
+<li>Tablet assignment: one server at a time.</li>
+</ul>
+</li>
+<li>Tablet Server<ul>
+<li>Tablet localization: Tablets stored in a B+Tree: B-tree (range of keys in each level), where stored at the leaves (only)</li>
+</ul>
+</li>
+</ul>
+<h3 id="tablet-localization">Tablet Localization<a class="headerlink" href="#tablet-localization" title="Permanent link">&para;</a></h3>
+<p>System maintains B+ tree index (in BigTable!) </p>
+<p>Clients searches index </p>
+<p>Clients cache tablet locations</p>
+<p><img alt="image-20201105142359164" src="../images/09-cluster-storage/image-20201105142359164.png" /></p>
+<p><img alt="image-20201105142406500" src="../images/09-cluster-storage/image-20201105142406500.png" /></p>
+<p>Eg. 128MB (2^27^) Meta-data tablets (1kB=2^10^ per key) in 2 index levels addresses 2^34^ tablets (of each 128Mb= 2^61^ B)</p>
+<h3 id="tablet-serving">Tablet Serving<a class="headerlink" href="#tablet-serving" title="Permanent link">&para;</a></h3>
+<p><img alt="image-20201105142512226" src="../images/09-cluster-storage/image-20201105142512226.png" /></p>
+<h3 id="bigtable-features">BigTable Features<a class="headerlink" href="#bigtable-features" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Single-row transactions</strong>: easy to do read/modify/write operations</li>
+<li><strong>Locality groups:</strong> segregate columns into different SSTables</li>
+<li><strong>In-memory columns:</strong> random access to small items</li>
+<li><strong>Suite of compression techniques:</strong> per locality group</li>
+<li><strong>Bloom filters:</strong> avoid seeks for non-existent data<ul>
+<li>Probabilistic set membership test: is item in set?<ul>
+<li>Answer: “definitely not” no need to look up!</li>
+<li>Answer: “maybe in set”.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Garbage Collection</strong> of (immutable) SSTable Files</li>
+</ul>
+<h3 id="performance">Performance<a class="headerlink" href="#performance" title="Permanent link">&para;</a></h3>
+<p>Anno 2006 [Chang et al - TOCS 26(2)]</p>
+<p><img alt="image-20201105142802293" src="../images/09-cluster-storage/image-20201105142802293.png" /></p>
+<ul>
+<li>“Mem” = locality group marked to be placed in-memory</li>
+<li>Random reads are slow because much data transferred from GFS, but little utilized, 1200 reads/s ~75MB/S<ul>
+<li>Random reads are slow: cannot exploit locality, much data from GFS not used.</li>
+<li>Reads in memory much faster.</li>
+</ul>
+</li>
+<li>Sequential read: better: same block hit 64 times<ul>
+<li>Sequential reads faster: entire block used!</li>
+</ul>
+</li>
+<li>Scans: use API for scanning over all values in a row range</li>
+<li>Good scalability for most operations, but not linear due to load imbalance</li>
+</ul>
+<h3 id="status-2009">Status (2009)<a class="headerlink" href="#status-2009" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Continuous development<ul>
+<li>Scaling, robustness</li>
+<li>Replication: eventual consistency replication across data centers (user facing services)</li>
+</ul>
+</li>
+<li>~500 BigTable clusters</li>
+<li>Largest cluster:<ul>
+<li>70+ PB data; sustained: 10M ops/sec; 30+ GB/s I/O</li>
+</ul>
+</li>
+</ul>
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p><img alt="image-20201105143040734" src="../images/09-cluster-storage/image-20201105143040734.png" /></p>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 9, 2021</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+        <script src="../../../javascripts/extra.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+      
+    
+  </body>
+</html>

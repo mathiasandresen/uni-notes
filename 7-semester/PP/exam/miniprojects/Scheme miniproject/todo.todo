@@ -1,0 +1,23 @@
+Fremgangsmåde
+
+✔ Read file with students @done(20-10-13 10:02)
+✔ Find out how to represent student, then for student write: @done(20-10-13 10:42)
+    ✔ Constructor @done(20-10-13 10:03)
+    ✔ Predicate @done(20-10-13 10:42)
+    ✔ Selection @done(20-10-13 10:30)
+✔ Write constructor function for a single group @done(20-10-13 11:22)
+✔ Write predicate function for group @done(20-10-13 11:25)
+✔ Write selector function that returns all studens in group @done(20-10-13 11:28)
+✔ Write selector function that returns group number/ID @done(20-10-13 11:28)
+
+✔ Random grouping @done(20-10-14 10:45)
+☐ Grouping by counting
+☐ Balanced grouping by counting
+
+✔ Write predicate to identify grouping object @done(20-10-14 11:05)
+✔ Write a function that returns a given group from a grouping @done(20-10-14 11:18)
+✔ Function that returns number of groups in grouping @done(20-10-14 11:47)
+☐ Function that returns maximum size of group in grouping
+☐ Function that returns minimum size of group in grouping
+
+☐ (Optional, but recommended) write pretty printing for students, groups and groupings

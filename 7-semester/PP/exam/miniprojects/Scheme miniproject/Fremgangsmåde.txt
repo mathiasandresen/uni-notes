@@ -1,0 +1,17 @@
+Fremgangsmåde
+
+[] 1. Read file with students
+[] 2. Find out how to represent student, then for student write:
+    [x] 3.1 Constructor 
+    [] 3.2 Predicate
+    [] 3.3 Selection
+3. Write a function that returns a given group from a grouping
+    2.1 Function that returns number of groups in grouping
+    2.2 Function that returns maximum size of group in grouping
+    2.3 Function that returns minimum size of group in grouping
+4. Write constructor function for a single group 
+5. Write predicate function for group 
+6. Write selector function that returns all studens in group
+7. Write selector function that returns group number/ID
+8. Write predicate to identify grouping object
+9. (Optional, but recommended) write pretty printing for students, groups and groupings

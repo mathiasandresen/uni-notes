@@ -6,7 +6,7 @@ title: Forside
 
 Velkommen til min side med mine noter fra Aalborg Universitet.
 
-Jeg læser bachelor i Software.
+Jeg er uddannet Software Ingeniør fra Aalborg Universitet.
 
 Siden indeholder lige nu noter fra:
 
@@ -15,10 +15,9 @@ Siden indeholder lige nu noter fra:
 * [5 Semester](5-semester/index.md)
 * [6 Semester](6-semester/index.md)
 * [7 Semester](7-semester/index.md)
+* [8 Semester](8-semester/index.md)
 
 <br>
-
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mathiasandresen/uni-notes/Publish%20docs%20via%20GitHub%20Pages)](https://github.com/mathiasandresen/uni-notes/actions?query=workflow%3A%22Publish+docs+via+GitHub+Pages%22)
 
 
 
